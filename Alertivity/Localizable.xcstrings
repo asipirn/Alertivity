@@ -2464,7 +2464,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CPU usage over 80 percent (critical)"
+            "value" : "CPU usage over 80% (critical)"
           }
         },
         "fr" : {
@@ -2499,7 +2499,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "CPU usage over 50 percent (elevated)"
+            "value" : "CPU usage over 50% (elevated)"
           }
         },
         "fr" : {
@@ -2604,7 +2604,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Memory usage over 85 percent (critical)"
+            "value" : "Memory usage over 85% (critical)"
           }
         },
         "fr" : {
@@ -2639,7 +2639,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Memory usage over 70 percent (elevated)"
+            "value" : "Memory usage over 70% (elevated)"
           }
         },
         "fr" : {
