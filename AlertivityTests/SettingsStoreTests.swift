@@ -25,6 +25,7 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
         expectEqual(store.highActivityCPUThresholdPercent, 80)
         expectEqual(store.highActivityMemoryThresholdPercent, 25)
         expectTrue(store.ignoredProcessPaths.isEmpty)
+        expectEqual(store.activityThresholds, .default)
     }
 
     @Test
@@ -60,5 +61,43 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
         expectEqual(MonitoringPreferences.normalizedCPUThreshold(101), 100)
         expectEqual(MonitoringPreferences.normalizedMemoryThreshold(0), 5)
         expectEqual(MonitoringPreferences.normalizedMemoryThreshold(51), 50)
+    }
+
+    @Test
+    func persistsAndResetsCustomActivityThresholds() {
+        let suiteName = "thresholds-\(UUID().uuidString)"
+        let defaults = makeIsolatedDefaults(suiteName)
+        let store = SettingsStore(userDefaults: defaults)
+
+        let error = store.updateActivityThresholds(
+            cpuElevatedPercent: 45,
+            cpuCriticalPercent: 75,
+            memoryElevatedPercent: 65,
+            memoryCriticalPercent: 82,
+            diskElevatedMegabytesPerSecond: 25,
+            diskCriticalMegabytesPerSecond: 90,
+            networkElevatedMegabytesPerSecond: 4,
+            networkCriticalMegabytesPerSecond: 18
+        )
+        expectEqual(error, nil)
+
+        let reloaded = SettingsStore(userDefaults: UserDefaults(suiteName: "alertivity-settings-tests-\(suiteName)")!)
+        expectEqual(reloaded.activityThresholds.cpuElevatedPercent, 45)
+        expectEqual(reloaded.activityThresholds.diskCriticalMegabytesPerSecond, 90)
+
+        reloaded.resetActivityThresholds()
+        expectEqual(reloaded.activityThresholds, .default)
+    }
+
+    @Test
+    func invalidSavedActivityThresholdsFallBackToDefaults() {
+        let defaults = makeIsolatedDefaults("invalid-thresholds")
+        let invalidJSON = """
+        {"cpuElevatedPercent":90,"cpuCriticalPercent":50,"memoryElevatedPercent":70,"memoryCriticalPercent":85,"diskElevatedMegabytesPerSecond":30,"diskCriticalMegabytesPerSecond":120,"networkElevatedMegabytesPerSecond":5,"networkCriticalMegabytesPerSecond":20}
+        """
+        defaults.set(Data(invalidJSON.utf8), forKey: "monitor.system.activityThresholds")
+
+        let store = SettingsStore(userDefaults: defaults)
+        expectEqual(store.activityThresholds, .default)
     }
 }

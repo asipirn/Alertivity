@@ -150,4 +150,35 @@ private final class CapturingNotificationCenter: UserNotificationCentering {
         manager.postNotificationIfNeeded(for: status, metrics: metrics)
         expectTrue(center.requests.isEmpty)
     }
+
+    @Test
+    func notificationEvaluationUsesConfiguredThresholds() {
+        let center = CapturingNotificationCenter()
+        let manager = NotificationManager(
+            notificationCenter: center,
+            authorizationStatusProvider: { .authorized },
+            initialAuthorizationStatus: .authorized
+        )
+        manager.highActivityDuration = 0
+
+        guard let thresholds = ActivityThresholds(
+            cpuElevatedPercent: 20,
+            cpuCriticalPercent: 35,
+            memoryElevatedPercent: 70,
+            memoryCriticalPercent: 85,
+            diskElevatedMegabytesPerSecond: 30,
+            diskCriticalMegabytesPerSecond: 120,
+            networkElevatedMegabytesPerSecond: 5,
+            networkCriticalMegabytesPerSecond: 20
+        ) else {
+            Issue.record("Expected valid custom thresholds")
+            return
+        }
+        var metrics = makeMetrics(cpu: 0.4, memory: 0.2)
+        metrics.thresholds = thresholds
+
+        manager.postNotificationIfNeeded(for: ActivityStatus(metrics: metrics), metrics: metrics)
+        expectEqual(center.requests.count, 1)
+        expectEqual(center.requests.first?.content.userInfo["triggerMetric"] as? String, "cpu")
+    }
 }

@@ -67,6 +67,9 @@ struct AlertivityApp: App {
             .onChange(of: settings.highActivityMemoryThresholdPercent) { _, value in
                 applyHighActivityMemoryThresholdUpdate(for: value)
             }
+            .onChange(of: settings.activityThresholds) { _, value in
+                applyActivityThresholdUpdate(for: value)
+            }
             .onChange(of: settings.ignoredProcessPaths) { _, paths in
                 applyIgnoredProcessPathsUpdate(for: paths)
             }
@@ -134,6 +137,7 @@ struct AlertivityApp: App {
         applyHighActivityDurationUpdate(for: settings.highActivityDurationSeconds)
         applyHighActivityCPUThresholdUpdate(for: settings.highActivityCPUThresholdPercent)
         applyHighActivityMemoryThresholdUpdate(for: settings.highActivityMemoryThresholdPercent)
+        applyActivityThresholdUpdate(for: settings.activityThresholds)
         applyIgnoredProcessPathsUpdate(for: settings.ignoredProcessPaths)
         notificationManager.onIgnoreProcess = { path in
             settings.ignoreProcess(at: path)
@@ -187,6 +191,11 @@ struct AlertivityApp: App {
         } else {
             monitor.highActivityMemoryThreshold = Double(normalized) / 100.0
         }
+    }
+
+    private func applyActivityThresholdUpdate(for thresholds: ActivityThresholds) {
+        monitor.activityThresholds = thresholds
+        updateMenuBarInsertion(for: ActivityStatus(metrics: monitor.metrics))
     }
 
     private func applyIgnoredProcessPathsUpdate(for paths: [String]) {

@@ -66,4 +66,33 @@ private final class StubMetricsProvider: SystemMetricsProviding {
         monitor.ingest(metrics: normal)
         expectEqual(monitor.status.level, .normal)
     }
+
+    @Test
+    func thresholdChangesReevaluateCurrentMetricsWithoutResettingStabilization() {
+        let monitor = ActivityMonitor(autoStart: false, provider: StubMetricsProvider())
+        let sample = makeMetrics(cpu: 0.45, memory: 0.2)
+        monitor.ingest(metrics: sample)
+        expectEqual(monitor.metrics.cpuSeverity, .normal)
+
+        guard let thresholds = ActivityThresholds(
+            cpuElevatedPercent: 20,
+            cpuCriticalPercent: 40,
+            memoryElevatedPercent: 70,
+            memoryCriticalPercent: 85,
+            diskElevatedMegabytesPerSecond: 30,
+            diskCriticalMegabytesPerSecond: 120,
+            networkElevatedMegabytesPerSecond: 5,
+            networkCriticalMegabytesPerSecond: 20
+        ) else {
+            Issue.record("Expected valid custom thresholds")
+            return
+        }
+
+        monitor.activityThresholds = thresholds
+        expectEqual(monitor.metrics.cpuSeverity, .critical)
+        expectEqual(monitor.status.level, .normal, "first reevaluation should preserve stabilization")
+
+        monitor.ingest(metrics: sample)
+        expectEqual(monitor.status.level, .critical)
+    }
 }

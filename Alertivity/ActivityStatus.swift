@@ -212,11 +212,11 @@ struct ActivityStatus: Sendable, Equatable {
         }
 
         if nonNormal.count == 1, let only = nonNormal.first {
-            return menuSingleSummary(for: only.0, severity: only.1)
+            return menuSingleSummary(for: only.0, severity: only.1, metrics: metrics)
         }
 
         let clauses = nonNormal.map { metric, severity in
-            menuMultiSummaryClause(for: metric, severity: severity)
+            menuMultiSummaryClause(for: metric, severity: severity, metrics: metrics)
         }
         return naturalListWithCommaBeforeAnd(clauses) + "."
     }
@@ -338,49 +338,62 @@ struct ActivityStatus: Sendable, Equatable {
         }
     }
 
-    private func menuSingleSummary(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity) -> String {
-        switch (metric, severity) {
-        case (.cpu, .elevated):
-            return L10n.string("status.menu.single.cpu.elevated")
-        case (.cpu, .critical):
-            return L10n.string("status.menu.single.cpu.critical")
-        case (.memory, .elevated):
-            return L10n.string("status.menu.single.memory.elevated")
-        case (.memory, .critical):
-            return L10n.string("status.menu.single.memory.critical")
-        case (.disk, .elevated):
-            return L10n.string("status.menu.single.disk.elevated")
-        case (.disk, .critical):
-            return L10n.string("status.menu.single.disk.critical")
-        case (.network, .elevated):
-            return L10n.string("status.menu.single.network.elevated")
-        case (.network, .critical):
-            return L10n.string("status.menu.single.network.critical")
-        case (_, .normal):
-            return ""
+    private func menuSingleSummary(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity, metrics: ActivityMetrics) -> String {
+        guard severity != .normal else { return "" }
+        let threshold = formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds)
+        let severityName = fullSeverityName(for: severity)
+        switch metric {
+        case .cpu, .memory:
+            return L10n.format(
+                "status.menu.single.percent.custom",
+                metricDisplayName(metric), severityName, threshold
+            )
+        case .disk, .network:
+            return L10n.format(
+                "status.menu.single.throughput.custom",
+                metricDisplayName(metric), severityName, threshold
+            )
         }
     }
 
-    private func menuMultiSummaryClause(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity) -> String {
+    private func menuMultiSummaryClause(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity, metrics: ActivityMetrics) -> String {
+        guard severity != .normal else { return "" }
+        let key = metric == .cpu || metric == .memory
+            ? "status.menu.multi.percent.custom"
+            : "status.menu.multi.throughput.custom"
+        return L10n.format(
+            key,
+            metricDisplayName(metric),
+            formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds),
+            fullSeverityName(for: severity)
+        )
+    }
+
+    private func formattedThreshold(
+        for metric: TriggerMetric,
+        severity: ActivityMetrics.MetricSeverity,
+        thresholds: ActivityThresholds
+    ) -> String {
+        let value: Double
         switch (metric, severity) {
-        case (.cpu, .elevated):
-            return L10n.string("status.menu.multi.cpu.elevated")
-        case (.cpu, .critical):
-            return L10n.string("status.menu.multi.cpu.critical")
-        case (.memory, .elevated):
-            return L10n.string("status.menu.multi.memory.elevated")
-        case (.memory, .critical):
-            return L10n.string("status.menu.multi.memory.critical")
-        case (.disk, .elevated):
-            return L10n.string("status.menu.multi.disk.elevated")
-        case (.disk, .critical):
-            return L10n.string("status.menu.multi.disk.critical")
-        case (.network, .elevated):
-            return L10n.string("status.menu.multi.network.elevated")
-        case (.network, .critical):
-            return L10n.string("status.menu.multi.network.critical")
-        case (_, .normal):
-            return ""
+        case (.cpu, .elevated): value = thresholds.cpuElevatedPercent
+        case (.cpu, .critical): value = thresholds.cpuCriticalPercent
+        case (.memory, .elevated): value = thresholds.memoryElevatedPercent
+        case (.memory, .critical): value = thresholds.memoryCriticalPercent
+        case (.disk, .elevated): value = thresholds.diskElevatedMegabytesPerSecond
+        case (.disk, .critical): value = thresholds.diskCriticalMegabytesPerSecond
+        case (.network, .elevated): value = thresholds.networkElevatedMegabytesPerSecond
+        case (.network, .critical): value = thresholds.networkCriticalMegabytesPerSecond
+        case (_, .normal): value = 0
+        }
+        return value.formatted(.number.precision(.fractionLength(0...2)))
+    }
+
+    private func fullSeverityName(for severity: ActivityMetrics.MetricSeverity) -> String {
+        switch severity {
+        case .normal: return L10n.string("status.severity.normal")
+        case .elevated: return L10n.string("status.severity.elevated")
+        case .critical: return L10n.string("status.severity.critical")
         }
     }
 

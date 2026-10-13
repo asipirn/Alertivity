@@ -23,6 +23,9 @@ final class ActivityMonitor: ObservableObject {
     private var isMonitoring = false
     private var pendingStatus: ActivityStatus?
     private var pendingStatusSamples: Int = 0
+    var activityThresholds: ActivityThresholds = .default {
+        didSet { update(with: metrics) }
+    }
 
     init(
         metrics: ActivityMetrics = .placeholder,
@@ -65,8 +68,10 @@ final class ActivityMonitor: ObservableObject {
     }
 
     private func update(with metrics: ActivityMetrics) {
-        self.metrics = metrics
-        let candidateStatus = ActivityStatus(metrics: metrics)
+        var configuredMetrics = metrics
+        configuredMetrics.thresholds = activityThresholds
+        self.metrics = configuredMetrics
+        let candidateStatus = ActivityStatus(metrics: configuredMetrics)
         self.status = resolveStatusTransition(to: candidateStatus)
         processSamplingAvailable = provider.processSamplingAvailable
     }

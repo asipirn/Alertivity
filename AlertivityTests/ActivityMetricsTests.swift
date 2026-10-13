@@ -56,4 +56,55 @@ import Testing
         let none = makeMetrics(cpu: 0.6, memory: 0.65)
         expectEqual(none.highestSeverityMetric(allowedSeverities: [.critical])?.0, nil)
     }
+
+    @Test
+    func customThresholdsControlSeverityBoundariesAndAutoSwitchSelection() {
+        guard let thresholds = ActivityThresholds(
+            cpuElevatedPercent: 20,
+            cpuCriticalPercent: 40,
+            memoryElevatedPercent: 30,
+            memoryCriticalPercent: 60,
+            diskElevatedMegabytesPerSecond: 2,
+            diskCriticalMegabytesPerSecond: 4,
+            networkElevatedMegabytesPerSecond: 1,
+            networkCriticalMegabytesPerSecond: 3
+        ) else {
+            Issue.record("Expected valid custom thresholds")
+            return
+        }
+
+        var metrics = makeMetrics(cpu: 0.4, memory: 0.3, diskBytesPerSecond: 2_000_000, networkBytesPerSecond: 3_000_000)
+        metrics.thresholds = thresholds
+
+        expectEqual(metrics.cpuSeverity, .critical)
+        expectEqual(metrics.memorySeverity, .elevated)
+        expectEqual(metrics.diskSeverity, .elevated)
+        expectEqual(metrics.networkSeverity, .critical)
+        expectEqual(metrics.highestSeverityMetric(allowedSeverities: [.critical])?.0, .cpu)
+    }
+
+    @Test
+    func thresholdValidationRejectsOutOfRangeAndReversedPairs() {
+        expectEqual(ActivityThresholds.validate(
+            cpuElevatedPercent: 0,
+            cpuCriticalPercent: 80,
+            memoryElevatedPercent: 70,
+            memoryCriticalPercent: 85,
+            diskElevatedMegabytesPerSecond: 30,
+            diskCriticalMegabytesPerSecond: 120,
+            networkElevatedMegabytesPerSecond: 5,
+            networkCriticalMegabytesPerSecond: 20
+        ), .cpuOutOfRange)
+
+        expectEqual(ActivityThresholds.validate(
+            cpuElevatedPercent: 80,
+            cpuCriticalPercent: 50,
+            memoryElevatedPercent: 70,
+            memoryCriticalPercent: 85,
+            diskElevatedMegabytesPerSecond: 30,
+            diskCriticalMegabytesPerSecond: 120,
+            networkElevatedMegabytesPerSecond: 5,
+            networkCriticalMegabytesPerSecond: 20
+        ), .elevatedMustBeBelowCritical)
+    }
 }

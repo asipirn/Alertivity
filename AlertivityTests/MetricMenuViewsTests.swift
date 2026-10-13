@@ -87,4 +87,24 @@ import Testing
         expectEqual(MenuIconType.cpu.metricSelection, .cpu)
         expectEqual(MenuIconType.network.metricSelection, .network)
     }
+
+    @Test
+    func autoSwitchUsesConfiguredThresholds() {
+        guard let thresholds = ActivityThresholds(
+            cpuElevatedPercent: 20,
+            cpuCriticalPercent: 30,
+            memoryElevatedPercent: 70,
+            memoryCriticalPercent: 90,
+            diskElevatedMegabytesPerSecond: 30,
+            diskCriticalMegabytesPerSecond: 120,
+            networkElevatedMegabytesPerSecond: 5,
+            networkCriticalMegabytesPerSecond: 20
+        ) else {
+            Issue.record("Expected valid custom thresholds")
+            return
+        }
+        var metrics = makeMetrics(cpu: 0.35, memory: 0.4)
+        metrics.thresholds = thresholds
+        expectEqual(MetricMenuSelection.highestPriorityHighActivity(in: metrics), .cpu)
+    }
 }

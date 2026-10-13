@@ -15,6 +15,7 @@ final class SettingsStore: ObservableObject {
         static let highActivityCPUThreshold = "monitor.topProcesses.cpuThresholdPercent"
         static let highActivityMemoryThreshold = "monitor.topProcesses.memoryThresholdPercent"
         static let ignoredProcessPaths = "monitor.topProcesses.ignoredExecutablePaths"
+        static let activityThresholds = "monitor.system.activityThresholds"
     }
 
     private let defaults: UserDefaults
@@ -67,6 +68,16 @@ final class SettingsStore: ObservableObject {
         didSet { defaults.set(ignoredProcessPaths, forKey: Keys.ignoredProcessPaths) }
     }
 
+    @Published private(set) var activityThresholds: ActivityThresholds {
+        didSet {
+            do {
+                defaults.set(try JSONEncoder().encode(activityThresholds), forKey: Keys.activityThresholds)
+            } catch {
+                AppLogger.metrics.error("Failed to persist activity thresholds: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+
     init(userDefaults: UserDefaults = .standard) {
         self.defaults = userDefaults
 
@@ -95,6 +106,49 @@ final class SettingsStore: ObservableObject {
                 .map(Self.normalizedProcessPath)
                 .filter { !$0.isEmpty }
         )).sorted()
+        activityThresholds = Self.loadActivityThresholds(from: defaults)
+    }
+
+    @discardableResult
+    func updateActivityThresholds(
+        cpuElevatedPercent: Double,
+        cpuCriticalPercent: Double,
+        memoryElevatedPercent: Double,
+        memoryCriticalPercent: Double,
+        diskElevatedMegabytesPerSecond: Double,
+        diskCriticalMegabytesPerSecond: Double,
+        networkElevatedMegabytesPerSecond: Double,
+        networkCriticalMegabytesPerSecond: Double
+    ) -> ActivityThresholds.ValidationError? {
+        let validationError = ActivityThresholds.validate(
+            cpuElevatedPercent: cpuElevatedPercent,
+            cpuCriticalPercent: cpuCriticalPercent,
+            memoryElevatedPercent: memoryElevatedPercent,
+            memoryCriticalPercent: memoryCriticalPercent,
+            diskElevatedMegabytesPerSecond: diskElevatedMegabytesPerSecond,
+            diskCriticalMegabytesPerSecond: diskCriticalMegabytesPerSecond,
+            networkElevatedMegabytesPerSecond: networkElevatedMegabytesPerSecond,
+            networkCriticalMegabytesPerSecond: networkCriticalMegabytesPerSecond
+        )
+        guard validationError == nil, let thresholds = ActivityThresholds(
+            cpuElevatedPercent: cpuElevatedPercent,
+            cpuCriticalPercent: cpuCriticalPercent,
+            memoryElevatedPercent: memoryElevatedPercent,
+            memoryCriticalPercent: memoryCriticalPercent,
+            diskElevatedMegabytesPerSecond: diskElevatedMegabytesPerSecond,
+            diskCriticalMegabytesPerSecond: diskCriticalMegabytesPerSecond,
+            networkElevatedMegabytesPerSecond: networkElevatedMegabytesPerSecond,
+            networkCriticalMegabytesPerSecond: networkCriticalMegabytesPerSecond
+        ) else { return validationError }
+
+        activityThresholds = thresholds
+        AppLogger.metrics.info("Activity thresholds updated")
+        return nil
+    }
+
+    func resetActivityThresholds() {
+        activityThresholds = .default
+        AppLogger.metrics.info("Activity thresholds reset to defaults")
     }
 
     func ignoreProcess(at path: String) {
@@ -115,5 +169,29 @@ final class SettingsStore: ObservableObject {
 
     static func normalizedProcessPath(_ path: String) -> String {
         NSString(string: path.trimmingCharacters(in: .whitespacesAndNewlines)).standardizingPath
+    }
+
+    private static func loadActivityThresholds(from defaults: UserDefaults) -> ActivityThresholds {
+        guard let data = defaults.data(forKey: Keys.activityThresholds) else { return .default }
+        do {
+            let decoded = try JSONDecoder().decode(ActivityThresholds.self, from: data)
+            guard let validated = ActivityThresholds(
+                cpuElevatedPercent: decoded.cpuElevatedPercent,
+                cpuCriticalPercent: decoded.cpuCriticalPercent,
+                memoryElevatedPercent: decoded.memoryElevatedPercent,
+                memoryCriticalPercent: decoded.memoryCriticalPercent,
+                diskElevatedMegabytesPerSecond: decoded.diskElevatedMegabytesPerSecond,
+                diskCriticalMegabytesPerSecond: decoded.diskCriticalMegabytesPerSecond,
+                networkElevatedMegabytesPerSecond: decoded.networkElevatedMegabytesPerSecond,
+                networkCriticalMegabytesPerSecond: decoded.networkCriticalMegabytesPerSecond
+            ) else {
+                AppLogger.metrics.error("Invalid saved activity thresholds; using defaults")
+                return .default
+            }
+            return validated
+        } catch {
+            AppLogger.metrics.error("Unreadable saved activity thresholds; using defaults: \(error.localizedDescription, privacy: .public)")
+            return .default
+        }
     }
 }

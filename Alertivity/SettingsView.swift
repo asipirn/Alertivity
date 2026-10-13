@@ -37,6 +37,10 @@ struct SettingsView: View {
                 )
             }
 
+            SettingsTab(title: "settings.tab.thresholds", systemImage: "gauge.with.dots.needle.50percent") {
+                SystemThresholdSettingsView(settings: settings, emphasizesNotes: true)
+            }
+
             if processSamplingAvailable {
                 SettingsTab(title: "settings.tab.detection", systemImage: "scope") {
                     DetectionSettingsFields(
@@ -86,6 +90,10 @@ struct NoticePreferencesView: View {
                 processSamplingAvailable: processSamplingAvailable,
                 emphasizesFooter: false
             )
+        }
+
+        Section("settings.tab.thresholds") {
+            SystemThresholdSettingsView(settings: settings, emphasizesNotes: false)
         }
 
         if processSamplingAvailable {
@@ -239,19 +247,194 @@ private struct DetectionSettingsFields: View {
     @Binding var highActivityMemoryThresholdPercent: Int
 
     var body: some View {
-        Picker("settings.detection.cpuThreshold", selection: $highActivityCPUThresholdPercent) {
-            ForEach(MonitoringPreferences.cpuThresholdOptions, id: \.self) { value in
-                Text(formattedPercent(value)).tag(value)
+        LabeledContent("settings.detection.cpuThreshold") {
+            HStack(spacing: 4) {
+                TextField("", value: $highActivityCPUThresholdPercent, format: .number)
+                    .frame(width: 64)
+                Text("%")
             }
         }
-        .pickerStyle(.menu)
 
-        Picker("settings.detection.memoryThreshold", selection: $highActivityMemoryThresholdPercent) {
-            ForEach(MonitoringPreferences.memoryThresholdOptions, id: \.self) { value in
-                Text(formattedPercent(value)).tag(value)
+        LabeledContent("settings.detection.memoryThreshold") {
+            HStack(spacing: 4) {
+                TextField("", value: $highActivityMemoryThresholdPercent, format: .number)
+                    .frame(width: 64)
+                Text("%")
             }
         }
-        .pickerStyle(.menu)
+    }
+}
+
+private struct SystemThresholdSettingsView: View {
+    private struct Draft: Equatable {
+        var cpuElevated: Double
+        var cpuCritical: Double
+        var memoryElevated: Double
+        var memoryCritical: Double
+        var diskElevated: Double
+        var diskCritical: Double
+        var networkElevated: Double
+        var networkCritical: Double
+
+        init(_ thresholds: ActivityThresholds) {
+            cpuElevated = thresholds.cpuElevatedPercent
+            cpuCritical = thresholds.cpuCriticalPercent
+            memoryElevated = thresholds.memoryElevatedPercent
+            memoryCritical = thresholds.memoryCriticalPercent
+            diskElevated = thresholds.diskElevatedMegabytesPerSecond
+            diskCritical = thresholds.diskCriticalMegabytesPerSecond
+            networkElevated = thresholds.networkElevatedMegabytesPerSecond
+            networkCritical = thresholds.networkCriticalMegabytesPerSecond
+        }
+    }
+
+    @ObservedObject var settings: SettingsStore
+    let emphasizesNotes: Bool
+    @State private var draft: Draft
+
+    init(settings: SettingsStore, emphasizesNotes: Bool) {
+        self.settings = settings
+        self.emphasizesNotes = emphasizesNotes
+        _draft = State(initialValue: Draft(settings.activityThresholds))
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 8) {
+                GridRow {
+                    Text("")
+                    Text("settings.thresholds.elevated")
+                        .frame(width: 60, alignment: .trailing)
+                    Text("settings.thresholds.critical")
+                        .frame(width: 60, alignment: .trailing)
+                    Text("")
+                }
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.secondary)
+                thresholdRow(
+                    "settings.thresholds.cpu",
+                    help: "CPU thresholds use total system processor utilization.",
+                    elevated: $draft.cpuElevated,
+                    critical: $draft.cpuCritical,
+                    unit: "%"
+                )
+                thresholdRow(
+                    "settings.thresholds.memory",
+                    help: "Memory thresholds use the percentage of physical memory in use.",
+                    elevated: $draft.memoryElevated,
+                    critical: $draft.memoryCritical,
+                    unit: "%"
+                )
+                thresholdRow(
+                    "settings.thresholds.disk",
+                    help: "Disk thresholds use combined read and write throughput.",
+                    elevated: $draft.diskElevated,
+                    critical: $draft.diskCritical,
+                    unit: "MB/s"
+                )
+                thresholdRow(
+                    "settings.thresholds.network",
+                    help: "Network thresholds use combined download and upload throughput.",
+                    elevated: $draft.networkElevated,
+                    critical: $draft.networkCritical,
+                    unit: "MB/s"
+                )
+            }
+
+            if let validationError {
+                Label(validationMessage(for: validationError), systemImage: "exclamationmark.triangle.fill")
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+            }
+
+            HStack {
+                Button("settings.thresholds.reset") {
+                    settings.resetActivityThresholds()
+                    draft = Draft(.default)
+                }
+                Spacer()
+            }
+
+            FooterDivider()
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("settings.thresholds.help")
+                Text("Process detection thresholds are configured separately.")
+            }
+            .font(.footnote.weight(emphasizesNotes ? .semibold : .regular))
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .onChange(of: draft) { _, _ in applyIfValid() }
+        .onChange(of: settings.activityThresholds) { _, thresholds in
+            if validationError == nil, Draft(thresholds) != draft {
+                draft = Draft(thresholds)
+            }
+        }
+    }
+
+    private func thresholdRow(
+        _ title: LocalizedStringKey,
+        help: LocalizedStringKey,
+        elevated: Binding<Double>,
+        critical: Binding<Double>,
+        unit: String
+    ) -> some View {
+        GridRow {
+            Text(title)
+                .help(help)
+            thresholdField(value: elevated)
+            thresholdField(value: critical)
+            Text(unit)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(minWidth: 30, alignment: .leading)
+        }
+    }
+
+    private func thresholdField(value: Binding<Double>) -> some View {
+        TextField("", value: value, format: .number.precision(.fractionLength(0...2)))
+            .multilineTextAlignment(.trailing)
+            .monospacedDigit()
+            .frame(width: 60)
+    }
+
+    private var validationError: ActivityThresholds.ValidationError? {
+        ActivityThresholds.validate(
+            cpuElevatedPercent: draft.cpuElevated,
+            cpuCriticalPercent: draft.cpuCritical,
+            memoryElevatedPercent: draft.memoryElevated,
+            memoryCriticalPercent: draft.memoryCritical,
+            diskElevatedMegabytesPerSecond: draft.diskElevated,
+            diskCriticalMegabytesPerSecond: draft.diskCritical,
+            networkElevatedMegabytesPerSecond: draft.networkElevated,
+            networkCriticalMegabytesPerSecond: draft.networkCritical
+        )
+    }
+
+    private func applyIfValid() {
+        guard validationError == nil else { return }
+        settings.updateActivityThresholds(
+            cpuElevatedPercent: draft.cpuElevated,
+            cpuCriticalPercent: draft.cpuCritical,
+            memoryElevatedPercent: draft.memoryElevated,
+            memoryCriticalPercent: draft.memoryCritical,
+            diskElevatedMegabytesPerSecond: draft.diskElevated,
+            diskCriticalMegabytesPerSecond: draft.diskCritical,
+            networkElevatedMegabytesPerSecond: draft.networkElevated,
+            networkCriticalMegabytesPerSecond: draft.networkCritical
+        )
+    }
+
+    private func validationMessage(for error: ActivityThresholds.ValidationError) -> LocalizedStringKey {
+        switch error {
+        case .cpuOutOfRange, .memoryOutOfRange:
+            return "settings.thresholds.error.percentRange"
+        case .diskOutOfRange, .networkOutOfRange:
+            return "settings.thresholds.error.throughputRange"
+        case .elevatedMustBeBelowCritical:
+            return "settings.thresholds.error.order"
+        }
     }
 }
 
