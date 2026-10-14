@@ -33,7 +33,7 @@ Build from source to unlock process-level activity, custom CPU and memory thresh
 
 ## Build from Source
 
-Requirements: **macOS 13 or later** and **Xcode 15 or later**.
+Requirements: **macOS 14 (Sonoma) or later** and **Xcode 15 or later**.
 
 1. Open `Alertivity.xcodeproj` in Xcode.
 2. Select the **Alertivity (Non-sandboxed)** scheme.
@@ -58,6 +58,8 @@ Alertivity monitors activity locally. Notifications require macOS authorization.
 English, German, French, Japanese, and Simplified Chinese.
 
 ## Development
+
+Both app targets require macOS 14 or later. Debug and Release pin this minimum explicitly so Xcode updates do not change compatibility. This baseline supports native SwiftUI Settings access and modern login-item registration without older-system fallbacks.
 
 Run the Swift Testing and UI test suites with:
 

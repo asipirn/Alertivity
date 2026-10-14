@@ -251,7 +251,7 @@ private struct DetectionSettingsFields: View {
             HStack(spacing: 4) {
                 TextField("", value: $highActivityCPUThresholdPercent, format: .number)
                     .frame(width: 64)
-                Text("%")
+                Text(verbatim: "%")
             }
         }
 
@@ -259,7 +259,7 @@ private struct DetectionSettingsFields: View {
             HStack(spacing: 4) {
                 TextField("", value: $highActivityMemoryThresholdPercent, format: .number)
                     .frame(width: 64)
-                Text("%")
+                Text(verbatim: "%")
             }
         }
     }

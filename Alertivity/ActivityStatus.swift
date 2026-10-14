@@ -358,15 +358,22 @@ struct ActivityStatus: Sendable, Equatable {
 
     private func menuMultiSummaryClause(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity, metrics: ActivityMetrics) -> String {
         guard severity != .normal else { return "" }
-        let key = metric == .cpu || metric == .memory
-            ? "status.menu.multi.percent.custom"
-            : "status.menu.multi.throughput.custom"
-        return L10n.format(
-            key,
-            metricDisplayName(metric),
-            formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds),
-            fullSeverityName(for: severity)
-        )
+        switch metric {
+        case .cpu, .memory:
+            return L10n.format(
+                "status.menu.multi.percent.custom",
+                metricDisplayName(metric),
+                formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds),
+                fullSeverityName(for: severity)
+            )
+        case .disk, .network:
+            return L10n.format(
+                "status.menu.multi.throughput.custom",
+                metricDisplayName(metric),
+                formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds),
+                fullSeverityName(for: severity)
+            )
+        }
     }
 
     private func formattedThreshold(
@@ -386,7 +393,12 @@ struct ActivityStatus: Sendable, Equatable {
         case (.network, .critical): value = thresholds.networkCriticalMegabytesPerSecond
         case (_, .normal): value = 0
         }
-        return value.formatted(.number.precision(.fractionLength(0...2)))
+        switch metric {
+        case .cpu, .memory:
+            return (value / 100).formatted(.percent.precision(.fractionLength(0...2)))
+        case .disk, .network:
+            return value.formatted(.number.precision(.fractionLength(0...2)))
+        }
     }
 
     private func fullSeverityName(for severity: ActivityMetrics.MetricSeverity) -> String {

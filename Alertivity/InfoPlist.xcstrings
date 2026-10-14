@@ -7,8 +7,8 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Alertivity"
+            "state" : "machine_translated",
+            "value" : "AlertivityNonSandboxed"
           }
         },
         "en" : {
@@ -19,20 +19,20 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Alertivity"
+            "state" : "machine_translated",
+            "value" : "AlertivityNonSandboxed"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Alertivity"
+            "state" : "machine_translated",
+            "value" : "AlertivityNonSandboxed"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Alertivity"
+            "state" : "machine_translated",
+            "value" : "AlertivityNonSandboxed"
           }
         }
       }

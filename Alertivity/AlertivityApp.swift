@@ -36,11 +36,7 @@ struct AlertivityApp: App {
                     .padding(6)
 
                     Divider()
-                    if #available(macOS 14.0, *) {
-                        SettingsMenuLinkRow()
-                    } else {
-                        // Fallback on earlier versions
-                    }
+                    SettingsMenuLinkRow()
                 }
                 .frame(minWidth: 220, alignment: .leading)
                 .padding(6)
@@ -304,18 +300,11 @@ private extension AlertivityApp {
 
 private enum LaunchAtLoginManager {
     static func isEnabled() -> Bool {
-        if #available(macOS 13.0, *) {
-            return SMAppService.mainApp.status == .enabled
-        }
-        return false
+        SMAppService.mainApp.status == .enabled
     }
 
     @discardableResult
     static func set(enabled: Bool) -> Bool {
-        guard #available(macOS 13.0, *) else {
-            return false
-        }
-
         do {
             if enabled {
                 try SMAppService.mainApp.register()
@@ -498,7 +487,6 @@ private struct SettingsWindowAccessor: NSViewRepresentable {
     }
 }
 
-@available(macOS 14.0, *)
 private struct SettingsMenuLinkRow: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isHovering = false
