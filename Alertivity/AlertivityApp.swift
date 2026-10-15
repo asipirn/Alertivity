@@ -11,6 +11,7 @@ struct AlertivityApp: App {
     @StateObject private var monitor = ActivityMonitor()
     @StateObject private var notificationManager = NotificationManager()
     @StateObject private var settings = AlertivityApp.makeSettingsStore()
+    @StateObject private var reviewStore = ReviewRequestStore()
 
     @State private var isMenuBarInserted = true
     @State private var hasInitialized = false
@@ -93,12 +94,18 @@ struct AlertivityApp: App {
         .menuBarExtraStyle(.window)
 
         Settings {
-            SettingsView(settings: settings, processSamplingAvailable: monitor.processSamplingAvailable)
+            SettingsView(settings: settings, processSamplingAvailable: monitor.processSamplingAvailable,
+                         reviewStore: reviewStore, metrics: monitor.metrics)
                 .frame(width: 400)
                 .background(SettingsWindowAccessor())
                 .onAppear {
                     NSApp.activate(ignoringOtherApps: true)
                 }
+        }
+        .commands {
+            CommandGroup(after: .appSettings) {
+                WriteReviewButton(store: reviewStore)
+            }
         }
 
 #if DEBUG
@@ -115,6 +122,7 @@ struct AlertivityApp: App {
     private func performInitialSetup() {
         guard !hasInitialized else { return }
         hasInitialized = true
+        reviewStore.startRecordingUsage(from: monitor)
 
 #if DEBUG
         if isUITest {
@@ -464,7 +472,8 @@ private struct MenuWindowBackground: NSViewRepresentable {
     }
 }
 
-private final class SettingsWindowTracker {
+/// Shares the actual settings window for focus restoration and safe review presentation.
+final class SettingsWindowTracker {
     static let shared = SettingsWindowTracker()
     weak var window: NSWindow?
 }

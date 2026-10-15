@@ -22,6 +22,7 @@
 		AA0000000000000000000402 /* MetricMenuViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000400 /* MetricMenuViewsTests.swift */; };
 		AA0000000000000000000403 /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000401 /* ContentViewTests.swift */; };
 		AA0000000000000000000508 /* AlertivityNonSandboxed.app in Embed App */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000500 /* AlertivityNonSandboxed.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA0000000000000000000601 /* ReviewRequestStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000600 /* ReviewRequestStoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		AA0000000000000000000400 /* MetricMenuViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricMenuViewsTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000401 /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000500 /* AlertivityNonSandboxed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlertivityNonSandboxed.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000000000000000000600 /* ReviewRequestStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestStoreTests.swift; sourceTree = "<group>"; };
 		C9055CF22EE03257002E5DF4 /* Alertivity.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Alertivity.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,6 +148,7 @@
 				AA0000000000000000000400 /* MetricMenuViewsTests.swift */,
 				AA0000000000000000000401 /* ContentViewTests.swift */,
 				AA0000000000000000000103 /* SystemMetricsProviderTests.swift */,
+				AA0000000000000000000600 /* ReviewRequestStoreTests.swift */,
 			);
 			path = AlertivityTests;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				AA0000000000000000000402 /* MetricMenuViewsTests.swift in Sources */,
 				AA0000000000000000000403 /* ContentViewTests.swift in Sources */,
 				AA000000000000000000010E /* SystemMetricsProviderTests.swift in Sources */,
+				AA0000000000000000000601 /* ReviewRequestStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

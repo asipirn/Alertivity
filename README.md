@@ -61,6 +61,8 @@ English, German, French, Japanese, and Simplified Chinese.
 
 Both app targets require macOS 14 or later. Debug and Release pin this minimum explicitly so Xcode updates do not change compatibility. This baseline supports native SwiftUI Settings access and modern login-item registration without older-system fallbacks.
 
+App Store review requests use persisted usage milestones and conservative frequency limits. The standard Alertivity application menu includes a manual review link.
+
 Run the Swift Testing and UI test suites with:
 
 ```sh

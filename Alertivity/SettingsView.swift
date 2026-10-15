@@ -6,13 +6,20 @@ private let settingsTabPadding = EdgeInsets(top: 24, leading: 45, bottom: 28, tr
 struct SettingsView: View {
     @ObservedObject var settings: SettingsStore
     let processSamplingAvailable: Bool
+    var reviewStore: ReviewRequestStore = ReviewRequestStore()
+    var metrics: ActivityMetrics = .placeholder
+    @State private var selectedTab: SettingsTabSelection = .general
 
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             SettingsTab(title: "settings.tab.general", systemImage: "switch.2") {
                 Toggle("settings.toggle.hideDockIcon", isOn: $settings.hideDockIcon)
                 Toggle("settings.toggle.launchAtLogin", isOn: $settings.launchAtLogin)
             }
+            .modifier(AutomaticReviewRequest(store: reviewStore, hasLiveData: metrics.hasLiveData,
+                                             isCritical: ActivityStatus(metrics: metrics).level == .critical,
+                                             isGeneralSelected: selectedTab == .general))
+            .tag(SettingsTabSelection.general)
 
             SettingsTab(title: "settings.tab.menuBar", systemImage: "waveform.path.ecg") {
                 MenuBarSettingsFields(
@@ -27,6 +34,7 @@ struct SettingsView: View {
 
                 SettingsFootnote(key: "settings.menuBar.help", weight: .semibold)
             }
+            .tag(SettingsTabSelection.menuBar)
 
             SettingsTab(title: "settings.tab.notifications", systemImage: "bell") {
                 NotificationSettingsFields(
@@ -36,10 +44,12 @@ struct SettingsView: View {
                     emphasizesFooter: true
                 )
             }
+            .tag(SettingsTabSelection.notifications)
 
             SettingsTab(title: "settings.tab.thresholds", systemImage: "gauge.with.dots.needle.50percent") {
                 SystemThresholdSettingsView(settings: settings, emphasizesNotes: true)
             }
+            .tag(SettingsTabSelection.thresholds)
 
             if processSamplingAvailable {
                 SettingsTab(title: "settings.tab.detection", systemImage: "scope") {
@@ -61,9 +71,14 @@ struct SettingsView: View {
                         emphasizesFooter: true
                     )
                 }
+                .tag(SettingsTabSelection.detection)
             }
         }
         .frame(minWidth: 420)
+    }
+
+    private enum SettingsTabSelection: Hashable {
+        case general, menuBar, notifications, thresholds, detection
     }
 }
 
