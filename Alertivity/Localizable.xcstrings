@@ -3564,7 +3564,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notification cooldown:"
+            "value" : "Cooldown:"
           }
         },
         "de" : {
