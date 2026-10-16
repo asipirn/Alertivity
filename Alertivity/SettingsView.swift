@@ -6,6 +6,7 @@ private let settingsTabPadding = EdgeInsets(top: 24, leading: 45, bottom: 28, tr
 struct SettingsView: View {
     @ObservedObject var settings: SettingsStore
     let processSamplingAvailable: Bool
+    @ObservedObject var notificationManager: NotificationManager
 
     var body: some View {
         TabView {
@@ -29,6 +30,8 @@ struct SettingsView: View {
             }
 
             SettingsTab(title: "settings.tab.notifications", systemImage: "bell") {
+                NotificationPermissionView(manager: notificationManager)
+                Divider()
                 NotificationSettingsFields(
                     notificationsEnabled: $settings.notificationsEnabled,
                     highActivityDurationSeconds: $settings.highActivityDurationSeconds,
@@ -597,6 +600,7 @@ private struct IgnoredProcessRow: View {
 
 #if DEBUG && !DISABLE_PREVIEWS
 private struct SettingsPreviewContainer: View {
+    @StateObject private var notificationManager = NotificationManager()
     @StateObject private var settings: SettingsStore
     let processSamplingAvailable: Bool
 
@@ -613,7 +617,8 @@ private struct SettingsPreviewContainer: View {
     var body: some View {
         SettingsView(
             settings: settings,
-            processSamplingAvailable: processSamplingAvailable
+            processSamplingAvailable: processSamplingAvailable,
+            notificationManager: notificationManager
         )
     }
 }

@@ -1,8 +1,14 @@
 import Combine
 import Foundation
 
+/// A terminal onboarding outcome suppresses automatic presentation; replay never resets preferences.
+enum OnboardingOutcome: String {
+    case pending, completed, skipped
+}
+
 final class SettingsStore: ObservableObject {
     private enum Keys {
+        static let onboardingOutcome = "app.onboarding.outcome"
         static let hideDockIcon = "app.hideDockIcon"
         static let launchAtLogin = "app.launchAtLogin"
         static let menuIconEnabled = "notice.menu.enabled"
@@ -19,6 +25,20 @@ final class SettingsStore: ObservableObject {
     }
 
     private let defaults: UserDefaults
+
+    /// An explicit replay request is transient; it must never reopen guidance after relaunch.
+    @Published var isOnboardingRequested = false
+
+    @Published private(set) var onboardingOutcome: OnboardingOutcome {
+        didSet { defaults.set(onboardingOutcome.rawValue, forKey: Keys.onboardingOutcome) }
+    }
+
+    /// Closing the welcome window counts as skipping, so it never blocks subsequent launches.
+    func finishOnboarding(_ outcome: OnboardingOutcome) {
+        guard outcome != .pending else { return }
+        onboardingOutcome = outcome
+        AppLogger.lifecycle.info("Onboarding finished; outcome: \(outcome.rawValue, privacy: .public)")
+    }
 
     @Published var hideDockIcon: Bool {
         didSet { defaults.set(hideDockIcon, forKey: Keys.hideDockIcon) }
@@ -80,6 +100,8 @@ final class SettingsStore: ObservableObject {
 
     init(userDefaults: UserDefaults = .standard) {
         self.defaults = userDefaults
+        onboardingOutcome = defaults.string(forKey: Keys.onboardingOutcome)
+            .flatMap(OnboardingOutcome.init(rawValue:)) ?? .pending
 
         hideDockIcon = defaults.object(forKey: Keys.hideDockIcon) as? Bool ?? false
         launchAtLogin = defaults.object(forKey: Keys.launchAtLogin) as? Bool ?? false
