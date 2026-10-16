@@ -39,8 +39,7 @@ struct SettingsView: View {
             .tag(SettingsTabSelection.menuBar)
 
             SettingsTab(title: "settings.tab.notifications", systemImage: "bell") {
-                NotificationPermissionView(manager: notificationManager)
-                Divider()
+                NotificationPermissionView(manager: notificationManager, showsAuthorizedStatus: false)
                 NotificationSettingsFields(
                     notificationsEnabled: $settings.notificationsEnabled,
                     highActivityDurationSeconds: $settings.highActivityDurationSeconds,
