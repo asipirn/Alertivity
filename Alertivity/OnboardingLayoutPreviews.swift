@@ -5,7 +5,10 @@ import SwiftUI
 #Preview("Fixed divider · CPU, network, status") {
     VStack(spacing: 16) {
         ForEach([MenuIconType.cpu, .network, .status]) { type in
-            OnboardingLivePreview(metrics: .previewNormal, iconType: .constant(type))
+            OnboardingLivePreview(
+                metrics: .previewNormal, iconType: .constant(type),
+                savedIconType: .status, applyStyle: {}
+            )
         }
     }
     .padding(28)

@@ -2239,37 +2239,107 @@
         }
       }
     },
-    "onboarding.preview.help" : {
+    "onboarding.preview.applied" : {
       "extractionState" : "manual",
       "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nur eine Vorschau. Deine gespeicherte Menüleiste bleibt unverändert."
-          }
-        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preview only. Your saved menu bar stays unchanged."
+            "value" : "Style in Use"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktueller Stil"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aperçu uniquement. Votre barre des menus reste inchangée."
+            "value" : "Style actuel"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "プレビューのみです。保存済みのメニューバー設定は変わりません。"
+            "value" : "使用中のスタイル"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅供预览，不会更改已保存的菜单栏设置。"
+            "value" : "当前使用的样式"
+          }
+        }
+      }
+    },
+    "onboarding.preview.apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use This"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwenden"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これを使用"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用此项"
+          }
+        }
+      }
+    },
+    "onboarding.preview.help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try a style, then choose Use This to save it."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Probiere einen Stil aus und speichere ihn mit „Verwenden“."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayez un style, puis choisissez « Utiliser » pour l’enregistrer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スタイルを試し、「これを使用」で保存できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "试选样式，然后点按“使用此项”保存。"
           }
         }
       }
@@ -2375,41 +2445,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在菜单栏查看高负载进程。"
-          }
-        }
-      }
-    },
-    "onboarding.process.unavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diese Version zeigt die gesamte Systemaktivität."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This version shows overall system activity."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette version affiche l’activité globale du système."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このバージョンはシステム全体の使用状況を表示します。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此版本显示系统整体活动。"
           }
         }
       }

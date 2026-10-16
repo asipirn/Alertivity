@@ -85,6 +85,45 @@ final class AlertivityUITests: XCTestCase {
         app.buttons["onboarding.skip"].click()
     }
 
+    func testApplyingPreviewStyleIsExplicitAndPersists() {
+        let app = launchApp()
+        app.launch()
+        let picker = app.popUpButtons["onboarding.previewStyle"]
+        XCTAssertTrue(picker.waitForExistence(timeout: 8))
+        let apply = app.buttons["onboarding.applyStyle"]
+        XCTAssertFalse(apply.isEnabled)
+        picker.click()
+        app.menuItems["Network throughput"].click()
+        XCTAssertTrue(apply.isEnabled)
+        apply.click()
+        XCTAssertFalse(apply.isEnabled)
+        // Continue and Done must not apply a subsequent exploratory selection.
+        picker.click()
+        app.menuItems["CPU usage"].click()
+        app.buttons["onboarding.next"].click()
+        app.buttons["onboarding.next"].click()
+        app.terminate()
+        app.launchArguments.append("UITestsPreserveDefaults")
+        app.launch()
+        app.typeKey(",", modifierFlags: .command)
+        let menuBar = app.buttons["Menu Bar"]
+        XCTAssertTrue(menuBar.waitForExistence(timeout: 5))
+        menuBar.click()
+        XCTAssertTrue(app.popUpButtons["arrow.up.arrow.down"].waitForExistence(timeout: 3))
+        XCTAssertEqual(app.popUpButtons["arrow.up.arrow.down"].value as? String, "Network throughput")
+        app.menuBars.menuBarItems["Help"].click()
+        app.menuItems["Getting Started…"].click()
+        XCTAssertTrue(picker.waitForExistence(timeout: 3))
+        XCTAssertEqual(picker.value as? String, "Network throughput")
+        picker.click()
+        app.menuItems["CPU usage"].click()
+        app.buttons["onboarding.skip"].click()
+        app.menuBars.menuBarItems["Help"].click()
+        app.menuItems["Getting Started…"].click()
+        XCTAssertTrue(picker.waitForExistence(timeout: 3))
+        XCTAssertEqual(picker.value as? String, "Network throughput")
+    }
+
     func testSkippingAndClosingSuppressFuturePresentation() {
         for closeWindow in [false, true] {
             let app = launchApp()

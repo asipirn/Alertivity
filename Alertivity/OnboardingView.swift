@@ -81,13 +81,23 @@ struct OnboardingView: View {
     private var introduction: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("onboarding.overview.help")
-            OnboardingLivePreview(metrics: monitor.metrics, iconType: $previewIconType)
+            OnboardingLivePreview(
+                metrics: monitor.metrics,
+                iconType: $previewIconType,
+                savedIconType: settings.menuIconType
+            ) {
+                // Applying is explicit; navigation and preview selection never save the style.
+                settings.menuIconType = previewIconType
+                AppLogger.lifecycle.info("Onboarding style applied; style: \(previewIconType.rawValue, privacy: .public)")
+            }
             DisclosureGroup("onboarding.moreOptions", isExpanded: $showsMenuOptions) {
                 autoSwitchOptions.padding(.top, 8)
             }
             .disclosureGroupStyle(OnboardingOptionsStyle())
             VStack(alignment: .leading, spacing: 4) {
-                Text(processSamplingAvailable ? "onboarding.process.available" : "onboarding.process.unavailable")
+                if processSamplingAvailable {
+                    Text("onboarding.process.available")
+                }
                 Text("onboarding.local")
             }
             .font(.caption).foregroundStyle(.secondary)
@@ -173,6 +183,8 @@ private struct OnboardingOptionsStyle: DisclosureGroupStyle {
 struct OnboardingLivePreview: View {
     let metrics: ActivityMetrics
     @Binding var iconType: MenuIconType
+    let savedIconType: MenuIconType
+    let applyStyle: () -> Void
 
     var body: some View {
         GroupBox {
@@ -200,9 +212,20 @@ struct OnboardingLivePreview: View {
                         .frame(width: 1, height: 44)
                         .accessibilityHidden(true)
                 }
-                Text("onboarding.preview.help")
-                    .font(.caption).foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 8) {
+                    Text("onboarding.preview.help")
+                        .font(.caption).foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.85)
+                    Spacer(minLength: 0)
+                    Button(action: applyStyle) {
+                        Text(iconType == savedIconType ? "onboarding.preview.applied" : "onboarding.preview.apply")
+                    }
+                    .fixedSize()
+                    .disabled(iconType == savedIconType)
+                    .accessibilityIdentifier("onboarding.applyStyle")
+                }
+                .padding(.trailing, 25)
             }
             .padding(8)
         }
