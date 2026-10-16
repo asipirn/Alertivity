@@ -15,7 +15,9 @@ final class NotificationManager: NSObject, ObservableObject {
     private let notificationCenter: UserNotificationCentering
     private var lastNotificationDate: Date?
     private let throttleInterval: TimeInterval = 60 * 10
-    private var authorizationStatus: UNAuthorizationStatus
+    @Published private(set) var authorizationStatus: UNAuthorizationStatus
+    @Published private(set) var isRequestingAuthorization = false
+    @Published private(set) var authorizationFailed = false
     var highActivityDuration: TimeInterval = 60
     var processSamplingAvailable: Bool = true
     var onIgnoreProcess: ((String) -> Void)?
@@ -54,19 +56,38 @@ final class NotificationManager: NSObject, ObservableObject {
         Task { await refreshAuthorizationStatus() }
     }
 
+    @MainActor
     func requestAuthorizationIfNeeded() {
+        Task { await requestAuthorization() }
+    }
+
+    /// Refresh before asking: cached status may be stale after a trip to System Settings.
+    /// Only an explicit user action calls this; monitoring itself never triggers a prompt.
+    @MainActor
+    func requestAuthorization() async {
+        guard !isRequestingAuthorization else { return }
+        isRequestingAuthorization = true
+        authorizationFailed = false
+        defer { isRequestingAuthorization = false }
+        await refreshAuthorizationStatus()
         guard authorizationStatus == .notDetermined else { return }
-        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
-            if let error {
-                AppLogger.notifications.error("Notification authorization failed: \(error.localizedDescription, privacy: .public)")
-            } else {
-                AppLogger.notifications.info("Notification authorization completed; granted: \(granted, privacy: .public)")
+        do {
+            let granted: Bool = try await withCheckedThrowingContinuation { continuation in
+                notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(returning: granted)
+                    }
+                }
             }
-            Task { await self?.refreshAuthorizationStatus() }
-            if !granted {
-                self?.lastNotificationDate = nil
-            }
+            AppLogger.notifications.info("Notification authorization completed; granted: \(granted, privacy: .public)")
+            if !granted { lastNotificationDate = nil }
+        } catch {
+            authorizationFailed = true
+            AppLogger.notifications.error("Notification authorization failed: \(error.localizedDescription, privacy: .public)")
         }
+        await refreshAuthorizationStatus()
     }
 
     func postNotificationIfNeeded(for _: ActivityStatus, metrics: ActivityMetrics) {
@@ -140,15 +161,15 @@ final class NotificationManager: NSObject, ObservableObject {
     }
 
     @MainActor
-    private func refreshAuthorizationStatus() async {
+    func refreshAuthorizationStatus() async {
         if let authorizationStatusProvider {
             authorizationStatus = await authorizationStatusProvider()
-            AppLogger.notifications.info("Notification authorization status: \(self.authorizationStatus.rawValue, privacy: .public)")
-            return
+        } else {
+            let settings = await notificationCenter.notificationSettings()
+            authorizationStatus = settings.authorizationStatus
         }
-
-        let settings = await notificationCenter.notificationSettings()
-        authorizationStatus = settings.authorizationStatus
+        // External permission changes resolve a previous request error as well as the status.
+        if authorizationStatus != .notDetermined { authorizationFailed = false }
         AppLogger.notifications.info("Notification authorization status: \(self.authorizationStatus.rawValue, privacy: .public)")
     }
 

@@ -28,12 +28,14 @@ struct WriteReviewButton: View {
 }
 
 /// Limits automatic presentation to the General pane, after inactivity in a real settings window.
+/// Pending onboarding and explicit replay also block requests, including while Settings is key.
 /// AppKit supplies local input and window/modal state that SwiftUI does not expose directly.
 struct AutomaticReviewRequest: ViewModifier {
     let store: ReviewRequestStore
     let hasLiveData: Bool
     let isCritical: Bool
     let isGeneralSelected: Bool
+    let isOnboardingActive: Bool
     @Environment(\.requestReview) private var requestReview
     @Environment(\.scenePhase) private var scenePhase
     @State private var interactionGeneration = 0
@@ -57,11 +59,12 @@ struct AutomaticReviewRequest: ViewModifier {
                 inputMonitor = nil
             }
             .task(id: RequestContext(interaction: interactionGeneration, phase: scenePhase,
-                                     live: hasLiveData, critical: isCritical, general: isGeneralSelected)) {
+                                     live: hasLiveData, critical: isCritical, general: isGeneralSelected,
+                                     onboarding: isOnboardingActive)) {
                 // Debug and standalone builds must never contact StoreKit automatically.
 #if !DEBUG
                 guard Bundle.main.bundleIdentifier == "com.Nobby.Alertivity",
-                      isGeneralSelected, hasLiveData, !isCritical, scenePhase == .active else { return }
+                      isGeneralSelected, !isOnboardingActive, hasLiveData, !isCritical, scenePhase == .active else { return }
                 do {
                     try await Task.sleep(for: .seconds(30))
                     guard safeToPresent else { return }
@@ -100,6 +103,7 @@ struct AutomaticReviewRequest: ViewModifier {
         let live: Bool
         let critical: Bool
         let general: Bool
+        let onboarding: Bool
     }
 }
 

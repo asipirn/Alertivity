@@ -6,6 +6,7 @@ private let settingsTabPadding = EdgeInsets(top: 24, leading: 45, bottom: 28, tr
 struct SettingsView: View {
     @ObservedObject var settings: SettingsStore
     let processSamplingAvailable: Bool
+    @ObservedObject var notificationManager: NotificationManager
     var reviewStore: ReviewRequestStore = ReviewRequestStore()
     var metrics: ActivityMetrics = .placeholder
     @State private var selectedTab: SettingsTabSelection = .general
@@ -18,7 +19,8 @@ struct SettingsView: View {
             }
             .modifier(AutomaticReviewRequest(store: reviewStore, hasLiveData: metrics.hasLiveData,
                                              isCritical: ActivityStatus(metrics: metrics).level == .critical,
-                                             isGeneralSelected: selectedTab == .general))
+                                             isGeneralSelected: selectedTab == .general,
+                                             isOnboardingActive: settings.onboardingOutcome == .pending || settings.isOnboardingRequested))
             .tag(SettingsTabSelection.general)
 
             SettingsTab(title: "settings.tab.menuBar", systemImage: "waveform.path.ecg") {
@@ -37,6 +39,8 @@ struct SettingsView: View {
             .tag(SettingsTabSelection.menuBar)
 
             SettingsTab(title: "settings.tab.notifications", systemImage: "bell") {
+                NotificationPermissionView(manager: notificationManager)
+                Divider()
                 NotificationSettingsFields(
                     notificationsEnabled: $settings.notificationsEnabled,
                     highActivityDurationSeconds: $settings.highActivityDurationSeconds,
@@ -612,6 +616,7 @@ private struct IgnoredProcessRow: View {
 
 #if DEBUG && !DISABLE_PREVIEWS
 private struct SettingsPreviewContainer: View {
+    @StateObject private var notificationManager = NotificationManager()
     @StateObject private var settings: SettingsStore
     let processSamplingAvailable: Bool
 
@@ -628,7 +633,8 @@ private struct SettingsPreviewContainer: View {
     var body: some View {
         SettingsView(
             settings: settings,
-            processSamplingAvailable: processSamplingAvailable
+            processSamplingAvailable: processSamplingAvailable,
+            notificationManager: notificationManager
         )
     }
 }
