@@ -14,7 +14,8 @@ extension UNUserNotificationCenter: UserNotificationCentering {}
 final class NotificationManager: NSObject, ObservableObject {
     private let notificationCenter: UserNotificationCentering
     private var lastNotificationDate: Date?
-    private let throttleInterval: TimeInterval = 60 * 10
+    /// Minimum spacing across all activity alerts. Updates apply against the existing last attempt.
+    var notificationCooldown: TimeInterval = TimeInterval(MonitoringPreferences.defaultNotificationCooldownMinutes * 60)
     @Published private(set) var authorizationStatus: UNAuthorizationStatus
     @Published private(set) var isRequestingAuthorization = false
     @Published private(set) var authorizationFailed = false
@@ -108,7 +109,7 @@ final class NotificationManager: NSObject, ObservableObject {
         guard shouldNotifyForCritical || hasHighActivityProcess else { return }
 
         let currentDate = now()
-        if let last = lastNotificationDate, currentDate.timeIntervalSince(last) < throttleInterval {
+        if let last = lastNotificationDate, currentDate.timeIntervalSince(last) < notificationCooldown {
             return
         }
 

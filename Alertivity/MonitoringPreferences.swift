@@ -2,6 +2,14 @@ import Foundation
 
 /// Defines the supported monitoring controls in one place so settings UI and runtime validation cannot drift apart.
 enum MonitoringPreferences {
+    static let notificationCooldownOptions = [1, 5, 10, 15, 30, 60]
+    static let defaultNotificationCooldownMinutes = 10
+
+    /// Reject unsupported saved values so the picker always represents the runtime preference.
+    static func normalizedNotificationCooldown(_ value: Int) -> Int {
+        notificationCooldownOptions.contains(value) ? value : defaultNotificationCooldownMinutes
+    }
+
     static let durationOptions = [30, 60, 120, 240, 600]
     static let cpuThresholdOptions = Array(stride(from: 20, through: 100, by: 15))
     static let memoryThresholdOptions = Array(stride(from: 5, through: 50, by: 5))
