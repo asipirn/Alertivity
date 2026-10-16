@@ -13,6 +13,7 @@ final class SettingsStore: ObservableObject {
         static let launchAtLogin = "app.launchAtLogin"
         static let menuIconEnabled = "notice.menu.enabled"
         static let menuIconOnlyWhenHigh = "notice.menu.onlyHigh"
+        static let notificationCooldown = "notice.notifications.cooldownMinutes"
         static let notificationsEnabled = "notice.notifications.enabled"
         static let menuIconType = "notice.menu.iconType"
         static let showMetricIcon = "notice.menu.showMetricIcon"
@@ -58,6 +59,20 @@ final class SettingsStore: ObservableObject {
 
     @Published var notificationsEnabled: Bool {
         didSet { defaults.set(notificationsEnabled, forKey: Keys.notificationsEnabled) }
+    }
+
+    /// Shared by system and process alerts; changing it preserves the last alert timestamp.
+    @Published var notificationCooldownMinutes: Int {
+        didSet {
+            let normalized = MonitoringPreferences.normalizedNotificationCooldown(notificationCooldownMinutes)
+            if normalized != notificationCooldownMinutes {
+                notificationCooldownMinutes = normalized
+            }
+            defaults.set(notificationCooldownMinutes, forKey: Keys.notificationCooldown)
+            if notificationCooldownMinutes != oldValue {
+                AppLogger.notifications.info("Notification cooldown updated; minutes: \(self.notificationCooldownMinutes, privacy: .public)")
+            }
+        }
     }
 
     @Published var menuIconType: MenuIconType {
@@ -108,6 +123,11 @@ final class SettingsStore: ObservableObject {
         isMenuIconEnabled = defaults.object(forKey: Keys.menuIconEnabled) as? Bool ?? true
         menuIconOnlyWhenHigh = defaults.object(forKey: Keys.menuIconOnlyWhenHigh) as? Bool ?? false
         notificationsEnabled = defaults.object(forKey: Keys.notificationsEnabled) as? Bool ?? true
+
+        notificationCooldownMinutes = MonitoringPreferences.normalizedNotificationCooldown(
+            defaults.object(forKey: Keys.notificationCooldown) as? Int
+                ?? MonitoringPreferences.defaultNotificationCooldownMinutes
+        )
 
         if
             let storedMenuIconType = defaults.string(forKey: Keys.menuIconType),

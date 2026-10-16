@@ -25,6 +25,8 @@ Alertivity monitors CPU, memory, disk, network, and process activity. It turns t
 2. Click the menu bar icon to view your Mac’s status and live metrics.
 3. Open **Settings** to choose your menu bar display, adjust activity thresholds, and enable notifications. Allow notification permission when prompted to receive alerts.
 
+In **Settings → Notifications**, choose a notification cooldown of 1, 5, 10, 15, 30, or 60 minutes (default: 10). This minimum interval is shared by all system and process alerts. Changes apply immediately using the last notification attempt; the preference is saved, while the cooldown timer resets when the app restarts. The high-activity duration separately controls how long a critical condition must persist before an alert qualifies.
+
 ### Menu bar summaries
 
 The summary identifies configured **alert thresholds** that current activity has reached,

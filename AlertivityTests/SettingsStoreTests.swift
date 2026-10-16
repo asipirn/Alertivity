@@ -18,6 +18,7 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
         expectTrue(store.isMenuIconEnabled)
         expectFalse(store.menuIconOnlyWhenHigh)
         expectTrue(store.notificationsEnabled)
+        expectEqual(store.notificationCooldownMinutes, 10)
         expectEqual(store.menuIconType, .status)
         expectTrue(store.showMetricIcon)
         expectTrue(store.isMenuIconAutoSwitchEnabled)
@@ -36,6 +37,7 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
 
         store.hideDockIcon = true
         store.notificationsEnabled = true
+        store.notificationCooldownMinutes = 30
         store.menuIconType = .network
         store.highActivityDurationSeconds = 90
         store.ignoreProcess(at: " /Applications/Safari.app/Contents/MacOS/Safari ")
@@ -44,6 +46,7 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
         let reloaded = SettingsStore(userDefaults: UserDefaults(suiteName: "alertivity-settings-tests-\(suiteName)")!)
         expectTrue(reloaded.hideDockIcon)
         expectTrue(reloaded.notificationsEnabled)
+        expectEqual(reloaded.notificationCooldownMinutes, 30)
         expectEqual(reloaded.menuIconType, .network)
         expectEqual(reloaded.highActivityDurationSeconds, 90)
         expectEqual(reloaded.ignoredProcessPaths, ["/Applications/Safari.app/Contents/MacOS/Safari"])
@@ -78,6 +81,18 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
         let defaults = makeIsolatedDefaults()
         defaults.set("invalid", forKey: "app.onboarding.outcome")
         expectEqual(SettingsStore(userDefaults: defaults).onboardingOutcome, .pending)
+    }
+
+    @Test(arguments: [-1, 0, 7, 61, Int.max])
+    func invalidCooldownFallsBackToDefault(value: Int) {
+        let defaults = makeIsolatedDefaults()
+        defaults.set(value, forKey: "notice.notifications.cooldownMinutes")
+        let store = SettingsStore(userDefaults: defaults)
+        expectEqual(store.notificationCooldownMinutes, 10)
+        store.notificationCooldownMinutes = 30
+        store.notificationCooldownMinutes = value
+        expectEqual(store.notificationCooldownMinutes, 10)
+        expectEqual(SettingsStore(userDefaults: defaults).notificationCooldownMinutes, 10)
     }
 
     @Test

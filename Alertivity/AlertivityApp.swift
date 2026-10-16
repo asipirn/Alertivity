@@ -61,6 +61,9 @@ struct AlertivityApp: App {
                 OnboardingLink(settings: settings)
             }
         }
+        .onChange(of: settings.notificationCooldownMinutes) { _, value in
+            notificationManager.notificationCooldown = TimeInterval(value * 60)
+        }
         .onChange(of: settings.highActivityDurationSeconds) { _, value in
             applyHighActivityDurationUpdate(for: value)
         }
@@ -167,6 +170,7 @@ struct AlertivityApp: App {
         applyDockVisibility(for: settings.hideDockIcon)
         applyLaunchAtLogin(for: settings.launchAtLogin)
         updateMenuBarInsertion(for: monitor.status)
+        notificationManager.notificationCooldown = TimeInterval(settings.notificationCooldownMinutes * 60)
         applyHighActivityDurationUpdate(for: settings.highActivityDurationSeconds)
         applyHighActivityCPUThresholdUpdate(for: settings.highActivityCPUThresholdPercent)
         applyHighActivityMemoryThresholdUpdate(for: settings.highActivityMemoryThresholdPercent)

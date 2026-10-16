@@ -106,6 +106,56 @@ private final class CapturingNotificationCenter: UserNotificationCentering {
         expectTrue(actionIdentifiers.contains("enhancedActivityMonitor.ignoreProcess"))
     }
 
+    @Test(arguments: [1, 5, 10, 15, 30, 60])
+    func notificationCooldownUsesConfiguredInterval(minutes: Int) {
+        let center = CapturingNotificationCenter()
+        var now = Date()
+        let manager = NotificationManager(
+            notificationCenter: center,
+            now: { now },
+            authorizationStatusProvider: { .authorized },
+            initialAuthorizationStatus: .authorized
+        )
+        expectEqual(manager.notificationCooldown, 600)
+        manager.notificationCooldown = TimeInterval(minutes * 60)
+        manager.highActivityDuration = 0
+        let cpu = makeMetrics(cpu: 0.95, memory: 0.2)
+        let memory = makeMetrics(cpu: 0.2, memory: 0.95)
+        manager.postNotificationIfNeeded(for: ActivityStatus(metrics: cpu), metrics: cpu)
+        expectEqual(center.requests.count, 1)
+        now = now.addingTimeInterval(TimeInterval(minutes * 60) - 1)
+        manager.postNotificationIfNeeded(for: ActivityStatus(metrics: memory), metrics: memory)
+        expectEqual(center.requests.count, 1)
+        now = now.addingTimeInterval(1)
+        manager.postNotificationIfNeeded(for: ActivityStatus(metrics: memory), metrics: memory)
+        expectEqual(center.requests.count, 2)
+    }
+
+    @Test
+    func changingCooldownPreservesLastNotificationTime() {
+        let center = CapturingNotificationCenter()
+        var now = Date()
+        let manager = NotificationManager(
+            notificationCenter: center,
+            now: { now },
+            authorizationStatusProvider: { .authorized },
+            initialAuthorizationStatus: .authorized
+        )
+        manager.highActivityDuration = 0
+        let metrics = makeMetrics(cpu: 0.95, memory: 0.2)
+        let status = ActivityStatus(metrics: metrics)
+        manager.postNotificationIfNeeded(for: status, metrics: metrics)
+        now = now.addingTimeInterval(300)
+        manager.notificationCooldown = 1800
+        manager.postNotificationIfNeeded(for: status, metrics: metrics)
+        expectEqual(center.requests.count, 1)
+        manager.notificationCooldown = 60
+        manager.postNotificationIfNeeded(for: status, metrics: metrics)
+        expectEqual(center.requests.count, 2)
+        manager.postNotificationIfNeeded(for: status, metrics: metrics)
+        expectEqual(center.requests.count, 2)
+    }
+
     @Test
     func criticalNotificationsRespectDwell() {
         let center = CapturingNotificationCenter()

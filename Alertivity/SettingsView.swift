@@ -42,6 +42,7 @@ struct SettingsView: View {
                 NotificationPermissionView(manager: notificationManager, showsAuthorizedStatus: false)
                 NotificationSettingsFields(
                     notificationsEnabled: $settings.notificationsEnabled,
+                    notificationCooldownMinutes: $settings.notificationCooldownMinutes,
                     highActivityDurationSeconds: $settings.highActivityDurationSeconds,
                     processSamplingAvailable: processSamplingAvailable,
                     emphasizesFooter: true
@@ -104,6 +105,7 @@ struct NoticePreferencesView: View {
         Section("settings.tab.notifications") {
             NotificationSettingsFields(
                 notificationsEnabled: $settings.notificationsEnabled,
+                notificationCooldownMinutes: $settings.notificationCooldownMinutes,
                 highActivityDurationSeconds: $settings.highActivityDurationSeconds,
                 processSamplingAvailable: processSamplingAvailable,
                 emphasizesFooter: false
@@ -231,12 +233,25 @@ private struct MenuBarSettingsFields: View {
 
 private struct NotificationSettingsFields: View {
     @Binding var notificationsEnabled: Bool
+    @Binding var notificationCooldownMinutes: Int
     @Binding var highActivityDurationSeconds: Int
     let processSamplingAvailable: Bool
     let emphasizesFooter: Bool
 
     var body: some View {
         Toggle("settings.notifications.enable", isOn: $notificationsEnabled)
+
+        VStack(alignment: .leading, spacing: 2) {
+            Picker("settings.notifications.cooldown", selection: $notificationCooldownMinutes) {
+                ForEach(MonitoringPreferences.notificationCooldownOptions, id: \.self) { value in
+                    Text(L10n.format("settings.notifications.cooldownValue", value)).tag(value)
+                }
+            }
+            .pickerStyle(.menu)
+            .disabled(!notificationsEnabled)
+
+            SettingsFootnote(key: "settings.notifications.cooldown.help")
+        }
 
         Picker("settings.detection.duration", selection: $highActivityDurationSeconds) {
             ForEach(MonitoringPreferences.durationOptions, id: \.self) { value in
