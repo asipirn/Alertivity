@@ -97,7 +97,10 @@ struct AlertivityApp: App {
                 .frame(width: 400)
                 .background(SettingsWindowAccessor())
                 .onAppear {
-                    NSApp.activate(ignoringOtherApps: true)
+                    // SwiftUI may show a retained Settings window without attaching a new view.
+                    DispatchQueue.main.async {
+                        SettingsWindowCoordinator.focusExistingWindow()
+                    }
                 }
         }
 
@@ -421,11 +424,24 @@ private struct MenuBarLabelLifecycleView: View {
 }
 
 private enum SettingsWindowCoordinator {
+    /// Promote the menu-bar app before opening Settings so activation and window ordering agree.
+    @MainActor
+    static func prepareForPresentation() {
+        if NSApp.activationPolicy() != .regular {
+            NSApp.setActivationPolicy(.regular)
+        }
+        NSApp.activate()
+    }
+
     @MainActor
     static func focusExistingWindow() {
         guard let window = SettingsWindowTracker.shared.window else { return }
+        prepareForPresentation()
+        if window.isMiniaturized {
+            window.deminiaturize(nil)
+        }
         window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        AppLogger.lifecycle.debug("Requested Settings window foreground presentation")
     }
 }
 
@@ -471,28 +487,43 @@ private final class SettingsWindowTracker {
 
 private struct SettingsWindowAccessor: NSViewRepresentable {
     func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async { registerWindow(for: view) }
-        return view
+        WindowRegistrationView()
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {
-        DispatchQueue.main.async { registerWindow(for: nsView) }
-    }
+    func updateNSView(_ nsView: NSView, context: Context) {}
 
-    private func registerWindow(for view: NSView) {
-        if let window = view.window {
+    private final class WindowRegistrationView: NSView {
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            guard let window else { return }
             SettingsWindowTracker.shared.window = window
+            // Wait until SwiftUI finishes attaching the new Settings window before ordering it.
+            // Ordinary view updates must not steal focus from another application.
+            DispatchQueue.main.async { [weak window] in
+                guard let window, SettingsWindowTracker.shared.window === window else { return }
+                SettingsWindowCoordinator.focusExistingWindow()
+            }
         }
     }
 }
 
 private struct SettingsMenuLinkRow: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openSettings) private var openSettings
     @State private var isHovering = false
 
     var body: some View {
-        SettingsLink {
+        Button {
+            dismiss()
+            // Close the menu extra first so its dismissal cannot take focus back from Settings.
+            DispatchQueue.main.async {
+                SettingsWindowCoordinator.prepareForPresentation()
+                openSettings()
+                DispatchQueue.main.async {
+                    SettingsWindowCoordinator.focusExistingWindow()
+                }
+            }
+        } label: {
             Text("menu.openSettings")
                 .font(.system(size: 12, weight: .medium))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -507,10 +538,6 @@ private struct SettingsMenuLinkRow: View {
         )
         .onHover { isHovering = $0 }
         .animation(.easeInOut(duration: 0.12), value: isHovering)
-        .simultaneousGesture(TapGesture().onEnded {
-            SettingsWindowCoordinator.focusExistingWindow()
-            dismiss()
-        })
     }
 }
 
