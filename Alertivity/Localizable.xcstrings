@@ -4694,6 +4694,222 @@
         }
       }
     },
+    "status.menu.collecting" : {
+      "comment" : "Menu summary: configured alert threshold, not a live reading. Reached includes equality and values above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking system activity…"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Systemaktivität wird geprüft …"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Vérification de l’activité du système…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "システムのアクティビティを確認中…"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "正在检查系统活动…"
+          }
+        }
+      }
+    },
+    "status.menu.normal" : {
+      "comment" : "Menu summary: configured alert threshold, not a live reading. Reached includes equality and values above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All metrics below alert thresholds."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Alle Messwerte unter den Warnschwellen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Toutes les mesures sont sous les seuils d’alerte."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "すべての測定値が通知しきい値未満です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "所有指标均低于提醒阈值。"
+          }
+        }
+      }
+    },
+    "status.menu.threshold.single" : {
+      "comment" : "Menu summary: configured alert threshold, not a live reading. Reached includes equality and values above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert threshold reached: %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Warnschwelle erreicht: %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Seuil d’alerte atteint : %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "通知しきい値に達しました：%@。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "已达到提醒阈值：%@。"
+          }
+        }
+      }
+    },
+    "status.menu.threshold.multiple" : {
+      "comment" : "Menu summary: configured alert threshold, not a live reading. Reached includes equality and values above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert thresholds reached: %@."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Warnschwellen erreicht: %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "Seuils d’alerte atteints : %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "通知しきい値に達しました：%@。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "已达到提醒阈值：%@。"
+          }
+        }
+      }
+    },
+    "status.menu.threshold.percent" : {
+      "comment" : "Menu summary: configured alert threshold, not a live reading. Reached includes equality and values above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@"
+          }
+        }
+      }
+    },
+    "status.menu.threshold.throughput" : {
+      "comment" : "Menu summary: configured alert threshold, not a live reading. Reached includes equality and values above it.",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@ MB/s"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@ MB/s"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@ Mo/s"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@ MB/s"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "machine_translated",
+            "value" : "%@ %@ MB/s"
+          }
+        }
+      }
+    },
     "status.message.collecting" : {
       "extractionState" : "manual",
       "localizations" : {

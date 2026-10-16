@@ -241,6 +241,15 @@ private struct MenuProcessRow: View {
         .padding()
 }
 
+// Worst-case summary at the compact width: all four critical thresholds are visible.
+#Preview("Menu Status – All Four Critical") {
+    var metrics = ActivityMetrics.previewMultiCritical
+    metrics.memoryUsed = Measurement(value: 29, unit: .gigabytes)
+    return MenuStatusView(metrics: metrics)
+        .frame(width: 240)
+        .padding()
+}
+
 #Preview("Menu Status – Disk Critical") {
     let metrics = ActivityMetrics.previewDiskCritical
     MenuStatusView(metrics: metrics)

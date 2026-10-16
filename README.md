@@ -25,6 +25,21 @@ Alertivity monitors CPU, memory, disk, network, and process activity. It turns t
 2. Click the menu bar icon to view your Mac’s status and live metrics.
 3. Open **Settings** to choose your menu bar display, adjust activity thresholds, and enable notifications. Allow notification permission when prompted to receive alerts.
 
+### Menu bar summaries
+
+The summary identifies configured **alert thresholds** that current activity has reached,
+for example, “Alert thresholds reached: CPU 80% and Memory 70%.” These numbers are
+thresholds, not live readings; the metric rows below show current values. “Reached”
+includes equality and values above the threshold. A threshold triggers a notice rather
+than imposing a resource limit.
+
+Each affected metric uses the elevated or critical threshold for its current severity,
+including custom values. Critical metrics appear first, with CPU, memory, disk, then
+network breaking ties. Localized list formatting and wrapping keep multi-metric
+summaries readable. Menu copy is separate from notification copy. Summary formatting
+runs on every refresh and adds no logs; collection and alert delivery retain their
+existing logging.
+
 ## Choose a Version
 
 ### Mac App Store

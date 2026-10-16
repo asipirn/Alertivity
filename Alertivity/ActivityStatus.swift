@@ -201,24 +201,30 @@ struct ActivityStatus: Sendable, Equatable {
         return metricSummaries.joined(separator: ", ")
     }
 
+    /// Explains which configured alert thresholds were reached, rather than repeating live readings.
+    /// Menu-only strings keep notification wording independent. Formatting runs on each refresh,
+    /// so it deliberately emits no logs; metric collection and alert delivery own observability.
     func menuSummary(for metrics: ActivityMetrics) -> String {
         guard metrics.hasLiveData else {
-            return L10n.string("status.message.collecting")
+            return L10n.string("status.menu.collecting")
         }
 
-        let nonNormal = nonNormalMetrics(metrics)
-        if nonNormal.isEmpty {
-            return L10n.string("status.message.healthy")
+        let affected = nonNormalMetrics(metrics)
+        guard !affected.isEmpty else {
+            return L10n.string("status.menu.normal")
         }
 
-        if nonNormal.count == 1, let only = nonNormal.first {
-            return menuSingleSummary(for: only.0, severity: only.1, metrics: metrics)
+        let clauses = affected.map { metric, severity in
+            let threshold = formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds)
+            let key = (metric == .cpu || metric == .memory)
+                ? "status.menu.threshold.percent"
+                : "status.menu.threshold.throughput"
+            return L10n.format(key, metricDisplayName(metric), threshold)
         }
-
-        let clauses = nonNormal.map { metric, severity in
-            menuMultiSummaryClause(for: metric, severity: severity, metrics: metrics)
-        }
-        return naturalListWithCommaBeforeAnd(clauses) + "."
+        return L10n.format(
+            affected.count == 1 ? "status.menu.threshold.single" : "status.menu.threshold.multiple",
+            L10n.list(clauses)
+        )
     }
 
     func triggerValue(for metrics: ActivityMetrics) -> Double? {
@@ -280,10 +286,6 @@ struct ActivityStatus: Sendable, Equatable {
         return metricsStatus
     }
 
-    private func naturalListWithCommaBeforeAnd(_ items: [String]) -> String {
-        L10n.list(items)
-    }
-
     private func metricsBySeverity(_ metrics: ActivityMetrics, target: ActivityMetrics.MetricSeverity) -> [TriggerMetric] {
         let pairs: [(TriggerMetric, ActivityMetrics.MetricSeverity)] = [
             (.cpu, metrics.cpuSeverity),
@@ -338,44 +340,6 @@ struct ActivityStatus: Sendable, Equatable {
         }
     }
 
-    private func menuSingleSummary(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity, metrics: ActivityMetrics) -> String {
-        guard severity != .normal else { return "" }
-        let threshold = formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds)
-        let severityName = fullSeverityName(for: severity)
-        switch metric {
-        case .cpu, .memory:
-            return L10n.format(
-                "status.menu.single.percent.custom",
-                metricDisplayName(metric), severityName, threshold
-            )
-        case .disk, .network:
-            return L10n.format(
-                "status.menu.single.throughput.custom",
-                metricDisplayName(metric), severityName, threshold
-            )
-        }
-    }
-
-    private func menuMultiSummaryClause(for metric: TriggerMetric, severity: ActivityMetrics.MetricSeverity, metrics: ActivityMetrics) -> String {
-        guard severity != .normal else { return "" }
-        switch metric {
-        case .cpu, .memory:
-            return L10n.format(
-                "status.menu.multi.percent.custom",
-                metricDisplayName(metric),
-                formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds),
-                fullSeverityName(for: severity)
-            )
-        case .disk, .network:
-            return L10n.format(
-                "status.menu.multi.throughput.custom",
-                metricDisplayName(metric),
-                formattedThreshold(for: metric, severity: severity, thresholds: metrics.thresholds),
-                fullSeverityName(for: severity)
-            )
-        }
-    }
-
     private func formattedThreshold(
         for metric: TriggerMetric,
         severity: ActivityMetrics.MetricSeverity,
@@ -398,14 +362,6 @@ struct ActivityStatus: Sendable, Equatable {
             return (value / 100).formatted(.percent.precision(.fractionLength(0...2)))
         case .disk, .network:
             return value.formatted(.number.precision(.fractionLength(0...2)))
-        }
-    }
-
-    private func fullSeverityName(for severity: ActivityMetrics.MetricSeverity) -> String {
-        switch severity {
-        case .normal: return L10n.string("status.severity.normal")
-        case .elevated: return L10n.string("status.severity.elevated")
-        case .critical: return L10n.string("status.severity.critical")
         }
     }
 
