@@ -50,50 +50,62 @@ struct AlertivityApp: App {
                 menuIconType: settingsBinding(\.menuIconType),
                 showMetricIcon: settingsBinding(\.showMetricIcon),
                 autoSwitchEnabled: settingsBinding(\.isMenuIconAutoSwitchEnabled),
-                initialize: performInitialSetup,
-                onStatusChange: handleStatusChange,
-                onMetricsChange: handleMetricsChange
+                initialize: performInitialSetup
             )
-            .onChange(of: settings.highActivityDurationSeconds) { _, value in
-                applyHighActivityDurationUpdate(for: value)
-            }
-            .onChange(of: settings.highActivityCPUThresholdPercent) { _, value in
-                applyHighActivityCPUThresholdUpdate(for: value)
-            }
-            .onChange(of: settings.highActivityMemoryThresholdPercent) { _, value in
-                applyHighActivityMemoryThresholdUpdate(for: value)
-            }
-            .onChange(of: settings.activityThresholds) { _, value in
-                applyActivityThresholdUpdate(for: value)
-            }
-            .onChange(of: settings.ignoredProcessPaths) { _, paths in
-                applyIgnoredProcessPathsUpdate(for: paths)
-            }
-            .onChange(of: settings.hideDockIcon) { _, value in
-                applyDockVisibility(for: value)
-            }
-            .onChange(of: settings.launchAtLogin) { _, value in
-                applyLaunchAtLogin(for: value)
-            }
-            .onChange(of: settings.isMenuIconEnabled) {
-                updateMenuBarInsertion(for: ActivityStatus(metrics: monitor.metrics))
-            }
-            .onChange(of: settings.menuIconOnlyWhenHigh) {
-                updateMenuBarInsertion(for: ActivityStatus(metrics: monitor.metrics))
-            }
-            .onChange(of: settings.notificationsEnabled) { _, newValue in
-                if newValue {
-                    notificationManager.requestAuthorizationIfNeeded()
-                }
-            }
-            .onChange(of: settings.isMenuIconAutoSwitchEnabled) { _, value in
-                enforceAutoSwitchDependencies(isEnabled: value)
-            }
+            .background(OnboardingLauncher(settings: settings))
         }
         .menuBarExtraStyle(.window)
+        .commands {
+            CommandGroup(replacing: .help) {
+                OnboardingLink(settings: settings)
+            }
+        }
+        .onChange(of: settings.highActivityDurationSeconds) { _, value in
+            applyHighActivityDurationUpdate(for: value)
+        }
+        .onChange(of: settings.highActivityCPUThresholdPercent) { _, value in
+            applyHighActivityCPUThresholdUpdate(for: value)
+        }
+        .onChange(of: settings.highActivityMemoryThresholdPercent) { _, value in
+            applyHighActivityMemoryThresholdUpdate(for: value)
+        }
+        .onChange(of: settings.activityThresholds) { _, value in
+            applyActivityThresholdUpdate(for: value)
+        }
+        .onChange(of: settings.ignoredProcessPaths) { _, paths in
+            applyIgnoredProcessPathsUpdate(for: paths)
+        }
+        .onChange(of: settings.hideDockIcon) { _, value in
+            applyDockVisibility(for: value)
+        }
+        .onChange(of: settings.launchAtLogin) { _, value in
+            applyLaunchAtLogin(for: value)
+        }
+        .onChange(of: settings.isMenuIconEnabled) {
+            updateMenuBarInsertion(for: ActivityStatus(metrics: monitor.metrics))
+        }
+        .onChange(of: settings.menuIconOnlyWhenHigh) {
+            updateMenuBarInsertion(for: ActivityStatus(metrics: monitor.metrics))
+        }
+        .onChange(of: settings.notificationsEnabled) { _, newValue in
+            if newValue {
+                notificationManager.requestAuthorizationIfNeeded()
+            }
+        }
+        .onChange(of: settings.isMenuIconAutoSwitchEnabled) { _, value in
+            enforceAutoSwitchDependencies(isEnabled: value)
+        }
+        .onChange(of: monitor.status) { _, status in handleStatusChange(status) }
+        .onChange(of: monitor.metrics) { _, metrics in handleMetricsChange(metrics) }
+
+        onboardingWindow
 
         Settings {
-            SettingsView(settings: settings, processSamplingAvailable: monitor.processSamplingAvailable)
+            SettingsView(
+                settings: settings,
+                processSamplingAvailable: monitor.processSamplingAvailable,
+                notificationManager: notificationManager
+            )
                 .frame(width: 400)
                 .background(SettingsWindowAccessor())
                 .onAppear {
@@ -110,6 +122,19 @@ struct AlertivityApp: App {
             }
         }
 #endif
+    }
+
+    private var onboardingWindow: some Scene {
+        Window("onboarding.title", id: "onboarding") {
+            OnboardingView(
+                settings: settings,
+                notificationManager: notificationManager,
+                monitor: monitor,
+                processSamplingAvailable: monitor.processSamplingAvailable
+            )
+        }
+        .windowResizability(.contentSize)
+        .defaultPosition(.center)
     }
 
     private func performInitialSetup() {
@@ -141,9 +166,6 @@ struct AlertivityApp: App {
         notificationManager.processSamplingAvailable = monitor.processSamplingAvailable
         enforceAutoSwitchDependencies(isEnabled: settings.isMenuIconAutoSwitchEnabled)
         sanitizeMenuIconType()
-        if settings.notificationsEnabled {
-            notificationManager.requestAuthorizationIfNeeded()
-        }
     }
 
     private func handleStatusChange(_ newValue: ActivityStatus) {
@@ -224,6 +246,10 @@ struct AlertivityApp: App {
     }
 
     private func applyLaunchAtLogin(for shouldLaunch: Bool) {
+#if DEBUG
+        // UI tests exercise preferences without changing the user's registered login item.
+        if isUITest { return }
+#endif
         let wasUpdated = LaunchAtLoginManager.set(enabled: shouldLaunch)
         guard wasUpdated else {
             DispatchQueue.main.async {
@@ -329,8 +355,6 @@ private struct MenuBarLabelLifecycleView: View {
     @Binding var showMetricIcon: Bool
     @Binding var autoSwitchEnabled: Bool
     let initialize: () -> Void
-    let onStatusChange: (ActivityStatus) -> Void
-    let onMetricsChange: (ActivityMetrics) -> Void
     @State private var autoSwitchSelection: MetricMenuSelection?
     @State private var pendingAutoSwitchSelection: MetricMenuSelection?
     @State private var pendingAutoSwitchSamples: Int = 0
@@ -347,20 +371,8 @@ private struct MenuBarLabelLifecycleView: View {
             initialize()
             updateAutoSwitchSelection(for: monitor.metrics)
         }
-        .onChange(of: monitor.status) { _, status in
-            onStatusChange(status)
-        }
-        .onChange(of: monitor.metrics) { _, metrics in
-            onMetricsChange(metrics)
-        }
         .onChange(of: monitor.metrics) { _, metrics in
             updateAutoSwitchSelection(for: metrics)
-        }
-        .onChange(of: isMenuIconEnabled) {
-            onStatusChange(monitor.status)
-        }
-        .onChange(of: menuIconOnlyWhenHigh) {
-            onStatusChange(monitor.status)
         }
         .onChange(of: autoSwitchEnabled) {
             updateAutoSwitchSelection(for: monitor.metrics)
@@ -530,7 +542,9 @@ private extension AlertivityApp {
         if ProcessInfo.processInfo.arguments.contains("UITests") {
             let suiteName = "Alertivity.UITests"
             defaults = UserDefaults(suiteName: suiteName) ?? .standard
-            defaults.removePersistentDomain(forName: suiteName)
+            if !ProcessInfo.processInfo.arguments.contains("UITestsPreserveDefaults") {
+                defaults.removePersistentDomain(forName: suiteName)
+            }
         }
 #endif
         return SettingsStore(userDefaults: defaults)

@@ -54,6 +54,33 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
     }
 
     @Test
+    func onboardingOutcomesPersistWithoutResettingPreferences() {
+        for outcome in [OnboardingOutcome.completed, .skipped] {
+            let defaults = makeIsolatedDefaults()
+            let store = SettingsStore(userDefaults: defaults)
+            expectEqual(store.onboardingOutcome, .pending)
+            store.notificationsEnabled = false
+            store.menuIconType = .network
+            store.highActivityDurationSeconds = 90
+            store.finishOnboarding(outcome)
+            store.isOnboardingRequested = true
+            let reloaded = SettingsStore(userDefaults: defaults)
+            expectEqual(reloaded.onboardingOutcome, outcome)
+            expectFalse(reloaded.isOnboardingRequested)
+            expectFalse(reloaded.notificationsEnabled)
+            expectEqual(reloaded.menuIconType, .network)
+            expectEqual(reloaded.highActivityDurationSeconds, 90)
+        }
+    }
+
+    @Test
+    func unknownOnboardingStateOffersGuidanceAgain() {
+        let defaults = makeIsolatedDefaults()
+        defaults.set("invalid", forKey: "app.onboarding.outcome")
+        expectEqual(SettingsStore(userDefaults: defaults).onboardingOutcome, .pending)
+    }
+
+    @Test
     func monitoringPreferencesClampValuesToRuntimeLimits() {
         expectEqual(MonitoringPreferences.normalizedDuration(0), 10)
         expectEqual(MonitoringPreferences.normalizedDuration(900), 600)

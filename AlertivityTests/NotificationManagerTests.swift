@@ -8,10 +8,12 @@ private final class CapturingNotificationCenter: UserNotificationCentering {
     var requests: [UNNotificationRequest] = []
     var categories: Set<UNNotificationCategory> = []
     var authorizationRequested = false
+    var authorizationError: Error?
+    var authorizationGranted = true
 
     func requestAuthorization(options: UNAuthorizationOptions, completionHandler: @escaping (Bool, Error?) -> Void) {
         authorizationRequested = true
-        completionHandler(true, nil)
+        completionHandler(authorizationGranted, authorizationError)
     }
 
     func notificationSettings() async -> UNNotificationSettings {
@@ -29,6 +31,68 @@ private final class CapturingNotificationCenter: UserNotificationCentering {
 }
 
 @Suite struct NotificationManagerTests {
+    @Test @MainActor
+    func authorizationIsExplicitAndUsesFreshStatus() async {
+        let center = CapturingNotificationCenter()
+        let manager = NotificationManager(
+            notificationCenter: center,
+            authorizationStatusProvider: { .denied },
+            initialAuthorizationStatus: .notDetermined
+        )
+        expectFalse(center.authorizationRequested)
+        await manager.requestAuthorization()
+        expectFalse(center.authorizationRequested)
+        expectEqual(manager.authorizationStatus, .denied)
+        expectFalse(manager.isRequestingAuthorization)
+    }
+
+    @Test(arguments: [true, false]) @MainActor
+    func undeterminedPermissionCanBeRequestedExplicitly(granted: Bool) async {
+        let center = CapturingNotificationCenter()
+        center.authorizationGranted = granted
+        let manager = NotificationManager(
+            notificationCenter: center,
+            authorizationStatusProvider: { center.authorizationRequested ? (granted ? .authorized : .denied) : .notDetermined }
+        )
+        expectFalse(center.authorizationRequested)
+        await manager.requestAuthorization()
+        expectTrue(center.authorizationRequested)
+        expectFalse(manager.authorizationFailed)
+        expectEqual(manager.authorizationStatus, granted ? .authorized : .denied)
+    }
+
+    @Test @MainActor
+    func authorizationFailureCanBeRetried() async {
+        let center = CapturingNotificationCenter()
+        center.authorizationError = NSError(domain: "NotificationTest", code: 1)
+        let manager = NotificationManager(
+            notificationCenter: center,
+            authorizationStatusProvider: { .notDetermined }
+        )
+        await manager.requestAuthorization()
+        expectTrue(manager.authorizationFailed)
+        expectFalse(manager.isRequestingAuthorization)
+        center.authorizationError = nil
+        await manager.requestAuthorization()
+        expectFalse(manager.authorizationFailed)
+    }
+
+    @Test @MainActor
+    func permissionGrantedExternallyClearsRequestError() async {
+        let center = CapturingNotificationCenter()
+        center.authorizationError = NSError(domain: "NotificationTest", code: 1)
+        let manager = NotificationManager(
+            notificationCenter: center,
+            authorizationStatusProvider: { center.authorizationError == nil ? .authorized : .notDetermined }
+        )
+        await manager.requestAuthorization()
+        expectTrue(manager.authorizationFailed)
+        center.authorizationError = nil
+        await manager.refreshAuthorizationStatus()
+        expectEqual(manager.authorizationStatus, .authorized)
+        expectFalse(manager.authorizationFailed)
+    }
+
     @Test
     func processNotificationCategoryIncludesIgnoreAction() {
         let center = CapturingNotificationCenter()
