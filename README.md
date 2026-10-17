@@ -35,12 +35,11 @@ thresholds, not live readings; the metric rows below show current values. “Rea
 includes equality and values above the threshold. A threshold triggers a notice rather
 than imposing a resource limit.
 
-Each affected metric uses the elevated or critical threshold for its current severity,
-including custom values. Critical metrics appear first, with CPU, memory, disk, then
-network breaking ties. Localized list formatting and wrapping keep multi-metric
-summaries readable. Menu copy is separate from notification copy. Summary formatting
-runs on every refresh and adds no logs; collection and alert delivery retain their
-existing logging.
+See [Metrics and status](wiki/Metrics-and-Status.md) for examples and [the developer guide](wiki/Developer-Guide.md#menu-summaries) for formatting details.
+
+## Documentation
+
+Read the [GitHub wiki](https://github.com/nobbbbby/Alertivity/wiki) for settings, notifications, troubleshooting, and development. Page sources are in [wiki/](wiki/Home.md); see [Editing the wiki](wiki/Maintaining-the-Wiki.md) to publish updates.
 
 ## Choose a Version
 
@@ -52,11 +51,11 @@ The sandboxed version provides system-wide health monitoring and critical-status
 
 ### Non-sandboxed
 
-Build from source to unlock process-level activity, custom CPU and memory thresholds, ignored-process rules, and quick actions for Activity Monitor or force quit.
+Build from source to unlock process-level activity, process CPU and memory detection thresholds, ignored-process rules, and quick actions for Activity Monitor or force quit. System activity thresholds are configurable in both targets.
 
 ## Build from Source
 
-Requirements: **macOS 14 (Sonoma) or later** and **Xcode 15 or later**.
+Requirements: **macOS 14 (Sonoma) or later** and a compatible stable Xcode. See the [developer guide](wiki/Developer-Guide.md) for tooling details.
 
 1. Open `Alertivity.xcodeproj` in Xcode.
 2. Select the **Alertivity (Non-sandboxed)** scheme.
@@ -77,7 +76,7 @@ For Terminal builds, add `DEVELOPMENT_TEAM=YOUR_TEAM_ID` to use your available d
 
 ## Privacy & Permissions
 
-Alertivity monitors activity locally. Notifications require macOS authorization. Revealing a process in Activity Monitor may require Accessibility permission for System Events.
+Read the [Privacy Policy](https://github.com/nobbbbby/Alertivity/wiki/Privacy-Policy) for data use and storage. Alertivity monitors activity locally. Notifications require macOS authorization. Revealing a process in Activity Monitor may require Accessibility permission for System Events.
 
 ## Languages
 
