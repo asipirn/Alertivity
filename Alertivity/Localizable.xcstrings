@@ -3215,8 +3215,8 @@
       }
     },
     "settings.ignoredProcesses.picker.message" : {
-      "comment" : "Instruction displayed in the process selection panel.",
-      "extractionState" : "stale",
+      "comment" : "Instruction displayed in the standalone process selection panel. Managed manually because it is loaded through L10n.string.",
+      "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5260,41 +5260,6 @@
         }
       }
     },
-    "status.severity.critical" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "kritisch"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "critical"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "critique"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "重大"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "严重"
-          }
-        }
-      }
-    },
     "status.severity.critical.abbrev" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5326,41 +5291,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "严重"
-          }
-        }
-      }
-    },
-    "status.severity.elevated" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "erhöht"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "elevated"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "élevé"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "上昇"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "升高"
           }
         }
       }
