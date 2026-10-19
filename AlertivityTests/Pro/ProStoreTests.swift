@@ -247,7 +247,10 @@ private final class FakeProClient: ProPurchasing {
 @Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct NativeProPurchaseTests {
     @Test
     func purchaseRestoreAndRefundUseVerifiedStoreKitTransactions() async throws {
-        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent() // Pro
+            .deletingLastPathComponent() // AlertivityTests
+            .deletingLastPathComponent() // Repository root
         let session = try SKTestSession(contentsOf: root.appendingPathComponent("StoreKit/Alertivity.storekit"))
         session.resetToDefaultState()
         session.disableDialogs = true
@@ -284,7 +287,10 @@ private final class FakeProClient: ProPurchasing {
     }
 
     private func makeSession() throws -> SKTestSession {
-        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent() // Pro
+            .deletingLastPathComponent() // AlertivityTests
+            .deletingLastPathComponent() // Repository root
         let session = try SKTestSession(contentsOf: root.appendingPathComponent("StoreKit/Alertivity.storekit"))
         session.resetToDefaultState()
         session.disableDialogs = true

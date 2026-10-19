@@ -38,24 +38,27 @@ xcodebuild \
 
 UI tests isolate app preferences and skip login registration. Onboarding coverage checks persisted outcomes, preference preservation, permission changes, explicit style application, and replay. Optional screenshots require `ALERTIVITY_CAPTURE_ONBOARDING=1` in the test-runner environment; capture can fail on secondary displays.
 
-For layout review, open `Alertivity/OnboardingLayoutPreviews.swift` in Xcode Canvas. Its sample readings do not start monitoring or change preferences. Equal-width preview columns keep the center divider fixed as values change.
+For layout review, open `Alertivity/Features/Onboarding/OnboardingLayoutPreviews.swift` in Xcode Canvas. Its sample readings do not start monitoring or change preferences. Equal-width preview columns keep the center divider fixed as values change.
 
-## Source files
+## Project structure
 
-| Behavior | Files in `Alertivity/` |
+The project navigator follows the folders on disk using Xcode synchronized folders. Both app targets share `Alertivity/`; each test folder belongs only to its matching test target. Adding a Swift file inside one of these folders automatically includes it in that target.
+
+| Folder | Contents |
 | --- | --- |
-| Scenes, menu commands, login registration, indicator selection | `AlertivityApp.swift` |
-| Sampling and process filtering | `SystemMetricsProvider.swift` |
-| Sampling schedule and status transitions | `ActivityMonitor.swift` |
-| Readings, severity, and explanations | `ActivityMetrics.swift`, `ActivityStatus.swift` |
-| Threshold defaults and validation | `MonitoringPreferences.swift` |
-| Persistence and onboarding outcome | `SettingsStore.swift` |
-| Configuration and permission UI | `SettingsView.swift`, `NotificationPermissionView.swift` |
-| Alert timing, shared cooldown, and actions | `NotificationManager.swift` |
-| Process actions | `ProcessActions.swift` |
-| Onboarding and previews | `OnboardingView.swift`, `OnboardingLayoutPreviews.swift` |
-| Review qualification and presentation | `ReviewRequestStore.swift`, `ReviewSettingsView.swift` |
-| Logging and translations | `AppLogger.swift`, `Localization.swift`, `Localizable.xcstrings` |
+| `Alertivity/App/` | App entry point, scenes, menu commands, and login registration |
+| `Alertivity/Features/` | Menu bar, settings, onboarding, Pro purchases, and review flows |
+| `Alertivity/Monitoring/` | Sampling, readings, thresholds, status transitions, and process actions |
+| `Alertivity/Notifications/` | Alert delivery, shared cooldown, and permission UI |
+| `Alertivity/Shared/` | Logging and localization helpers |
+| `Alertivity/Resources/` | App icon, asset catalog, and string catalogs |
+| `Alertivity/Preview Content/` | Development-only preview assets |
+| `AlertivityTests/` | Unit and integration tests by feature, with shared fixtures in `Support/` |
+| `AlertivityUITests/` | UI automation |
+| `Configuration/` | Shared Info.plist and each app target's signing entitlements |
+| `StoreKit/` | Local purchase fixture |
+
+`Configuration/` and `StoreKit/` are visible in Xcode but have no target membership. Build settings reference the plist and entitlements explicitly; schemes and purchase tests reference the StoreKit fixture. Keep development fixtures outside `Alertivity/` so folder synchronization does not add them to shipped resources. Target names, bundle identifiers, and the root `Alertivity.xctestplan` remain stable.
 
 ## Window and permission handling
 

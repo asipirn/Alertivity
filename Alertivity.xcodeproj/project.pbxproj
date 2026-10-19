@@ -7,23 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA000000000000000000010E /* SystemMetricsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000103 /* SystemMetricsProviderTests.swift */; };
-		AA000000000000000000020A /* ActivityStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000200 /* ActivityStatusTests.swift */; };
-		AA000000000000000000020B /* ActivityMonitorIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000201 /* ActivityMonitorIntegrationTests.swift */; };
-		AA000000000000000000020C /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000202 /* NotificationManagerTests.swift */; };
-		AA000000000000000000020D /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000203 /* SettingsStoreTests.swift */; };
-		AA000000000000000000020E /* HighActivityProcessFilteringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000204 /* HighActivityProcessFilteringTests.swift */; };
-		AA000000000000000000020F /* TestExpectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000205 /* TestExpectations.swift */; };
-		AA0000000000000000000211 /* TestDataBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000210 /* TestDataBuilders.swift */; };
-		AA0000000000000000000212 /* ActivityMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000213 /* ActivityMetricsTests.swift */; };
-		AA0000000000000000000214 /* ProcessUsageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000215 /* ProcessUsageTests.swift */; };
-		AA0000000000000000000216 /* ProcessActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000217 /* ProcessActionsTests.swift */; };
-		AA0000000000000000000303 /* AlertivityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000302 /* AlertivityUITests.swift */; };
-		AA0000000000000000000402 /* MetricMenuViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000400 /* MetricMenuViewsTests.swift */; };
-		AA0000000000000000000403 /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000401 /* ContentViewTests.swift */; };
 		AA0000000000000000000508 /* AlertivityNonSandboxed.app in Embed App */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000500 /* AlertivityNonSandboxed.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		AA0000000000000000000601 /* ReviewRequestStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000600 /* ReviewRequestStoreTests.swift */; };
-		AA0000000000000000000791 /* ProStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000790 /* ProStoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,48 +37,17 @@
 /* Begin PBXFileReference section */
 		AA0000000000000000000003 /* Alertivity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Alertivity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000101 /* AlertivityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlertivityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA0000000000000000000103 /* SystemMetricsProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMetricsProviderTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000200 /* ActivityStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityStatusTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000201 /* ActivityMonitorIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitorIntegrationTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000202 /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000203 /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000204 /* HighActivityProcessFilteringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighActivityProcessFilteringTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000205 /* TestExpectations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestExpectations.swift; sourceTree = "<group>"; };
-		AA0000000000000000000210 /* TestDataBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataBuilders.swift; sourceTree = "<group>"; };
-		AA0000000000000000000213 /* ActivityMetricsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMetricsTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000215 /* ProcessUsageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessUsageTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000217 /* ProcessActionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessActionsTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000301 /* AlertivityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlertivityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA0000000000000000000302 /* AlertivityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertivityUITests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000400 /* MetricMenuViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricMenuViewsTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000401 /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000500 /* AlertivityNonSandboxed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlertivityNonSandboxed.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA0000000000000000000600 /* ReviewRequestStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestStoreTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000790 /* ProStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProStoreTests.swift; sourceTree = "<group>"; };
-		AA0000000000000000000792 /* StoreKit/Alertivity.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit/Alertivity.storekit; sourceTree = "<group>"; };
 		C9055CF22EE03257002E5DF4 /* Alertivity.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Alertivity.xctestplan; sourceTree = "<group>"; };
-		C99493853085C63D00434ACE /* Alertivity (Non-sandboxed).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Alertivity (Non-sandboxed).entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AA0000000000000000000507 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = AA0000000000000000000501 /* Alertivity (Non-sandboxed) */;
-		};
-		C96C6D6B2E9F8D57006AAF07 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = AA0000000000000000000002 /* Alertivity */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C96C6D5E2E9F8D57006AAF07 /* Alertivity */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (C96C6D6B2E9F8D57006AAF07 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, AA0000000000000000000507 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Alertivity; sourceTree = "<group>"; };
+		C96C6D5E2E9F8D57006AAF07 /* Alertivity */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Alertivity; sourceTree = "<group>"; };
+		AA0000000000000000000102 /* AlertivityTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AlertivityTests; sourceTree = "<group>"; };
+		AA0000000000000000000300 /* AlertivityUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AlertivityUITests; sourceTree = "<group>"; };
+		AB0000000000000000000001 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
+		AA0000000000000000000792 /* StoreKit */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = StoreKit; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,17 +71,17 @@
 		AA0000000000000000000004 = {
 			isa = PBXGroup;
 			children = (
-				C99493853085C63D00434ACE /* Alertivity (Non-sandboxed).entitlements */,
-				C9055CF22EE03257002E5DF4 /* Alertivity.xctestplan */,
-				AA0000000000000000000792 /* StoreKit/Alertivity.storekit */,
 				C96C6D5E2E9F8D57006AAF07 /* Alertivity */,
 				AA0000000000000000000102 /* AlertivityTests */,
 				AA0000000000000000000300 /* AlertivityUITests */,
-				AA0000000000000000000019,
+				AB0000000000000000000001 /* Configuration */,
+				C9055CF22EE03257002E5DF4 /* Alertivity.xctestplan */,
+				AA0000000000000000000792 /* StoreKit */,
+				AA0000000000000000000019 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		AA0000000000000000000019 = {
+		AA0000000000000000000019 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				AA0000000000000000000003 /* Alertivity.app */,
@@ -136,36 +89,7 @@
 				AA0000000000000000000101 /* AlertivityTests.xctest */,
 				AA0000000000000000000301 /* AlertivityUITests.xctest */,
 			);
-			sourceTree = "<group>";
-		};
-		AA0000000000000000000102 /* AlertivityTests */ = {
-			isa = PBXGroup;
-			children = (
-				AA0000000000000000000200 /* ActivityStatusTests.swift */,
-				AA0000000000000000000201 /* ActivityMonitorIntegrationTests.swift */,
-				AA0000000000000000000202 /* NotificationManagerTests.swift */,
-				AA0000000000000000000203 /* SettingsStoreTests.swift */,
-				AA0000000000000000000204 /* HighActivityProcessFilteringTests.swift */,
-				AA0000000000000000000205 /* TestExpectations.swift */,
-				AA0000000000000000000210 /* TestDataBuilders.swift */,
-				AA0000000000000000000213 /* ActivityMetricsTests.swift */,
-				AA0000000000000000000215 /* ProcessUsageTests.swift */,
-				AA0000000000000000000217 /* ProcessActionsTests.swift */,
-				AA0000000000000000000400 /* MetricMenuViewsTests.swift */,
-				AA0000000000000000000401 /* ContentViewTests.swift */,
-				AA0000000000000000000103 /* SystemMetricsProviderTests.swift */,
-				AA0000000000000000000600 /* ReviewRequestStoreTests.swift */,
-				AA0000000000000000000790 /* ProStoreTests.swift */,
-			);
-			path = AlertivityTests;
-			sourceTree = "<group>";
-		};
-		AA0000000000000000000300 /* AlertivityUITests */ = {
-			isa = PBXGroup;
-			children = (
-				AA0000000000000000000302 /* AlertivityUITests.swift */,
-			);
-			path = AlertivityUITests;
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,7 +110,7 @@
 				C96C6D5E2E9F8D57006AAF07 /* Alertivity */,
 			);
 			name = Alertivity;
-			productName = EnhancedActivityMonitor;
+			productName = Alertivity;
 			productReference = AA0000000000000000000003 /* Alertivity.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -202,6 +126,9 @@
 			);
 			dependencies = (
 				AA0000000000000000000106 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA0000000000000000000102 /* AlertivityTests */,
 			);
 			name = AlertivityTests;
 			productName = AlertivityTests;
@@ -221,6 +148,9 @@
 			);
 			dependencies = (
 				AA000000000000000000030B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA0000000000000000000300 /* AlertivityUITests */,
 			);
 			name = AlertivityUITests;
 			productName = AlertivityUITests;
@@ -342,21 +272,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA000000000000000000020A /* ActivityStatusTests.swift in Sources */,
-				AA000000000000000000020B /* ActivityMonitorIntegrationTests.swift in Sources */,
-				AA000000000000000000020C /* NotificationManagerTests.swift in Sources */,
-				AA000000000000000000020D /* SettingsStoreTests.swift in Sources */,
-				AA000000000000000000020E /* HighActivityProcessFilteringTests.swift in Sources */,
-				AA000000000000000000020F /* TestExpectations.swift in Sources */,
-				AA0000000000000000000211 /* TestDataBuilders.swift in Sources */,
-				AA0000000000000000000212 /* ActivityMetricsTests.swift in Sources */,
-				AA0000000000000000000214 /* ProcessUsageTests.swift in Sources */,
-				AA0000000000000000000216 /* ProcessActionsTests.swift in Sources */,
-				AA0000000000000000000402 /* MetricMenuViewsTests.swift in Sources */,
-				AA0000000000000000000403 /* ContentViewTests.swift in Sources */,
-				AA000000000000000000010E /* SystemMetricsProviderTests.swift in Sources */,
-				AA0000000000000000000601 /* ReviewRequestStoreTests.swift in Sources */,
-				AA0000000000000000000791 /* ProStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,7 +279,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA0000000000000000000303 /* AlertivityUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +367,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Alertivity/Info.plist;
+				INFOPLIST_FILE = Configuration/Info.plist;
 				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -531,7 +445,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Alertivity/Info.plist;
+				INFOPLIST_FILE = Configuration/Info.plist;
 				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -558,7 +472,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = Alertivity/Alertivity.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Configuration/Alertivity.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -576,7 +490,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
-				INFOPLIST_FILE = Alertivity/Info.plist;
+				INFOPLIST_FILE = Configuration/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Alertivity;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -599,7 +513,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = Alertivity/Alertivity.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Configuration/Alertivity.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
@@ -615,7 +529,7 @@
 				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
 				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
 				ENABLE_RESOURCE_ACCESS_USB = NO;
-				INFOPLIST_FILE = Alertivity/Info.plist;
+				INFOPLIST_FILE = Configuration/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Alertivity;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -722,7 +636,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = "Alertivity (Non-sandboxed).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Configuration/Alertivity (Non-sandboxed).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -730,7 +644,7 @@
 				DEVELOPMENT_TEAM = 6L6TBLCF9Y;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = YES;
-				INFOPLIST_FILE = Alertivity/Info.plist;
+				INFOPLIST_FILE = Configuration/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Alertivity;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -753,13 +667,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = "Alertivity (Non-sandboxed).entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Configuration/Alertivity (Non-sandboxed).entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6L6TBLCF9Y;
 				ENABLE_APP_SANDBOX = NO;
-				INFOPLIST_FILE = Alertivity/Info.plist;
+				INFOPLIST_FILE = Configuration/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Alertivity;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
