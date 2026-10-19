@@ -12,6 +12,8 @@ A system metric must remain Critical for the selected High activity duration. Th
 
 In the source build, sustained [process activity](https://github.com/nobbbbby/Alertivity/wiki/Process-Insights#find-sustained-activity) can also trigger an alert. After a notification attempt, Alertivity waits for the selected **Cooldown** before attempting another. The default is ten minutes. System and process alerts share this interval. Changing it applies immediately against the last attempt; it does not start a new timer. The setting is saved, but the timer resets when the app restarts. Alerts are checked on each sample, so delivery can be later than the selected duration.
 
+Custom duration and cooldown require Pro in the Mac App Store build; Free uses 60 seconds and 10 minutes. The open-source build has no purchase requirement.
+
 Set **High activity duration** for how long activity must persist, and **Cooldown** for the gap between alerts, in [Settings](https://github.com/nobbbbby/Alertivity/wiki/Settings#notifications).
 
 ## Permissions by task

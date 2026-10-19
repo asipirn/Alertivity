@@ -35,7 +35,7 @@ Open **Settings → Thresholds**, then edit the Elevated and Critical columns fo
 | Network activity severity | Settings → Thresholds → Network throughput → Elevated / Critical | 0.1–100,000 MB/s, combined receives and sends |
 | Restore system threshold defaults | Settings → Thresholds → Reset to Defaults | Resets all four metrics. |
 
-These controls are available in both targets. Elevated must be strictly below Critical. Valid edits apply immediately; invalid edits show an explanation and preserve the last valid configuration.
+These controls require Pro in the Mac App Store build and are always available in the open-source build. Elevated must be strictly below Critical. Valid edits apply immediately; invalid edits show an explanation and preserve the last valid configuration.
 
 Default values are listed in [Metrics and status](https://github.com/nobbbbby/Alertivity/wiki/Metrics-and-Status).
 
@@ -62,3 +62,23 @@ These paths appear only when process sampling is available in the non-sandboxed 
 | Resume detection for an ignored process | Settings → Detection → Whitelist → the process’s minus button | Remove its saved executable-path rule. The button’s accessibility label is Remove ignored process. |
 
 See [Process insights](https://github.com/nobbbbby/Alertivity/wiki/Process-Insights) for how the list and actions work.
+
+## Free and Pro in the Mac App Store build
+
+Alertivity Pro unlocks customization of system CPU, memory, disk, and network thresholds,
+notification cooldown, and high-activity duration. Other current monitoring, notification,
+menu bar, and general features remain free.
+
+Without Pro, monitoring uses the default thresholds listed in [Metrics and status](Metrics-and-Status.md),
+a 10-minute notification cooldown, and a 60-second high-activity duration. The corresponding
+controls show these effective defaults and are disabled. Hover over the lock beside a restricted
+setting for an explanation. Saved custom values are preserved,
+including values from an earlier version, and become active again when Pro access is verified.
+Refunding or revoking Pro returns monitoring to the defaults without deleting saved values.
+
+Open **Settings → Pro** to purchase the one-time unlock or restore an existing
+purchase with your App Store account. The price comes from the App Store. Pending purchases
+unlock customization after approval; cancelled or unverified purchases do not grant access.
+
+The open-source, non-sandboxed build remains fully unlocked. It does not require a purchase
+for customization or any process feature and does not contact the Pro purchase service.

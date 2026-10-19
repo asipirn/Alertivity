@@ -68,3 +68,75 @@ Use the existing OSLog categories for state changes and errors. Do not log sensi
 ## Menu summaries
 
 `ActivityStatus.menuSummary(for:)` formats the thresholds reached by the current readings. Notification wording uses separate strings. Localized list formatting and line wrapping handle multiple affected metrics. Formatting runs on every refresh and emits no logs; sampling and alert delivery use their existing log categories.
+
+## App Store Pro configuration (AL-79)
+
+The sandboxed app target defines `APP_STORE` in both Debug and Release. The non-sandboxed
+target does not. This explicit build distinction controls monetization; runtime failures of
+process sampling must never change purchase requirements.
+
+`SettingsStore.monitoringConfiguration` resolves saved preferences into the effective Free/Pro
+configuration used by monitoring and notifications. UI lock states alone are insufficient.
+StoreKit-verified access enables the saved configuration; lack of access uses fixed defaults.
+Access is rechecked on launch, app activation, restore, and transaction updates, without trusting
+a Boolean in UserDefaults. Existing users' saved custom values survive the transition to Free,
+refunds, and subsequent restoration. All source-build features remain available without StoreKit.
+
+Before release, create a **non-consumable** App Store Connect product matching
+`ProStore.productID` (`com.Nobby.Alertivity.pro`), choose its price and availability, provide its
+localized metadata and review information, and validate the purchase flow in Apple's sandbox.
+The app uses the product's localized `displayPrice`; no production price is hardcoded. Product
+configuration and App Store approval are release requirements. The app reports unavailable
+purchase options if the product is not returned, while still allowing restoration.
+
+`StoreKit/Alertivity.storekit` is a local test fixture. Its $0.99 price is a test value, not a pricing
+decision. `NativeProPurchaseTests` uses `SKTestSession` with this fixture to exercise the native
+StoreKit adapter through purchase, restore, relaunch, and refund without real charges. The
+non-sandboxed host runs those tests with an explicitly injected App Store distribution. Mocked
+purchase tests cover pending, cancellation, failures, updates, and the absence of StoreKit calls
+from the source build. The sandboxed `Alertivity` scheme already selects the fixture under
+**Run → Options → StoreKit Configuration** for local debugging. Select **None** there when
+testing real App Store Connect products in Apple’s sandbox. The fixture is also visible in the
+project navigator and is not included in the app’s resources or Archive configuration.
+
+Referral rewards are not implemented; their qualification rules and platform feasibility remain
+part of AL-74.
+
+### Local StoreKit regression coverage
+
+Run `AlertivityTests` with the **Alertivity (Non-sandboxed)** scheme and normal code signing
+(the tests explicitly inject the App Store distribution where required). For just the real
+StoreKit adapter, select `NativeProPurchaseTests`. All native cases use the local fixture and
+`SKTestSession`; they do not require an App Store Connect product or charge real money.
+
+| Scenario | Local coverage |
+| --- | --- |
+| Purchase, transaction completion, relaunch, restore | Native StoreKit and app-level tests |
+| Ask to Buy approval and decline | Native StoreKit; approval exercises transaction updates |
+| Interrupted purchase and subsequent resolution | Native StoreKit and transaction updates |
+| Purchase failure and retry | Native injected purchase error |
+| Product lookup failure and retry | Native injected offline error |
+| Restore with no purchase; failed restore and recovery | Native StoreKit and injected offline error |
+| Invalid transaction signature and later successful verification | Native verification-error injection |
+| Refund, Free defaults, saved customization, and repurchase | Native refund plus activation refresh and settings integration |
+| Cancellation without an error message | App-level tests for cancelled results and direct/wrapped cancellation errors |
+| Native cancellation injection and retry | Native StoreKit safety check; see limitation below |
+| Verified updates against stale cached queries | App-level regression test |
+| Older lookup completing after a successful purchase | App-level concurrency regression test |
+| Repeated purchase/restore actions while a purchase is pending | App-level concurrency regression test |
+| Open-source build makes no Pro purchase-service calls | App-level regression test |
+
+On the macOS 27 local test service, injecting `StoreKitError.userCancelled` through
+`SKTestSession` produces `ASDServerErrorDomain` 907 and then `StoreKitError.unknown`, rather
+than a normal cancelled result. The native test verifies that this grants no access and a retry
+can succeed. Separate app-level tests verify that actual cancellation results and cancellation
+errors show no failure message. Unknown errors remain visible.
+
+The local service also did not deliver a refund update in the test host. Native refund tests
+therefore exercise the explicit entitlement refresh used when the app becomes active. Actual
+approval and interruption updates are tested natively; refund-update handling is additionally
+covered with a verified delivery whose cached lookup still incorrectly grants access.
+
+The two feature-boundary UI tests keep screenshot capture optional so their functional assertions
+can run on hosts where macOS cannot create images. Set `ALERTIVITY_CAPTURE_UI_SCREENSHOTS=1`
+in the UI test runner's environment to attach screenshots when a display is available.

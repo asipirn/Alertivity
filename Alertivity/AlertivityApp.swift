@@ -12,6 +12,8 @@ struct AlertivityApp: App {
     @StateObject private var notificationManager = NotificationManager()
     @StateObject private var settings = AlertivityApp.makeSettingsStore()
     @StateObject private var reviewStore = ReviewRequestStore()
+    @StateObject private var proStore = ProStore()
+    @Environment(\.scenePhase) private var scenePhase
 
     @State private var isMenuBarInserted = true
     @State private var hasInitialized = false
@@ -54,6 +56,7 @@ struct AlertivityApp: App {
                 initialize: performInitialSetup
             )
             .background(OnboardingLauncher(settings: settings))
+            .task { await proStore.start() }
         }
         .menuBarExtraStyle(.window)
         .commands {
@@ -61,20 +64,20 @@ struct AlertivityApp: App {
                 OnboardingLink(settings: settings)
             }
         }
-        .onChange(of: settings.notificationCooldownMinutes) { _, value in
-            notificationManager.notificationCooldown = TimeInterval(value * 60)
+        .onChange(of: proStore.hasProAccess, initial: true) { _, granted in
+            settings.setProAccess(granted)
         }
-        .onChange(of: settings.highActivityDurationSeconds) { _, value in
-            applyHighActivityDurationUpdate(for: value)
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await proStore.refreshAccess() } }
+        }
+        .onChange(of: settings.monitoringConfiguration) { _, configuration in
+            applyMonitoringConfiguration(configuration)
         }
         .onChange(of: settings.highActivityCPUThresholdPercent) { _, value in
             applyHighActivityCPUThresholdUpdate(for: value)
         }
         .onChange(of: settings.highActivityMemoryThresholdPercent) { _, value in
             applyHighActivityMemoryThresholdUpdate(for: value)
-        }
-        .onChange(of: settings.activityThresholds) { _, value in
-            applyActivityThresholdUpdate(for: value)
         }
         .onChange(of: settings.ignoredProcessPaths) { _, paths in
             applyIgnoredProcessPathsUpdate(for: paths)
@@ -107,13 +110,15 @@ struct AlertivityApp: App {
         Settings {
             SettingsView(
                 settings: settings,
-                processSamplingAvailable: monitor.processSamplingAvailable,
+                processSamplingAvailable: settings.distribution == .openSource && monitor.processSamplingAvailable,
                 notificationManager: notificationManager,
                 reviewStore: reviewStore,
+                proStore: proStore,
                 metrics: monitor.metrics
             )
                 .frame(width: 400)
                 .background(SettingsWindowAccessor())
+                .task { await proStore.start() }
                 .onAppear {
                     // SwiftUI may show a retained Settings window without attaching a new view.
                     DispatchQueue.main.async {
@@ -170,11 +175,9 @@ struct AlertivityApp: App {
         applyDockVisibility(for: settings.hideDockIcon)
         applyLaunchAtLogin(for: settings.launchAtLogin)
         updateMenuBarInsertion(for: monitor.status)
-        notificationManager.notificationCooldown = TimeInterval(settings.notificationCooldownMinutes * 60)
-        applyHighActivityDurationUpdate(for: settings.highActivityDurationSeconds)
+        applyMonitoringConfiguration(settings.monitoringConfiguration)
         applyHighActivityCPUThresholdUpdate(for: settings.highActivityCPUThresholdPercent)
         applyHighActivityMemoryThresholdUpdate(for: settings.highActivityMemoryThresholdPercent)
-        applyActivityThresholdUpdate(for: settings.activityThresholds)
         applyIgnoredProcessPathsUpdate(for: settings.ignoredProcessPaths)
         notificationManager.onIgnoreProcess = { path in
             settings.ignoreProcess(at: path)
@@ -199,14 +202,14 @@ struct AlertivityApp: App {
         updateMenuBarInsertion(for: ActivityStatus(metrics: newMetrics))
     }
 
-    private func applyHighActivityDurationUpdate(for value: Int) {
-        let normalized = MonitoringPreferences.normalizedDuration(value)
-        if normalized != value {
-            settings.highActivityDurationSeconds = normalized
-        } else {
-            monitor.highActivityDuration = TimeInterval(normalized)
-            notificationManager.highActivityDuration = TimeInterval(normalized)
+    private func applyMonitoringConfiguration(_ configuration: MonitoringConfiguration) {
+        notificationManager.notificationCooldown = TimeInterval(configuration.cooldownMinutes * 60)
+        monitor.highActivityDuration = TimeInterval(configuration.durationSeconds)
+        notificationManager.highActivityDuration = TimeInterval(configuration.durationSeconds)
+        if monitor.activityThresholds != configuration.thresholds {
+            applyActivityThresholdUpdate(for: configuration.thresholds)
         }
+        AppLogger.metrics.info("Effective monitoring configuration applied; custom: \(settings.canCustomizeMonitoring, privacy: .public) cooldownMinutes: \(configuration.cooldownMinutes) durationSeconds: \(configuration.durationSeconds)")
     }
 
     private func applyHighActivityCPUThresholdUpdate(for value: Int) {
@@ -586,6 +589,12 @@ private extension AlertivityApp {
             if !ProcessInfo.processInfo.arguments.contains("UITestsPreserveDefaults") {
                 defaults.removePersistentDomain(forName: suiteName)
             }
+        }
+#endif
+#if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("UITests"),
+           ProcessInfo.processInfo.arguments.contains("UITestsAppStoreFree") {
+            return SettingsStore(userDefaults: defaults, distribution: .appStore)
         }
 #endif
         return SettingsStore(userDefaults: defaults)

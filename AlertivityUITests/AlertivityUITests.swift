@@ -5,6 +5,85 @@ final class AlertivityUITests: XCTestCase {
         continueAfterFailure = false
     }
 
+    func testFreeCustomizationControlsAreLocked() {
+        verifyCustomizationControls(appStoreFree: true)
+    }
+
+    func testOpenSourceCustomizationControlsStayUnlocked() {
+        verifyCustomizationControls(appStoreFree: false)
+    }
+
+    func testAppStoreOnboardingIntroducesProWithoutPurchase() {
+        let app = launchApp()
+        app.launchArguments.append("UITestsAppStoreFree")
+        app.launch()
+        let next = app.buttons["onboarding.next"]
+        XCTAssertTrue(next.waitForExistence(timeout: 8))
+        XCTAssertEqual(app.staticTexts["onboarding.step"].value as? String, "Step 1 of 3")
+        next.click()
+        XCTAssertEqual(app.staticTexts["onboarding.step"].value as? String, "Step 2 of 3")
+        next.click()
+        XCTAssertEqual(app.staticTexts["onboarding.step"].value as? String, "Step 3 of 3")
+        XCTAssertTrue(app.staticTexts["onboarding.pro.introduction"].waitForExistence(timeout: 3))
+        for key in ["pro.feature.thresholds", "pro.feature.cooldown", "pro.feature.duration"] {
+            XCTAssertTrue(app.staticTexts[key].exists)
+        }
+        XCTAssertFalse(app.buttons["pro.purchase"].exists)
+        XCTAssertFalse(app.buttons["pro.restore"].exists)
+        app.buttons["onboarding.back"].click()
+        XCTAssertEqual(app.staticTexts["onboarding.step"].value as? String, "Step 2 of 3")
+        next.click()
+        next.click()
+        XCTAssertTrue(next.waitForNonExistence(timeout: 3))
+    }
+
+    private func verifyCustomizationControls(appStoreFree: Bool) {
+        let app = launchApp()
+        if appStoreFree { app.launchArguments.append("UITestsAppStoreFree") }
+        app.launch()
+        let skip = app.buttons["onboarding.skip"]
+        XCTAssertTrue(skip.waitForExistence(timeout: 8))
+        skip.click()
+        app.typeKey(",", modifierFlags: .command)
+        let notifications = app.buttons["Notifications"]
+        XCTAssertTrue(notifications.waitForExistence(timeout: 5))
+        notifications.click()
+        let cooldown = app.popUpButtons["settings.notificationCooldown"]
+        let duration = app.popUpButtons["settings.highActivityDuration"]
+        XCTAssertTrue(cooldown.waitForExistence(timeout: 3))
+        XCTAssertEqual(cooldown.isEnabled, !appStoreFree)
+        XCTAssertEqual(duration.isEnabled, !appStoreFree)
+        XCTAssertTrue(app.checkBoxes["Enable system notifications"].isEnabled)
+        for key in ["pro.lock.cooldown", "pro.lock.duration"] {
+            let hint = app.images[key]
+            XCTAssertEqual(hint.exists, appStoreFree)
+            if appStoreFree { XCTAssertTrue(hint.isEnabled) }
+        }
+        XCTAssertFalse(app.staticTexts.containing(NSPredicate(format: "label CONTAINS[c] %@", "non-sandboxed")).firstMatch.exists)
+        saveBoundaryScreenshot(app, name: appStoreFree ? "Free Notifications" : "Open Source Notifications")
+        app.buttons["Thresholds"].click()
+        let fields = app.textFields.allElementsBoundByIndex
+        XCTAssertEqual(fields.count, 8)
+        XCTAssertTrue(fields.allSatisfy { $0.isEnabled == !appStoreFree })
+        for metric in ["cpu", "memory", "disk", "network"] {
+            let hint = app.images["pro.lock.thresholds.\(metric)"]
+            XCTAssertEqual(hint.exists, appStoreFree)
+            if appStoreFree { XCTAssertTrue(hint.isEnabled) }
+        }
+        saveBoundaryScreenshot(app, name: appStoreFree ? "Free Thresholds" : "Open Source Thresholds")
+        // Narrow Settings windows may place tabs in the native toolbar overflow menu.
+        if !appStoreFree { XCTAssertFalse(app.buttons["Pro"].exists) }
+    }
+
+    private func saveBoundaryScreenshot(_ app: XCUIApplication, name: String) {
+        // Functional checks must also run on hosts without a screenshot-capable display.
+        guard ProcessInfo.processInfo.environment["ALERTIVITY_CAPTURE_UI_SCREENSHOTS"] == "1" else { return }
+        let attachment = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
+
     func testAppLaunchesAndStaysActive() {
         let app = launchApp()
         app.launch()

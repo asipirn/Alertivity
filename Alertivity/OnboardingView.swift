@@ -16,17 +16,21 @@ struct OnboardingView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Label(step == 0 ? "onboarding.overview.title" : "onboarding.alerts.title", systemImage: step == 0 ? "waveform.path.ecg" : "bell")
+            Label(stepTitle, systemImage: stepSymbol)
                 .font(.title.bold())
                 .accessibilityAddTraits(.isHeader)
-            Text(L10n.format("onboarding.step", step + 1, 2))
+            Text(L10n.format("onboarding.step", step + 1, stepCount))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .accessibilityIdentifier("onboarding.step")
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    if step == 0 { introduction } else { preferences }
+                    switch step {
+                    case 0: introduction
+                    case 1: preferences
+                    default: proIntroduction
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -41,8 +45,8 @@ struct OnboardingView: View {
                     Button("onboarding.back") { step -= 1 }
                         .accessibilityIdentifier("onboarding.back")
                 }
-                Button(step == 1 ? "onboarding.done" : "onboarding.continue") {
-                    if step == 1 { finish(.completed) } else { step += 1 }
+                Button(isLastStep ? "onboarding.done" : "onboarding.continue") {
+                    if isLastStep { finish(.completed) } else { step += 1 }
                 }
                 .keyboardShortcut(.defaultAction)
                 .accessibilityIdentifier("onboarding.next")
@@ -76,6 +80,41 @@ struct OnboardingView: View {
             settings.isOnboardingRequested = false
             if settings.onboardingOutcome == .pending { settings.finishOnboarding(.skipped) }
         }
+    }
+
+    private var stepCount: Int { settings.distribution == .appStore ? 3 : 2 }
+    private var isLastStep: Bool { step == stepCount - 1 }
+
+    private var stepTitle: LocalizedStringKey {
+        switch step {
+        case 0: "onboarding.overview.title"
+        case 1: "onboarding.alerts.title"
+        default: "pro.title"
+        }
+    }
+
+    private var stepSymbol: String {
+        switch step {
+        case 0: "waveform.path.ecg"
+        case 1: "bell"
+        default: "star"
+        }
+    }
+
+    /// Explain the boundary without interrupting setup with a purchase or permission prompt.
+    private var proIntroduction: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("onboarding.pro.help")
+                .accessibilityIdentifier("onboarding.pro.introduction")
+            ProFeatureList()
+            Text("pro.oneTime")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.secondary)
+            Text("onboarding.pro.settings")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     private var introduction: some View {

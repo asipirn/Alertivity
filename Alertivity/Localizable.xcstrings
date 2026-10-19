@@ -1,6 +1,834 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+  "pro.requiresPro": {
+    "comment": "AL-79: Pro lock hover help or optional onboarding introduction.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Requires Alertivity Pro"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Erfordert Alertivity Pro"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Nécessite Alertivity Pro"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro が必要です"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "需要 Alertivity Pro"
+        }
+      }
+    }
+  },
+  "pro.lock.thresholds": {
+    "comment": "AL-79: Pro lock hover help or optional onboarding introduction.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Requires Alertivity Pro. Free monitoring uses the default thresholds."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Erfordert Alertivity Pro. Die kostenlose Überwachung verwendet die Standardschwellenwerte."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Nécessite Alertivity Pro. La surveillance gratuite utilise les seuils par défaut."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro が必要です。無料の監視にはデフォルトのしきい値が使われます。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "需要 Alertivity Pro。免费监控使用默认阈值。"
+        }
+      }
+    }
+  },
+  "pro.lock.cooldown": {
+    "comment": "AL-79: Pro lock hover help or optional onboarding introduction.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Requires Alertivity Pro. Free monitoring uses a 10-minute notification cooldown."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Erfordert Alertivity Pro. Die kostenlose Überwachung verwendet einen Benachrichtigungsabstand von 10 Minuten."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Nécessite Alertivity Pro. La surveillance gratuite utilise un délai de 10 minutes entre les notifications."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro が必要です。無料の監視では通知間隔は10分です。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "需要 Alertivity Pro。免费监控的通知冷却时间为 10 分钟。"
+        }
+      }
+    }
+  },
+  "pro.lock.duration": {
+    "comment": "AL-79: Pro lock hover help or optional onboarding introduction.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Requires Alertivity Pro. Free monitoring uses a 60-second high-activity duration."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Erfordert Alertivity Pro. Die kostenlose Überwachung verwendet eine Dauer hoher Aktivität von 60 Sekunden."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Nécessite Alertivity Pro. La surveillance gratuite utilise une durée d’activité élevée de 60 secondes."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro が必要です。無料の監視では高負荷の継続時間は60秒です。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "需要 Alertivity Pro。免费监控的高活动持续时间为 60 秒。"
+        }
+      }
+    }
+  },
+  "onboarding.pro.help": {
+    "comment": "AL-79: Pro lock hover help or optional onboarding introduction.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Monitoring and notifications are free with the default settings. Pro lets you customize:"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Überwachung und Benachrichtigungen sind mit den Standardeinstellungen kostenlos. Mit Pro kannst du Folgendes anpassen:"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "La surveillance et les notifications sont gratuites avec les réglages par défaut. Pro vous permet de personnaliser :"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "デフォルト設定での監視と通知は無料です。Pro では次の項目をカスタマイズできます："
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "使用默认设置的监控和通知免费。Pro 可让您自定义："
+        }
+      }
+    }
+  },
+  "onboarding.pro.settings": {
+    "comment": "AL-79: Pro lock hover help or optional onboarding introduction.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "You can unlock Pro anytime in Settings → Pro."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Du kannst Pro jederzeit unter Einstellungen → Pro freischalten."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Vous pouvez déverrouiller Pro à tout moment dans Réglages → Pro."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "「設定 → Pro」からいつでも Pro を購入できます。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "您可随时在“设置 → Pro”中解锁。"
+        }
+      }
+    }
+  },
+  "pro.tabTitle": {
+    "comment": "AL-79: Short Settings tab title.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro"
+        }
+      }
+    }
+  },
+  "pro.title": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro"
+        }
+      }
+    }
+  },
+  "pro.unlocked": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro is unlocked"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro ist freigeschaltet"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro est déverrouillé"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro は有効です"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Alertivity Pro 已解锁"
+        }
+      }
+    }
+  },
+  "pro.feature.thresholds": {
+    "comment": "AL-79: Individual paid feature in the Pro feature list.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Custom CPU, memory, disk, and network thresholds"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Eigene Schwellenwerte für CPU, Arbeitsspeicher, Festplatte und Netzwerk"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Seuils personnalisés du processeur, de la mémoire, du disque et du réseau"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "CPU、メモリ、ディスク、ネットワークのしきい値のカスタマイズ"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "自定义 CPU、内存、磁盘和网络阈值"
+        }
+      }
+    }
+  },
+  "pro.feature.cooldown": {
+    "comment": "AL-79: Individual paid feature in the Pro feature list.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Custom notification cooldown"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Anpassbarer Benachrichtigungsabstand"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Délai personnalisé entre les notifications"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "通知間隔のカスタマイズ"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "自定义通知冷却时间"
+        }
+      }
+    }
+  },
+  "pro.feature.duration": {
+    "comment": "AL-79: Individual paid feature in the Pro feature list.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Custom high-activity duration"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Anpassbare Dauer hoher Aktivität"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Durée personnalisée d’activité élevée"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "高負荷の継続時間のカスタマイズ"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "自定义高活动持续时间"
+        }
+      }
+    }
+  },
+  "pro.oneTime": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "One-time purchase. No subscription."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Einmaliger Kauf. Kein Abonnement."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Achat unique. Sans abonnement."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "買い切りです。サブスクリプションではありません。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "一次性购买，无需订阅。"
+        }
+      }
+    }
+  },
+  "pro.buy": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Unlock Pro — %@"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro freischalten — %@"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Déverrouiller Pro — %@"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro を購入 — %@"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "解锁 Pro — %@"
+        }
+      }
+    }
+  },
+  "pro.restore": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Restore Purchases"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Käufe wiederherstellen"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Restaurer les achats"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "購入を復元"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "恢复购买"
+        }
+      }
+    }
+  },
+  "pro.retry": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Load Purchase Options"
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Kaufoptionen laden"
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Charger les options d’achat"
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "購入オプションを読み込む"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "加载购买选项"
+        }
+      }
+    }
+  },
+  "pro.unavailable": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro is currently unavailable for purchase. You can still restore an existing purchase."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro kann derzeit nicht gekauft werden. Vorhandene Käufe können weiterhin wiederhergestellt werden."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro n’est pas disponible à l’achat pour le moment. Vous pouvez toujours restaurer un achat existant."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "現在 Pro を購入できません。購入済みの場合は復元できます。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro 暂时无法购买。您仍可恢复已有购买。"
+        }
+      }
+    }
+  },
+  "pro.loadError": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Couldn’t load purchase options. Please try again."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Kaufoptionen konnten nicht geladen werden. Bitte versuche es erneut."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Impossible de charger les options d’achat. Réessayez."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "購入オプションを読み込めませんでした。もう一度お試しください。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "无法加载购买选项，请重试。"
+        }
+      }
+    }
+  },
+  "pro.pending": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Your purchase is awaiting approval. Pro will unlock when it is approved."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Dein Kauf wartet auf Genehmigung. Pro wird nach der Genehmigung freigeschaltet."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Votre achat est en attente d’approbation. Pro sera déverrouillé après son approbation."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "購入の承認を待っています。承認されると Pro が有効になります。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "购买正在等待批准，批准后将自动解锁 Pro。"
+        }
+      }
+    }
+  },
+  "pro.purchaseError": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "The purchase couldn’t be completed or verified. Please try again."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Der Kauf konnte nicht abgeschlossen oder bestätigt werden. Bitte versuche es erneut."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "L’achat n’a pas pu être effectué ou vérifié. Réessayez."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "購入を完了または確認できませんでした。もう一度お試しください。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "无法完成或验证购买，请重试。"
+        }
+      }
+    }
+  },
+  "pro.restored": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Your Pro purchase has been restored."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Dein Pro-Kauf wurde wiederhergestellt."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Votre achat Pro a été restauré."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Pro の購入を復元しました。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "已恢复您的 Pro 购买。"
+        }
+      }
+    }
+  },
+  "pro.noPurchase": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "No Pro purchase was found for your App Store account."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Für deinen App Store-Account wurde kein Pro-Kauf gefunden."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Aucun achat Pro n’a été trouvé pour votre compte App Store."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "この App Store アカウントの Pro 購入が見つかりませんでした。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "未找到此 App Store 账户的 Pro 购买记录。"
+        }
+      }
+    }
+  },
+  "pro.restoreError": {
+    "comment": "AL-79: App Store Pro customization and purchase UI.",
+    "extractionState": "manual",
+    "localizations": {
+      "en": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Couldn’t restore purchases. Please try again."
+        }
+      },
+      "de": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Käufe konnten nicht wiederhergestellt werden. Bitte versuche es erneut."
+        }
+      },
+      "fr": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "Impossible de restaurer les achats. Réessayez."
+        }
+      },
+      "ja": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "購入を復元できませんでした。もう一度お試しください。"
+        }
+      },
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "无法恢复购买，请重试。"
+        }
+      }
+    }
+  },
     "menu.writeReview": {
       "comment": "AL-75: Voluntary App Store review command in the standard application menu.",
       "extractionState": "manual",
@@ -3738,31 +4566,31 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benachrichtigungen werden ausgelöst, wenn eine Metrik %d Sekunden lang kritisch ist. Prozesswarnungen erfordern den non-sandboxed Build."
+            "value" : "Benachrichtigungen werden ausgelöst, wenn eine Metrik %d Sekunden lang kritisch ist."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notifications fire when any metric stays critical for %d seconds. Process alerts require the non-sandboxed build."
+            "value" : "Notifications fire when any metric stays critical for %d seconds."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les notifications s'affichent lorsqu'une mesure reste critique pendant %d secondes. Les alertes de processus nécessitent la version non-sandboxed."
+            "value" : "Les notifications s’affichent lorsqu’une mesure reste critique pendant %d secondes."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "いずれかの指標が %d 秒間重大な状態の場合に通知します。プロセス通知には non-sandboxed ビルドが必要です。"
+            "value" : "いずれかの指標が %d 秒間重大な状態の場合に通知します。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当任一指标连续 %d 秒处于严重状态时发送通知。进程提醒需要 non-sandboxed 版本。"
+            "value" : "当任一指标连续 %d 秒处于严重状态时发送通知。"
           }
         }
       }

@@ -13,7 +13,7 @@ The overall status follows the highest severity among CPU, memory, disk, and net
 | Disk | 30 MB/s | 120 MB/s | Combined read and write throughput |
 | Network | 5 MB/s | 20 MB/s | Combined receive and send throughput |
 
-Values below Elevated are Normal. At a threshold, the higher status applies: CPU at 80% is Critical with the defaults. MB/s uses decimal megabytes (1 MB = 1,000,000 bytes), not megabits. Change these values under **Settings → Thresholds**; process detection has separate controls.
+Values below Elevated are Normal. At a threshold, the higher status applies: CPU at 80% is Critical with the defaults. MB/s uses decimal megabytes (1 MB = 1,000,000 bytes), not megabits. Customize these values under **Settings → Thresholds** with Pro in the App Store build, or without a purchase in the open-source build; process detection has separate controls.
 
 ## Menu summaries
 

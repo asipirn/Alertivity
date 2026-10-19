@@ -7,31 +7,31 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "needs_review",
             "value" : "AlertivityNonSandboxed"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "AlertivityNonSandboxed"
+            "value" : "Alertivity"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "needs_review",
             "value" : "AlertivityNonSandboxed"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "needs_review",
             "value" : "AlertivityNonSandboxed"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "needs_review",
             "value" : "AlertivityNonSandboxed"
           }
         }

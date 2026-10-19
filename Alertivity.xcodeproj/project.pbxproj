@@ -23,6 +23,7 @@
 		AA0000000000000000000403 /* ContentViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000401 /* ContentViewTests.swift */; };
 		AA0000000000000000000508 /* AlertivityNonSandboxed.app in Embed App */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000500 /* AlertivityNonSandboxed.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AA0000000000000000000601 /* ReviewRequestStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000600 /* ReviewRequestStoreTests.swift */; };
+		AA0000000000000000000791 /* ProStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000790 /* ProStoreTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +70,10 @@
 		AA0000000000000000000401 /* ContentViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewTests.swift; sourceTree = "<group>"; };
 		AA0000000000000000000500 /* AlertivityNonSandboxed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlertivityNonSandboxed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000600 /* ReviewRequestStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewRequestStoreTests.swift; sourceTree = "<group>"; };
+		AA0000000000000000000790 /* ProStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProStoreTests.swift; sourceTree = "<group>"; };
+		AA0000000000000000000792 /* StoreKit/Alertivity.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit/Alertivity.storekit; sourceTree = "<group>"; };
 		C9055CF22EE03257002E5DF4 /* Alertivity.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Alertivity.xctestplan; sourceTree = "<group>"; };
+		C99493853085C63D00434ACE /* Alertivity (Non-sandboxed).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Alertivity (Non-sandboxed).entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -114,7 +118,9 @@
 		AA0000000000000000000004 = {
 			isa = PBXGroup;
 			children = (
+				C99493853085C63D00434ACE /* Alertivity (Non-sandboxed).entitlements */,
 				C9055CF22EE03257002E5DF4 /* Alertivity.xctestplan */,
+				AA0000000000000000000792 /* StoreKit/Alertivity.storekit */,
 				C96C6D5E2E9F8D57006AAF07 /* Alertivity */,
 				AA0000000000000000000102 /* AlertivityTests */,
 				AA0000000000000000000300 /* AlertivityUITests */,
@@ -149,6 +155,7 @@
 				AA0000000000000000000401 /* ContentViewTests.swift */,
 				AA0000000000000000000103 /* SystemMetricsProviderTests.swift */,
 				AA0000000000000000000600 /* ReviewRequestStoreTests.swift */,
+				AA0000000000000000000790 /* ProStoreTests.swift */,
 			);
 			path = AlertivityTests;
 			sourceTree = "<group>";
@@ -349,6 +356,7 @@
 				AA0000000000000000000403 /* ContentViewTests.swift in Sources */,
 				AA000000000000000000010E /* SystemMetricsProviderTests.swift in Sources */,
 				AA0000000000000000000601 /* ReviewRequestStoreTests.swift in Sources */,
+				AA0000000000000000000791 /* ProStoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,7 +459,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				/* No target declares App Intents; skip the otherwise empty metadata extraction. */
 				LM_SKIP_METADATA_EXTRACTION = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -530,7 +537,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				/* No target declares App Intents; skip the otherwise empty metadata extraction. */
 				LM_SKIP_METADATA_EXTRACTION = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
@@ -552,8 +558,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = Alertivity/Alertivity.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6L6TBLCF9Y;
@@ -582,7 +589,7 @@
 				PRODUCT_MODULE_NAME = AlertivitySandboxed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG APP_STORE";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -592,7 +599,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_ENTITLEMENTS = Alertivity/Alertivity.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 6L6TBLCF9Y;
@@ -619,6 +627,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Nobby.Alertivity;
 				PRODUCT_MODULE_NAME = AlertivitySandboxed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APP_STORE;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -713,6 +722,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Alertivity (Non-sandboxed).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
@@ -743,6 +753,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = pulse;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_ENTITLEMENTS = "Alertivity (Non-sandboxed).entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;

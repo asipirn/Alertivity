@@ -8,6 +8,7 @@ struct SettingsView: View {
     let processSamplingAvailable: Bool
     @ObservedObject var notificationManager: NotificationManager
     var reviewStore: ReviewRequestStore = ReviewRequestStore()
+    var proStore: ProStore? = nil
     var metrics: ActivityMetrics = .placeholder
     @State private var selectedTab: SettingsTabSelection = .general
 
@@ -41,9 +42,7 @@ struct SettingsView: View {
             SettingsTab(title: "settings.tab.notifications", systemImage: "bell") {
                 NotificationPermissionView(manager: notificationManager, showsAuthorizedStatus: false)
                 NotificationSettingsFields(
-                    notificationsEnabled: $settings.notificationsEnabled,
-                    notificationCooldownMinutes: $settings.notificationCooldownMinutes,
-                    highActivityDurationSeconds: $settings.highActivityDurationSeconds,
+                    settings: settings,
                     processSamplingAvailable: processSamplingAvailable,
                     emphasizesFooter: true
                 )
@@ -54,6 +53,13 @@ struct SettingsView: View {
                 SystemThresholdSettingsView(settings: settings, emphasizesNotes: true)
             }
             .tag(SettingsTabSelection.thresholds)
+
+            if settings.distribution == .appStore, let proStore {
+                SettingsTab(title: "pro.tabTitle", systemImage: "star") {
+                    ProSettingsPane(store: proStore)
+                }
+                .tag(SettingsTabSelection.pro)
+            }
 
             if processSamplingAvailable {
                 SettingsTab(title: "settings.tab.detection", systemImage: "scope") {
@@ -82,7 +88,7 @@ struct SettingsView: View {
     }
 
     private enum SettingsTabSelection: Hashable {
-        case general, menuBar, notifications, thresholds, detection
+        case general, menuBar, notifications, thresholds, detection, pro
     }
 }
 
@@ -104,9 +110,7 @@ struct NoticePreferencesView: View {
 
         Section("settings.tab.notifications") {
             NotificationSettingsFields(
-                notificationsEnabled: $settings.notificationsEnabled,
-                notificationCooldownMinutes: $settings.notificationCooldownMinutes,
-                highActivityDurationSeconds: $settings.highActivityDurationSeconds,
+                settings: settings,
                 processSamplingAvailable: processSamplingAvailable,
                 emphasizesFooter: false
             )
@@ -163,7 +167,7 @@ private struct SettingsTab<Content: View>: View {
     }
 }
 
-private struct SettingsFootnote: View {
+struct SettingsFootnote: View {
     let key: LocalizedStringKey
     var weight: Font.Weight = .regular
 
@@ -175,7 +179,7 @@ private struct SettingsFootnote: View {
     }
 }
 
-private struct FooterDivider: View {
+struct FooterDivider: View {
     var body: some View {
         Divider()
             .padding(.horizontal, -12)
@@ -232,37 +236,63 @@ private struct MenuBarSettingsFields: View {
 }
 
 private struct NotificationSettingsFields: View {
-    @Binding var notificationsEnabled: Bool
-    @Binding var notificationCooldownMinutes: Int
-    @Binding var highActivityDurationSeconds: Int
+    @ObservedObject var settings: SettingsStore
     let processSamplingAvailable: Bool
     let emphasizesFooter: Bool
 
     var body: some View {
-        Toggle("settings.notifications.enable", isOn: $notificationsEnabled)
+        Toggle("settings.notifications.enable", isOn: $settings.notificationsEnabled)
 
         VStack(alignment: .leading, spacing: 2) {
-            Picker("settings.notifications.cooldown", selection: $notificationCooldownMinutes) {
-                ForEach(MonitoringPreferences.notificationCooldownOptions, id: \.self) { value in
-                    Text(L10n.format("settings.notifications.cooldownValue", value)).tag(value)
+            LabeledContent {
+                Picker("settings.notifications.cooldown", selection: Binding(
+                    get: { settings.monitoringConfiguration.cooldownMinutes },
+                    set: { if settings.canCustomizeMonitoring { settings.notificationCooldownMinutes = $0 } }
+                )) {
+                    ForEach(MonitoringPreferences.notificationCooldownOptions, id: \.self) { value in
+                        Text(L10n.format("settings.notifications.cooldownValue", value)).tag(value)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .disabled(!settings.notificationsEnabled || !settings.canCustomizeMonitoring)
+                .accessibilityIdentifier("settings.notificationCooldown")
+            } label: {
+                HStack(spacing: 6) {
+                    Text("settings.notifications.cooldown")
+                    if !settings.canCustomizeMonitoring {
+                        ProLockHint(help: "pro.lock.cooldown", identifier: "pro.lock.cooldown")
+                    }
                 }
             }
-            .pickerStyle(.menu)
-            .disabled(!notificationsEnabled)
-
             SettingsFootnote(key: "settings.notifications.cooldown.help")
         }
 
-        Picker("settings.detection.duration", selection: $highActivityDurationSeconds) {
-            ForEach(MonitoringPreferences.durationOptions, id: \.self) { value in
-                Text(L10n.format("settings.detection.durationValue", value)).tag(value)
+        LabeledContent {
+            Picker("settings.detection.duration", selection: Binding(
+                get: { settings.monitoringConfiguration.durationSeconds },
+                set: { if settings.canCustomizeMonitoring { settings.highActivityDurationSeconds = $0 } }
+            )) {
+                ForEach(MonitoringPreferences.durationOptions, id: \.self) { value in
+                    Text(L10n.format("settings.detection.durationValue", value)).tag(value)
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(.menu)
+            .disabled(!settings.canCustomizeMonitoring)
+            .accessibilityIdentifier("settings.highActivityDuration")
+        } label: {
+            HStack(spacing: 6) {
+                Text("settings.detection.duration")
+                if !settings.canCustomizeMonitoring {
+                    ProLockHint(help: "pro.lock.duration", identifier: "pro.lock.duration")
+                }
             }
         }
-        .pickerStyle(.menu)
 
         FooterDivider()
 
-        Text(L10n.format(notificationNoteKey, highActivityDurationSeconds))
+        Text(L10n.format(notificationNoteKey, settings.monitoringConfiguration.durationSeconds))
             .font(.footnote.weight(emphasizesFooter ? .semibold : .regular))
             .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
@@ -328,7 +358,7 @@ private struct SystemThresholdSettingsView: View {
     init(settings: SettingsStore, emphasizesNotes: Bool) {
         self.settings = settings
         self.emphasizesNotes = emphasizesNotes
-        _draft = State(initialValue: Draft(settings.activityThresholds))
+        _draft = State(initialValue: Draft(settings.monitoringConfiguration.thresholds))
     }
 
     var body: some View {
@@ -346,6 +376,7 @@ private struct SystemThresholdSettingsView: View {
                 .foregroundStyle(.secondary)
                 thresholdRow(
                     "settings.thresholds.cpu",
+                    lockIdentifier: "pro.lock.thresholds.cpu",
                     help: "CPU thresholds use total system processor utilization.",
                     elevated: $draft.cpuElevated,
                     critical: $draft.cpuCritical,
@@ -353,6 +384,7 @@ private struct SystemThresholdSettingsView: View {
                 )
                 thresholdRow(
                     "settings.thresholds.memory",
+                    lockIdentifier: "pro.lock.thresholds.memory",
                     help: "Memory thresholds use the percentage of physical memory in use.",
                     elevated: $draft.memoryElevated,
                     critical: $draft.memoryCritical,
@@ -360,6 +392,7 @@ private struct SystemThresholdSettingsView: View {
                 )
                 thresholdRow(
                     "settings.thresholds.disk",
+                    lockIdentifier: "pro.lock.thresholds.disk",
                     help: "Disk thresholds use combined read and write throughput.",
                     elevated: $draft.diskElevated,
                     critical: $draft.diskCritical,
@@ -367,12 +400,15 @@ private struct SystemThresholdSettingsView: View {
                 )
                 thresholdRow(
                     "settings.thresholds.network",
+                    lockIdentifier: "pro.lock.thresholds.network",
                     help: "Network thresholds use combined download and upload throughput.",
                     elevated: $draft.networkElevated,
                     critical: $draft.networkCritical,
                     unit: "MB/s"
                 )
             }
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("settings.systemThresholds")
 
             if let validationError {
                 Label(validationMessage(for: validationError), systemImage: "exclamationmark.triangle.fill")
@@ -385,6 +421,7 @@ private struct SystemThresholdSettingsView: View {
                     settings.resetActivityThresholds()
                     draft = Draft(.default)
                 }
+                .disabled(!settings.canCustomizeMonitoring)
                 Spacer()
             }
 
@@ -392,14 +429,19 @@ private struct SystemThresholdSettingsView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("settings.thresholds.help")
-                Text("Process detection thresholds are configured separately.")
+                if settings.distribution == .openSource {
+                    Text("Process detection thresholds are configured separately.")
+                }
             }
             .font(.footnote.weight(emphasizesNotes ? .semibold : .regular))
             .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
         }
         .onChange(of: draft) { _, _ in applyIfValid() }
-        .onChange(of: settings.activityThresholds) { _, thresholds in
+        .onChange(of: settings.canCustomizeMonitoring) { _, _ in
+            draft = Draft(settings.monitoringConfiguration.thresholds)
+        }
+        .onChange(of: settings.monitoringConfiguration.thresholds) { _, thresholds in
             if validationError == nil, Draft(thresholds) != draft {
                 draft = Draft(thresholds)
             }
@@ -408,16 +450,24 @@ private struct SystemThresholdSettingsView: View {
 
     private func thresholdRow(
         _ title: LocalizedStringKey,
+        lockIdentifier: String,
         help: LocalizedStringKey,
         elevated: Binding<Double>,
         critical: Binding<Double>,
         unit: String
     ) -> some View {
         GridRow {
-            Text(title)
-                .help(help)
+            HStack(spacing: 6) {
+                Text(title).help(help)
+                if !settings.canCustomizeMonitoring {
+                    ProLockHint(help: "pro.lock.thresholds", identifier: lockIdentifier)
+                }
+            }
+            .accessibilityElement(children: .contain)
             thresholdField(value: elevated)
+                .disabled(!settings.canCustomizeMonitoring)
             thresholdField(value: critical)
+                .disabled(!settings.canCustomizeMonitoring)
             Text(unit)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -446,7 +496,7 @@ private struct SystemThresholdSettingsView: View {
     }
 
     private func applyIfValid() {
-        guard validationError == nil else { return }
+        guard settings.canCustomizeMonitoring, validationError == nil else { return }
         settings.updateActivityThresholds(
             cpuElevatedPercent: draft.cpuElevated,
             cpuCriticalPercent: draft.cpuCritical,

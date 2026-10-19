@@ -26,6 +26,25 @@ final class SettingsStore: ObservableObject {
     }
 
     private let defaults: UserDefaults
+    let distribution: AppDistribution
+    @Published private(set) var hasProAccess = false
+
+    var canCustomizeMonitoring: Bool { distribution == .openSource || hasProAccess }
+
+    /// Only this configuration may drive monitoring and alerts; saved custom values remain untouched.
+    var monitoringConfiguration: MonitoringConfiguration {
+        MonitoringConfiguration(
+            thresholds: canCustomizeMonitoring ? activityThresholds : .default,
+            cooldownMinutes: canCustomizeMonitoring ? notificationCooldownMinutes : MonitoringPreferences.defaultNotificationCooldownMinutes,
+            durationSeconds: canCustomizeMonitoring ? MonitoringPreferences.normalizedDuration(highActivityDurationSeconds) : 60
+        )
+    }
+
+    func setProAccess(_ granted: Bool) {
+        guard distribution == .appStore, hasProAccess != granted else { return }
+        hasProAccess = granted
+        AppLogger.purchases.info("Monitoring customization access changed; granted: \(granted, privacy: .public)")
+    }
 
     /// An explicit replay request is transient; it must never reopen guidance after relaunch.
     @Published var isOnboardingRequested = false
@@ -113,7 +132,8 @@ final class SettingsStore: ObservableObject {
         }
     }
 
-    init(userDefaults: UserDefaults = .standard) {
+    init(userDefaults: UserDefaults = .standard, distribution: AppDistribution = .current) {
+        self.distribution = distribution
         self.defaults = userDefaults
         onboardingOutcome = defaults.string(forKey: Keys.onboardingOutcome)
             .flatMap(OnboardingOutcome.init(rawValue:)) ?? .pending

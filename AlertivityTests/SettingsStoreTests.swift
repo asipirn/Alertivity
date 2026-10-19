@@ -143,3 +143,67 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
         expectEqual(store.activityThresholds, .default)
     }
 }
+
+@Suite struct ProBoundaryTests {
+    @Test
+    func savedCustomizationSurvivesFreeProAndRelaunch() throws {
+        let defaults = makeIsolatedDefaults()
+        let source = SettingsStore(userDefaults: defaults, distribution: .openSource)
+        source.notificationCooldownMinutes = 30
+        source.highActivityDurationSeconds = 240
+        #expect(source.updateActivityThresholds(
+            cpuElevatedPercent: 40, cpuCriticalPercent: 60,
+            memoryElevatedPercent: 50, memoryCriticalPercent: 70,
+            diskElevatedMegabytesPerSecond: 10, diskCriticalMegabytesPerSecond: 20,
+            networkElevatedMegabytesPerSecond: 1, networkCriticalMegabytesPerSecond: 2
+        ) == nil)
+        let custom = source.monitoringConfiguration
+        let store = SettingsStore(userDefaults: defaults, distribution: .appStore)
+        #expect(!store.canCustomizeMonitoring)
+        #expect(store.monitoringConfiguration == MonitoringConfiguration(thresholds: .default, cooldownMinutes: 10, durationSeconds: 60))
+        #expect(store.activityThresholds == custom.thresholds)
+        #expect(store.notificationCooldownMinutes == 30)
+        #expect(store.highActivityDurationSeconds == 240)
+        store.setProAccess(true)
+        #expect(store.monitoringConfiguration == custom)
+        store.setProAccess(false)
+        #expect(store.monitoringConfiguration.thresholds == .default)
+        // Relaunch trusts StoreKit again, rather than a saved Boolean entitlement.
+        let reloaded = SettingsStore(userDefaults: defaults, distribution: .appStore)
+        #expect(!reloaded.hasProAccess)
+        reloaded.setProAccess(true)
+        #expect(reloaded.monitoringConfiguration == custom)
+    }
+
+    @Test
+    func freeRuntimeCannotBeBypassedByWritingPreferences() {
+        let store = SettingsStore(userDefaults: makeIsolatedDefaults(), distribution: .appStore)
+        store.notificationCooldownMinutes = 1
+        store.highActivityDurationSeconds = 600
+        #expect(store.monitoringConfiguration.cooldownMinutes == 10)
+        #expect(store.monitoringConfiguration.durationSeconds == 60)
+        store.notificationsEnabled = false
+        store.menuIconType = .network
+        store.isMenuIconAutoSwitchEnabled = false
+        #expect(!store.notificationsEnabled)
+        #expect(store.menuIconType == .network)
+        #expect(!store.isMenuIconAutoSwitchEnabled)
+    }
+
+    @Test
+    func openSourceCustomizationAndProcessFeaturesNeedNoPurchase() {
+        let store = SettingsStore(userDefaults: makeIsolatedDefaults(), distribution: .openSource)
+        store.notificationCooldownMinutes = 1
+        store.highActivityDurationSeconds = 120
+        store.highActivityCPUThresholdPercent = 95
+        store.highActivityMemoryThresholdPercent = 40
+        store.ignoreProcess(at: "/usr/bin/test")
+        store.setProAccess(false)
+        #expect(store.canCustomizeMonitoring)
+        #expect(store.monitoringConfiguration.cooldownMinutes == 1)
+        #expect(store.monitoringConfiguration.durationSeconds == 120)
+        #expect(store.highActivityCPUThresholdPercent == 95)
+        #expect(store.highActivityMemoryThresholdPercent == 40)
+        #expect(store.isProcessIgnored(at: "/usr/bin/test"))
+    }
+}
