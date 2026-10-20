@@ -4421,6 +4421,7 @@
       }
     },
     "settings.menuBar.help" : {
+      "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4552,6 +4553,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "显示指标图标"
+          }
+        }
+      }
+    },
+    "settings.menuBar.showMetricIcon.autoSwitchHelp" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim automatischen Wechsel bleibt das Messwertsymbol sichtbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto switch keeps the metric icon visible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le basculement automatique garde l’icône de la métrique visible."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動切替中は指標アイコンが常に表示されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动切换时始终显示指标图标。"
+          }
+        }
+      }
+    },
+    "settings.menuBar.showMetricIcon.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show a symbol beside the selected metric’s value."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Symbol neben dem Wert des ausgewählten Messwerts anzeigen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher une icône à côté de la valeur de la métrique sélectionnée."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した指標の値の横にアイコンを表示します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所选指标的数值旁显示图标。"
           }
         }
       }
@@ -4799,6 +4868,41 @@
         }
       }
     },
+    "settings.tab.detection.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set process detection limits and manage the whitelist."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grenzwerte für die Prozesserkennung festlegen und die Ausnahmeliste verwalten."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définir les seuils de détection des processus et gérer la liste blanche."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロセス検出のしきい値とホワイトリストを設定します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置进程检测阈值并管理白名单。"
+          }
+        }
+      },
+      "extractionState" : "manual"
+    },
     "settings.tab.general" : {
       "localizations" : {
         "de" : {
@@ -4832,6 +4936,41 @@
           }
         }
       }
+    },
+    "settings.tab.general.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Control Dock visibility and startup at login."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sichtbarkeit im Dock und Start bei der Anmeldung festlegen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contrôler la visibilité dans le Dock et le lancement à l’ouverture de session."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dockへの表示とログイン時の起動を設定します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置 Dock 图标显示和登录时启动。"
+          }
+        }
+      },
+      "extractionState" : "manual"
     },
     "settings.tab.menuBar" : {
       "localizations" : {
@@ -4900,6 +5039,41 @@
           }
         }
       }
+    },
+    "settings.tab.notifications.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure activity notifications and alert timing."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivitätsmitteilungen und den Zeitpunkt von Warnungen konfigurieren."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurer les notifications d’activité et le délai des alertes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アクティビティ通知とアラートのタイミングを設定します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "配置活动通知和提醒时间。"
+          }
+        }
+      },
+      "extractionState" : "manual"
     },
     "settings.tab.thresholds" : {
       "localizations" : {

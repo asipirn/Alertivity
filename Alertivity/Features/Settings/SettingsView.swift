@@ -13,83 +13,166 @@ struct SettingsView: View {
     @State private var selectedTab: SettingsTabSelection = .general
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            SettingsTab(title: "settings.tab.general", systemImage: "switch.2") {
-                Toggle("settings.toggle.hideDockIcon", isOn: $settings.hideDockIcon)
-                Toggle("settings.toggle.launchAtLogin", isOn: $settings.launchAtLogin)
-            }
-            .modifier(AutomaticReviewRequest(store: reviewStore, hasLiveData: metrics.hasLiveData,
-                                             isCritical: ActivityStatus(metrics: metrics).level == .critical,
-                                             isGeneralSelected: selectedTab == .general,
-                                             isOnboardingActive: settings.onboardingOutcome == .pending || settings.isOnboardingRequested))
-            .tag(SettingsTabSelection.general)
-
-            SettingsTab(title: "settings.tab.menuBar", systemImage: "waveform.path.ecg") {
-                MenuBarSettingsFields(
-                    isMenuIconEnabled: $settings.isMenuIconEnabled,
-                    menuIconOnlyWhenHigh: $settings.menuIconOnlyWhenHigh,
-                    menuIconType: $settings.menuIconType,
-                    showMetricIcon: $settings.showMetricIcon,
-                    autoSwitchEnabled: $settings.isMenuIconAutoSwitchEnabled,
-                autoSwitchPriority: $settings.menuIconAutoSwitchPriority
-                )
-
-                FooterDivider()
-
-                SettingsFootnote(key: "settings.menuBar.help", weight: .semibold)
-            }
-            .tag(SettingsTabSelection.menuBar)
-
-            SettingsTab(title: "settings.tab.notifications", systemImage: "bell") {
-                NotificationPermissionView(manager: notificationManager, showsAuthorizedStatus: false)
-                NotificationSettingsFields(
-                    settings: settings,
-                    processSamplingAvailable: processSamplingAvailable,
-                    emphasizesFooter: true
-                )
-            }
-            .tag(SettingsTabSelection.notifications)
-
-            SettingsTab(title: "settings.tab.thresholds", systemImage: "gauge.with.dots.needle.50percent") {
-                SystemThresholdSettingsView(settings: settings, emphasizesNotes: true)
-            }
-            .tag(SettingsTabSelection.thresholds)
-
-            if settings.distribution == .appStore, let proStore {
-                SettingsTab(title: "pro.tabTitle", systemImage: "star") {
-                    ProSettingsPane(store: proStore)
+        Group {
+            if #available(macOS 27.0, *) {
+                TabView(selection: $selectedTab) {
+                    ForEach(availableTabs, id: \.self) { tab in
+                        Tab(L10n.string(tab.titleKey), systemImage: tab.symbolName, value: tab) {
+                            pane(for: tab)
+                        }
+                        .help(tabHelp(for: tab))
+                    }
                 }
-                .tag(SettingsTabSelection.pro)
-            }
-
-            if processSamplingAvailable {
-                SettingsTab(title: "settings.tab.detection", systemImage: "scope") {
-                    DetectionSettingsFields(
-                        highActivityCPUThresholdPercent: $settings.highActivityCPUThresholdPercent,
-                        highActivityMemoryThresholdPercent: $settings.highActivityMemoryThresholdPercent
-                    )
-
-                    Divider()
-
-                    IgnoredProcessSettingsView(settings: settings)
-
-                    FooterDivider()
-
-                    DetectionSettingsFooter(
-                        highActivityCPUThresholdPercent: settings.highActivityCPUThresholdPercent,
-                        highActivityMemoryThresholdPercent: settings.highActivityMemoryThresholdPercent,
-                        highActivityDurationSeconds: settings.highActivityDurationSeconds,
-                        emphasizesFooter: true
-                    )
+            } else {
+                TabView(selection: $selectedTab) {
+                    ForEach(availableTabs, id: \.self) { tab in
+                        pane(for: tab)
+                            .tabItem { Label(LocalizedStringKey(tab.titleKey), systemImage: tab.symbolName) }
+                            .tag(tab)
+                    }
                 }
-                .tag(SettingsTabSelection.detection)
+                .background(SettingsTabHelp(descriptions: tabDescriptions))
             }
         }
         .frame(minWidth: 420)
     }
 
+    private var availableTabs: [SettingsTabSelection] {
+        var tabs: [SettingsTabSelection] = [.general, .menuBar, .notifications, .thresholds]
+        if settings.distribution == .appStore, proStore != nil { tabs.append(.pro) }
+        if processSamplingAvailable { tabs.append(.detection) }
+        return tabs
+    }
+
+    private func tabHelp(for tab: SettingsTabSelection) -> String {
+        tabDescriptions[L10n.string(tab.titleKey)] ?? ""
+    }
+
+    @ViewBuilder
+    private func pane(for tab: SettingsTabSelection) -> some View {
+        switch tab {
+        case .general: generalPane
+        case .menuBar: menuBarPane
+        case .notifications: notificationsPane
+        case .thresholds: thresholdsPane
+        case .pro: proPane
+        case .detection: detectionPane
+        }
+    }
+
+    private var generalPane: some View {
+        SettingsPane {
+            Toggle("settings.toggle.hideDockIcon", isOn: $settings.hideDockIcon)
+            Toggle("settings.toggle.launchAtLogin", isOn: $settings.launchAtLogin)
+        }
+        .modifier(AutomaticReviewRequest(
+            store: reviewStore,
+            hasLiveData: metrics.hasLiveData,
+            isCritical: ActivityStatus(metrics: metrics).level == .critical,
+            isGeneralSelected: selectedTab == .general,
+            isOnboardingActive: settings.onboardingOutcome == .pending || settings.isOnboardingRequested
+        ))
+    }
+
+    private var menuBarPane: some View {
+        SettingsPane {
+            MenuBarSettingsFields(
+                isMenuIconEnabled: $settings.isMenuIconEnabled,
+                menuIconOnlyWhenHigh: $settings.menuIconOnlyWhenHigh,
+                menuIconType: $settings.menuIconType,
+                showMetricIcon: $settings.showMetricIcon,
+                autoSwitchEnabled: $settings.isMenuIconAutoSwitchEnabled,
+                autoSwitchPriority: $settings.menuIconAutoSwitchPriority
+            )
+        }
+    }
+
+    private var notificationsPane: some View {
+        SettingsPane {
+            NotificationPermissionView(manager: notificationManager, showsAuthorizedStatus: false)
+            NotificationSettingsFields(
+                settings: settings,
+                processSamplingAvailable: processSamplingAvailable,
+                emphasizesFooter: true
+            )
+        }
+    }
+
+    private var thresholdsPane: some View {
+        SettingsPane {
+            SystemThresholdSettingsView(settings: settings, showsDescription: false)
+        }
+    }
+
+    private var proPane: some View {
+        SettingsPane {
+            if let proStore {
+                ProSettingsPane(store: proStore)
+            }
+        }
+    }
+
+    private var detectionPane: some View {
+        SettingsPane {
+            DetectionSettingsFields(
+                highActivityCPUThresholdPercent: $settings.highActivityCPUThresholdPercent,
+                highActivityMemoryThresholdPercent: $settings.highActivityMemoryThresholdPercent
+            )
+
+            Divider()
+
+            IgnoredProcessSettingsView(settings: settings)
+
+            FooterDivider()
+
+            DetectionSettingsFooter(
+                highActivityCPUThresholdPercent: settings.highActivityCPUThresholdPercent,
+                highActivityMemoryThresholdPercent: settings.highActivityMemoryThresholdPercent,
+                highActivityDurationSeconds: settings.highActivityDurationSeconds,
+                emphasizesFooter: true
+            )
+        }
+    }
+
+    private var tabDescriptions: [String: String] {
+        var thresholds = L10n.string("settings.thresholds.help")
+        if settings.distribution == .openSource {
+            thresholds += "\n" + L10n.string("Process detection thresholds are configured separately.")
+        }
+        return [
+            L10n.string("settings.tab.general"): L10n.string("settings.tab.general.help"),
+            L10n.string("settings.tab.menuBar"): L10n.string("settings.menuBar.help"),
+            L10n.string("settings.tab.notifications"): L10n.string("settings.tab.notifications.help"),
+            L10n.string("settings.tab.thresholds"): thresholds,
+            L10n.string("settings.tab.detection"): L10n.string("settings.tab.detection.help"),
+            L10n.string("pro.tabTitle"): L10n.string("pro.oneTime")
+        ]
+    }
+
     private enum SettingsTabSelection: Hashable {
         case general, menuBar, notifications, thresholds, detection, pro
+
+        var titleKey: String {
+            switch self {
+            case .general: "settings.tab.general"
+            case .menuBar: "settings.tab.menuBar"
+            case .notifications: "settings.tab.notifications"
+            case .thresholds: "settings.tab.thresholds"
+            case .detection: "settings.tab.detection"
+            case .pro: "pro.tabTitle"
+            }
+        }
+
+        var symbolName: String {
+            switch self {
+            case .general: "switch.2"
+            case .menuBar: "waveform.path.ecg"
+            case .notifications: "bell"
+            case .thresholds: "gauge.with.dots.needle.50percent"
+            case .detection: "scope"
+            case .pro: "star"
+            }
+        }
     }
 }
 
@@ -119,7 +202,7 @@ struct NoticePreferencesView: View {
         }
 
         Section("settings.tab.thresholds") {
-            SystemThresholdSettingsView(settings: settings, emphasizesNotes: false)
+            SystemThresholdSettingsView(settings: settings)
         }
 
         if processSamplingAvailable {
@@ -144,20 +227,8 @@ struct NoticePreferencesView: View {
     }
 }
 
-private struct SettingsTab<Content: View>: View {
-    let title: LocalizedStringKey
-    let systemImage: String
-    let content: Content
-
-    init(
-        title: LocalizedStringKey,
-        systemImage: String,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.title = title
-        self.systemImage = systemImage
-        self.content = content()
-    }
+private struct SettingsPane<Content: View>: View {
+    @ViewBuilder var content: Content
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -165,7 +236,6 @@ private struct SettingsTab<Content: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(settingsTabPadding)
-        .tabItem { Label(title, systemImage: systemImage) }
     }
 }
 
@@ -197,33 +267,44 @@ private struct MenuBarSettingsFields: View {
     @Binding var autoSwitchPriority: [MetricMenuSelection]
 
     var body: some View {
-        Toggle("settings.menuBar.showIndicator", isOn: $isMenuIconEnabled)
+        VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle("settings.menuBar.showIndicator", isOn: $isMenuIconEnabled)
 
-        Picker("settings.menuBar.defaultIconType", selection: $menuIconType) {
-            ForEach(MenuIconType.allCases) { iconType in
-                Label(iconType.title, systemImage: iconType.symbolName)
-                    .tag(iconType)
-            }
-        }
-        .disabled(!isMenuIconEnabled)
-        .pickerStyle(.menu)
+                Toggle("settings.menuBar.onlyShowHigh", isOn: $menuIconOnlyWhenHigh)
+                    .disabled(!isMenuIconEnabled)
 
-        VStack(alignment: .leading, spacing: 2) {
-            Toggle("settings.menuBar.autoSwitch", isOn: autoSwitchBinding)
+                Picker("settings.menuBar.defaultIconType", selection: $menuIconType) {
+                    ForEach(MenuIconType.allCases) { iconType in
+                        Label(iconType.title, systemImage: iconType.symbolName)
+                            .tag(iconType)
+                    }
+                }
                 .disabled(!isMenuIconEnabled)
+                .pickerStyle(.menu)
 
-            SettingsFootnote(key: "settings.menuBar.autoSwitch.help")
-                .padding(.bottom, 2)
-        }
+                if menuIconType.metricSelection != nil {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Toggle("settings.menuBar.showMetricIcon", isOn: $showMetricIcon)
+                            .disabled(!isMenuIconEnabled || autoSwitchEnabled)
+                            .help("settings.menuBar.showMetricIcon.help")
 
-        priorityEditor
+                        if autoSwitchEnabled {
+                            SettingsFootnote(key: "settings.menuBar.showMetricIcon.autoSwitchHelp")
+                        }
+                    }
+                }
+            }
 
-        Toggle("settings.menuBar.onlyShowHigh", isOn: $menuIconOnlyWhenHigh)
-            .disabled(!isMenuIconEnabled)
+            Divider()
 
-        if menuIconType.metricSelection != nil || autoSwitchEnabled {
-            Toggle("settings.menuBar.showMetricIcon", isOn: $showMetricIcon)
-                .disabled(!isMenuIconEnabled || autoSwitchEnabled)
+            VStack(alignment: .leading, spacing: 10) {
+                Toggle("settings.menuBar.autoSwitch", isOn: autoSwitchBinding)
+                    .help("settings.menuBar.autoSwitch.help")
+                    .disabled(!isMenuIconEnabled)
+
+                priorityEditor
+            }
         }
     }
 
@@ -403,12 +484,12 @@ private struct SystemThresholdSettingsView: View {
     }
 
     @ObservedObject var settings: SettingsStore
-    let emphasizesNotes: Bool
+    let showsDescription: Bool
     @State private var draft: Draft
 
-    init(settings: SettingsStore, emphasizesNotes: Bool) {
+    init(settings: SettingsStore, showsDescription: Bool = true) {
         self.settings = settings
-        self.emphasizesNotes = emphasizesNotes
+        self.showsDescription = showsDescription
         _draft = State(initialValue: Draft(settings.monitoringConfiguration.thresholds))
     }
 
@@ -468,25 +549,27 @@ private struct SystemThresholdSettingsView: View {
             }
 
             HStack {
+                Spacer()
                 Button("settings.thresholds.reset") {
                     settings.resetActivityThresholds()
                     draft = Draft(.default)
                 }
                 .disabled(!settings.canCustomizeMonitoring)
-                Spacer()
             }
 
-            FooterDivider()
+            if showsDescription {
+                FooterDivider()
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text("settings.thresholds.help")
-                if settings.distribution == .openSource {
-                    Text("Process detection thresholds are configured separately.")
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("settings.thresholds.help")
+                    if settings.distribution == .openSource {
+                        Text("Process detection thresholds are configured separately.")
+                    }
                 }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
             }
-            .font(.footnote.weight(emphasizesNotes ? .semibold : .regular))
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
         }
         .onChange(of: draft) { _, _ in applyIfValid() }
         .onChange(of: settings.canCustomizeMonitoring) { _, _ in

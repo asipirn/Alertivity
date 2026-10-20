@@ -1,6 +1,6 @@
 # Settings
 
-Open **Alertivity’s menu bar indicator → Open Settings…**. Paths below use the app’s English labels.
+Open **Alertivity’s menu bar indicator → Open Settings…**. Paths below use the app’s English labels. Hover over a tab for its description. Notification and detection notes that include configured values remain visible below the controls.
 
 ## General
 
@@ -20,7 +20,7 @@ If macOS requires login-item approval, open **Apple menu → System Settings →
 | Automatic metric selection | Settings → Menu Bar → Auto switch to busiest metric | Follows a Critical metric, then returns to the default. |
 | Auto-switch priority | Settings → Menu Bar → Metric priority | Use the up/down arrows to order CPU, memory, disk, and network. The highest listed Critical metric wins. Reset Priority restores CPU → Memory → Disk → Network. |
 | Show only during Critical activity | Settings → Menu Bar → Only show on high activity | Hides the indicator at Normal and Elevated status. |
-| Metric symbols | Settings → Menu Bar → Show metric icon | Shows a symbol beside the value. Auto switch keeps this on and disables editing. |
+| Metric symbols | Settings → Menu Bar → Show metric icon | Available when the default icon type is a metric. Shows a symbol beside the value. Auto switch keeps this on and disables editing; the explanation appears directly below the control. |
 
 If the indicator is hidden, reopen Alertivity to access Settings. Auto-switch timing is described in [Metrics and status](https://github.com/nobbbbby/Alertivity/wiki/Metrics-and-Status).
 
