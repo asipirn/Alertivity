@@ -4,7 +4,7 @@
 
 The overall status uses the highest severity among CPU, memory, disk, and network. One busy resource can make the status Critical even when the others are idle. The menu shows the individual readings so you can see which resource caused it.
 
-When several metrics have the same severity, the trigger order is CPU, memory, disk, then network. This gives alerts and auto switch a consistent selection. [Metrics and status](https://github.com/nobbbbby/Alertivity/wiki/Metrics-and-Status) lists the thresholds and measurement details.
+When several metrics have the same severity, the trigger order is CPU, memory, disk, then network. This fixed order selects notification triggers and breaks ties in status summaries. Auto switch has a separate, customizable priority in **Settings → Menu Bar → Metric priority**; changing it does not change alert selection. [Metrics and status](https://github.com/nobbbbby/Alertivity/wiki/Metrics-and-Status) lists the thresholds and measurement details.
 
 ## Alerts
 

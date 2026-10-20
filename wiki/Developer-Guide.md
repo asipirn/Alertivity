@@ -68,6 +68,16 @@ Notification requests are serialized and refresh authorization first. Permission
 
 Use the existing OSLog categories for state changes and errors. Do not log sensitive process data. See [Design decisions](https://github.com/nobbbbby/Alertivity/wiki/Design-Decisions) and [Editing the wiki](https://github.com/nobbbbby/Alertivity/wiki/Maintaining-the-Wiki).
 
+## Localization
+
+See [Localization](https://github.com/nobbbbby/Alertivity/wiki/Localization) for catalog ownership, language coverage, format placeholders, and validation. Update translations alongside changes to visible text, notification messages, tooltips, and accessibility labels.
+
+## Auto Switch priorities
+
+`SettingsStore.menuIconAutoSwitchPriority` persists the metric order. `MetricMenuSelection.normalizedAutoSwitchPriority` removes duplicates and appends missing metrics in the default CPU → Memory → Disk → Network order. The priority editor preserves each metric once and provides localized raise/lower accessibility labels. Reset Priority restores the default order.
+
+The menu bar controller selects the first Critical metric in that order after two matching samples. Reordering affects only Auto Switch, not the overall status, summary ordering, or notification trigger priority. Priority and metric-icon help remain available in the free App Store build.
+
 ## Menu summaries
 
 `ActivityStatus.menuSummary(for:)` formats the thresholds reached by the current readings. Notification wording uses separate strings. Localized list formatting and line wrapping handle multiple affected metrics. Formatting runs on every refresh and emits no logs; sampling and alert delivery use their existing log categories.

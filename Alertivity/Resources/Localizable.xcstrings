@@ -941,25 +941,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : ""
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : ""
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : ""
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : ""
           }
         }
@@ -969,25 +969,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : " • "
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : " • "
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : " • "
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : " • "
           }
         }
@@ -1244,25 +1244,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Die CPU-Schwellenwerte basieren auf der gesamten Systemprozessorauslastung."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les seuils CPU utilisent le taux d’utilisation total du processeur système."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPUのしきい値には、システム全体のプロセッサ使用率が使用されます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU 阈值使用系统处理器总使用率。"
           }
         }
@@ -1414,25 +1414,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Die Datenträger-Schwellenwerte basieren auf dem kombinierten Lese- und Schreibdurchsatz."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les seuils du disque utilisent le débit combiné de lecture et d’écriture."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "ディスクのしきい値には、読み書きを合計したスループットが使用されます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "磁盘阈值使用读取和写入的总吞吐量。"
           }
         }
@@ -1443,7 +1443,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "OK"
           }
         },
@@ -1455,19 +1455,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "OK"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "OK"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "好"
           }
         }
@@ -1479,25 +1479,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Die Speicher-Schwellenwerte basieren auf dem prozentualen Anteil des verwendeten physischen Speichers."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les seuils de mémoire utilisent le pourcentage de mémoire physique utilisée."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "物理メモリの使用率が、メモリのしきい値に使用されます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "内存阈值使用物理内存使用率。"
           }
         }
@@ -2066,25 +2066,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Die Netzwerk-Schwellenwerte basieren auf dem kombinierten Download- und Upload-Durchsatz."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les seuils réseau utilisent le débit combiné de téléchargement et de téléversement."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "ダウンロードとアップロードを合計したスループットが、ネットワークのしきい値に使用されます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "网络阈值使用下载和上传的总吞吐量。"
           }
         }
@@ -2130,7 +2130,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Zur Ausnahmeliste hinzufügen"
           }
         },
@@ -2142,19 +2142,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Ajouter aux processus ignorés"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "無視するプロセスに追加"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "添加到忽略列表"
           }
         }
@@ -3566,25 +3566,25 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Schwellenwerte für die Prozesserkennung werden separat konfiguriert."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les seuils de détection des processus sont configurés séparément."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "プロセス検出のしきい値は別に設定します。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "进程检测阈值需单独配置。"
           }
         }
@@ -3942,7 +3942,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Hinzufügen"
           }
         },
@@ -3954,19 +3954,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Ajouter"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "追加"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "添加"
           }
         }
@@ -3977,7 +3977,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Prozesse auf der Ausnahmeliste werden nicht in Warnungen zu hoher Aktivität angezeigt, ihre Nutzung wird jedoch weiterhin in die allgemeinen Systemmetriken einbezogen."
           }
         },
@@ -3989,19 +3989,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les processus ignorés n’apparaîtront pas dans les alertes de forte activité, mais leur utilisation sera toujours prise en compte dans les métriques système globales."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "無視するプロセスは高負荷の通知には表示されませんが、その使用量は引き続きシステム全体の指標に含まれます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "忽略列表中的进程不会出现在高活动提醒中，但其资源使用情况仍会计入整体系统指标。"
           }
         }
@@ -4012,7 +4012,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Wähle eine App oder eine ausführbare Datei aus."
           }
         },
@@ -4024,19 +4024,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Choisissez une application ou un fichier exécutable."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "アプリケーションまたは実行可能ファイルを選択してください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "请选择应用或可执行文件。"
           }
         }
@@ -4047,7 +4047,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Prozess konnte nicht hinzugefügt werden"
           }
         },
@@ -4059,19 +4059,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Impossible d’ajouter le processus"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "プロセスを追加できませんでした"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "无法添加进程"
           }
         }
@@ -4083,7 +4083,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Wähle eine App oder eine ausführbare Datei aus, die von der Überwachung auf hohe Prozessaktivität ausgeschlossen werden soll."
           }
         },
@@ -4095,19 +4095,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Choisissez une application ou un fichier exécutable à exclure de la surveillance des processus à forte activité."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "高負荷プロセスの監視から除外するアプリケーションまたは実行可能ファイルを選択してください。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "选择要从高活动进程监控中排除的应用或可执行文件。"
           }
         }
@@ -4118,7 +4118,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Prozess aus Ausnahmeliste entfernen"
           }
         },
@@ -4130,19 +4130,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Retirer des processus ignorés"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "無視するプロセスから削除"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "从忽略列表中移除进程"
           }
         }
@@ -4153,7 +4153,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Ausnahmeliste"
           }
         },
@@ -4165,19 +4165,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Processus ignorés"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "無視するプロセス"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "忽略列表"
           }
         }
@@ -4678,7 +4678,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Délai entre les notifications:"
+            "value" : "Délai entre les notifications :"
           }
         },
         "ja" : {
@@ -4920,19 +4920,19 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Définir les seuils de détection des processus et gérer la liste blanche."
+            "value" : "Définir les seuils de détection des processus et gérer les processus ignorés."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "プロセス検出のしきい値とホワイトリストを設定します。"
+            "value" : "プロセス検出のしきい値と無視するプロセスを設定します。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "设置进程检测阈值并管理白名单。"
+            "value" : "设置进程检测阈值并管理忽略列表。"
           }
         }
       },
@@ -5148,7 +5148,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "System-CPU"
           }
         },
@@ -5160,19 +5160,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU système"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU 使用率"
           }
         }
@@ -5216,7 +5216,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Datenträgerdurchsatz"
           }
         },
@@ -5228,19 +5228,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Débit disque"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "ディスク"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "磁盘吞吐量"
           }
         }
@@ -5284,7 +5284,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Jeder erhöhte Schwellenwert muss unter dem zugehörigen kritischen Schwellenwert liegen."
           }
         },
@@ -5296,19 +5296,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Chaque seuil élevé doit être inférieur au seuil critique correspondant."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "各指標では、上昇しきい値を重大しきい値より低くする必要があります。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "每个指标的升高阈值必须低于严重阈值。"
           }
         }
@@ -5318,31 +5318,31 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU- und Speicherwerte müssen zwischen 1 und 100 liegen."
           }
         },
         "en" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU and memory values must be between 1 and 100."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les valeurs du CPU et de la mémoire doivent être comprises entre 1 et 100."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPUとメモリの値は1から100の間にする必要があります。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "CPU 和内存值必须介于 1 和 100 之间。"
           }
         }
@@ -5352,7 +5352,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Datenträger- und Netzwerkwerte müssen zwischen 0,1 und 100 000 MB/s liegen."
           }
         },
@@ -5364,19 +5364,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Les valeurs du disque et du réseau doivent être comprises entre 0,1 et 100 000 Mo/s."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
-            "value" : "ディスクとネットワークのしきい値は0以上にする必要があります。"
+            "state" : "translated",
+            "value" : "ディスクとネットワークの値は0.1〜100,000 MB/sの範囲にする必要があります。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "磁盘和网络值必须介于 0.1 和 100,000 MB/秒之间。"
           }
         }
@@ -5420,7 +5420,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Systemspeicher"
           }
         },
@@ -5432,19 +5432,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Mémoire système"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "システムメモリ"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "系统内存"
           }
         }
@@ -5454,7 +5454,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Netzwerkdurchsatz"
           }
         },
@@ -5466,19 +5466,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Débit réseau"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "ネットワークスループット"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "网络吞吐量"
           }
         }
@@ -5488,7 +5488,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Auf Standardwerte zurücksetzen"
           }
         },
@@ -5500,19 +5500,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Rétablir les réglages par défaut"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "デフォルトに戻す"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "恢复默认设置"
           }
         }
@@ -5731,31 +5731,31 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@-Auslastung über %@ (%@)"
           }
         },
         "en" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ usage over %@ (%@)"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Utilisation %@ supérieure à %@ (%@)"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@使用率 %@超（%@）"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ 使用率超过 %@（%@）"
           }
         }
@@ -5766,7 +5766,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@aktivität über %@ MB/s (%@)"
           }
         },
@@ -5778,19 +5778,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Activité %@ supérieure à %@ Mo/s (%@)"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@アクティビティ %@ MB/s超（%@）"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ 活动超过 %@ MB/秒（%@）"
           }
         }
@@ -5941,7 +5941,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@aktivität hat den Schwellenwert für %@ überschritten und eine Auslastung von mehr als %@ Prozent erreicht."
           }
         },
@@ -5953,19 +5953,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "L’activité %@ a dépassé le seuil %@, atteignant plus de %@ pour cent."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@のアクティビティが%@しきい値を超え、使用率が%@パーセントを超えました。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ 活动超过 %@ 阈值，使用率高于百分之 %@。"
           }
         }
@@ -5976,7 +5976,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@aktivität hat den Schwellenwert für %@ überschritten und eine Gesamtrate von ≥%@ MB/s erreicht."
           }
         },
@@ -5988,19 +5988,19 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "L’activité %@ a dépassé le seuil %@, atteignant un débit agrégé de ≥%@ Mo/s."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@のアクティビティが%@しきい値を超え、合計レートが%@ MB/s以上になりました。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ 活动超过 %@ 阈值，汇总速率达到 ≥%@ MB/秒。"
           }
         }
@@ -6018,25 +6018,25 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Systemaktivität wird geprüft …"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Vérification de l’activité du système…"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "システムのアクティビティを確認中…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "正在检查系统活动…"
           }
         }
@@ -6054,25 +6054,25 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Alle Messwerte unter den Warnschwellen."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Toutes les mesures sont sous les seuils d’alerte."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "すべての測定値が通知しきい値未満です。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "所有指标均低于提醒阈值。"
           }
         }
@@ -6090,25 +6090,25 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Warnschwelle erreicht: %@."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Seuil d’alerte atteint : %@."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "通知しきい値に達しました：%@。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "已达到提醒阈值：%@。"
           }
         }
@@ -6126,25 +6126,25 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Warnschwellen erreicht: %@."
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "Seuils d’alerte atteints : %@."
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "通知しきい値に達しました：%@。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "已达到提醒阈值：%@。"
           }
         }
@@ -6162,25 +6162,25 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@"
           }
         }
@@ -6198,25 +6198,25 @@
         },
         "de" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@ MB/s"
           }
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@ Mo/s"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@ MB/s"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "machine_translated",
+            "state" : "translated",
             "value" : "%@ %@ MB/s"
           }
         }

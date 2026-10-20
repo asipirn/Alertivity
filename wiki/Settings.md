@@ -18,7 +18,7 @@ If macOS requires login-item approval, open **Apple menu → System Settings →
 | Indicator visibility | Settings → Menu Bar → Show indicator | Turning this off hides the indicator even during Critical activity. |
 | Default reading | Settings → Menu Bar → Default icon type | Choose Status, CPU, memory, disk, or network. |
 | Automatic metric selection | Settings → Menu Bar → Auto switch to busiest metric | Follows a Critical metric, then returns to the default. |
-| Auto-switch priority | Settings → Menu Bar → Metric priority | Use the up/down arrows to order CPU, memory, disk, and network. The highest listed Critical metric wins. Reset Priority restores CPU → Memory → Disk → Network. |
+| Auto-switch priority | Settings → Menu Bar → Metric priority | Expand Metric priority, then use the up/down arrows to order CPU, memory, disk, and network. The highest listed Critical metric wins. Reset Priority restores CPU → Memory → Disk → Network. |
 | Show only during Critical activity | Settings → Menu Bar → Only show on high activity | Hides the indicator at Normal and Elevated status. |
 | Metric symbols | Settings → Menu Bar → Show metric icon | Available when the default icon type is a metric. Shows a symbol beside the value. Auto switch keeps this on and disables editing; the explanation appears directly below the control. |
 
@@ -49,7 +49,7 @@ Default values are listed in [Metrics and status](https://github.com/nobbbbby/Al
 | Sustained-activity duration | Settings → Notifications → High activity duration | Choose 30, 60, 120, 240, or 600 seconds; the default is 60 seconds. |
 | macOS notification delivery | Apple menu → System Settings → Notifications → Alertivity | macOS controls delivery, sounds, and previews here. |
 
-The duration also controls sustained process detection when available. See [Notifications and permissions](https://github.com/nobbbbby/Alertivity/wiki/Notifications-and-Permissions) for alert timing.
+The footer shows the effective duration and minimum interval between alerts, including Free defaults when Pro is locked. Turning off notifications disables the Cooldown picker; high-activity duration remains available to Pro and source-build users because it also controls sustained process detection when available. See [Notifications and permissions](https://github.com/nobbbbby/Alertivity/wiki/Notifications-and-Permissions) for alert timing.
 
 ## Process detection and whitelist
 
@@ -70,16 +70,24 @@ Alertivity Pro unlocks customization of system CPU, memory, disk, and network th
 notification cooldown, and high-activity duration. Other current monitoring, notification,
 menu bar, and general features remain free.
 
-Without Pro, monitoring uses the default thresholds listed in [Metrics and status](Metrics-and-Status.md),
+Without Pro, monitoring uses the default thresholds listed in [Metrics and status](https://github.com/nobbbbby/Alertivity/wiki/Metrics-and-Status),
 a 10-minute notification cooldown, and a 60-second high-activity duration. The corresponding
 controls show these effective defaults and are disabled. Hover over the lock beside a restricted
 setting for an explanation. Saved custom values are preserved,
 including values from an earlier version, and become active again when Pro access is verified.
 Refunding or revoking Pro returns monitoring to the defaults without deleting saved values.
 
-Open **Settings → Pro** to purchase the one-time unlock or restore an existing
-purchase with your App Store account. The price comes from the App Store. Pending purchases
-unlock customization after approval; cancelled or unverified purchases do not grant access.
+Open **Settings → Pro** to purchase the one-time unlock or restore an existing purchase with your App Store account. Choose **Unlock Pro — [price]** to buy or **Restore Purchases** to restore. If purchase options have not loaded, choose **Load Purchase Options**. Actions are disabled while a request is running.
+
+The note below the buttons shows purchase status or explains that this is a one-time purchase without a subscription. The price comes from the App Store. Pending purchases unlock customization after approval; cancelled or unverified purchases do not grant access.
 
 The open-source, non-sandboxed build remains fully unlocked. It does not require a purchase
 for customization or any process feature and does not contact the Pro purchase service.
+
+## App Store reviews
+
+Choose **Alertivity → Write Review…** to open the App Store review page at any time. If the App Store cannot open, Alertivity shows an error and you can try again later.
+
+A verified production App Store installation may also request a review automatically in **Settings → General**, after at least seven days since first monitoring and activity on three distinct days. Requests wait for 30 seconds without interaction, live data, a non-Critical status, and an active Settings window without a sheet or modal dialog. Onboarding blocks the request. Debug, TestFlight, and source builds do not request reviews automatically.
+
+The app records at most one automatic attempt per version and waits at least 120 days between attempts; opening the manual review page also delays future automatic requests. macOS decides whether to show a prompt, and Alertivity does not know whether you submitted a review.

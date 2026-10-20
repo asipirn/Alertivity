@@ -4,7 +4,7 @@
 
 Markdown sources are kept in the app repository’s `wiki/` directory. GitHub stores published wiki pages in a **separate Git repository**, `https://github.com/nobbbbby/Alertivity.wiki.git`. Editing this directory alone does not publish anything. Keep internal development notes in the ignored `docs/` directory out of the public wiki.
 
-These pages were checked against local main at `cf9f5f0` on October 17, 2026, including notification cooldown settings (AL-77) and alert-threshold summaries (AL-78). Home notes the version covered. Recheck it against a verified Store version when preparing a release.
+These pages were checked against source commit `826cde1` on October 20, 2026, including Free and Pro settings, purchase states, custom Auto Switch priorities, tab help, and the notification timing footer. Home notes the version covered. Recheck it against a verified Store version when preparing a release.
 
 ## Page reference
 
@@ -20,6 +20,7 @@ These pages were checked against local main at `cf9f5f0` on October 17, 2026, in
 | Troubleshooting and bug reports | Troubleshooting |
 | Design rationale and trade-offs | Design Decisions |
 | Builds, tests, and source files | Developer Guide |
+| Supported languages, string catalogs, translation checks | Localization |
 
 Link to an existing explanation rather than repeating it. Use the app’s labels for configuration paths. Describe what the app does; do not invent product goals or research findings to explain the code.
 
@@ -58,7 +59,7 @@ git -C "$wiki_checkout" add -- \
   Home.md Getting-Started.md Metrics-and-Status.md Settings.md \
   Notifications-and-Permissions.md Process-Insights.md Troubleshooting.md \
   Developer-Guide.md Design-Decisions.md Privacy-Policy.md \
-  Maintaining-the-Wiki.md _Sidebar.md _Footer.md
+  Maintaining-the-Wiki.md Localization.md _Sidebar.md _Footer.md
 git -C "$wiki_checkout" diff --cached --check
 git -C "$wiki_checkout" diff --cached
 git -C "$wiki_checkout" commit -m 'docs(wiki): Add Alertivity guides (AL-76)'

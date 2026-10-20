@@ -9,6 +9,7 @@
 - [Troubleshooting](https://github.com/nobbbbby/Alertivity/wiki/Troubleshooting)
 - [Privacy Policy](https://github.com/nobbbbby/Alertivity/wiki/Privacy-Policy)
 - [Design decisions](https://github.com/nobbbbby/Alertivity/wiki/Design-Decisions)
+- [Localization](https://github.com/nobbbbby/Alertivity/wiki/Localization)
 - [Developer guide](https://github.com/nobbbbby/Alertivity/wiki/Developer-Guide)
 - [Maintaining the wiki](https://github.com/nobbbbby/Alertivity/wiki/Maintaining-the-Wiki)
 

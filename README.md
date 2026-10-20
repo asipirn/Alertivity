@@ -12,7 +12,7 @@ Alertivity monitors CPU, memory, disk, network, and process activity. It turns t
 
 - **At-a-glance health** — one clear status for your Mac
 - **Live metrics** — CPU, memory, disk, and network activity
-- **Smart menu bar icon** — show a chosen metric or automatically follow the busiest one
+- **Smart menu bar icon** — show a chosen metric or automatically follow Critical activity in your preferred metric order
 - **Useful alerts** — get notified when critical activity persists
 - **Process insights** — identify, inspect, ignore, or terminate resource-heavy processes¹
 - **Made for macOS** — launch at login, optional Dock icon, and a localized SwiftUI interface
@@ -82,4 +82,4 @@ Read the [Privacy Policy](https://github.com/nobbbbby/Alertivity/wiki/Privacy-Po
 
 ## Languages
 
-English, German, French, Japanese, and Simplified Chinese.
+English, German, French, Japanese, and Simplified Chinese. See the [localization guide](wiki/Localization.md) to maintain translations.

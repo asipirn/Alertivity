@@ -12,10 +12,11 @@ Documentation for Alertivity, the macOS menu bar activity monitor.
 - [Troubleshooting](https://github.com/nobbbbby/Alertivity/wiki/Troubleshooting)
 - [Privacy Policy](https://github.com/nobbbbby/Alertivity/wiki/Privacy-Policy)
 
-These pages describe the source version. Some features, including the welcome guide, editable thresholds, and notification cooldown settings, may not yet be in the Mac App Store release.
+These pages describe the source version. They cover the optional welcome guide, Free and Pro settings, custom Auto Switch priorities, and notification timing. Mac App Store availability may differ from the source version; this wiki does not confirm that a feature or Pro product has been released.
 
 ## Development
 
+- [Localization](https://github.com/nobbbbby/Alertivity/wiki/Localization)
 - [Developer guide](https://github.com/nobbbbby/Alertivity/wiki/Developer-Guide)
 - [Design decisions](https://github.com/nobbbbby/Alertivity/wiki/Design-Decisions)
 - [Editing the wiki](https://github.com/nobbbbby/Alertivity/wiki/Maintaining-the-Wiki)
