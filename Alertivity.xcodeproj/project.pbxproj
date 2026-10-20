@@ -43,11 +43,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		C96C6D5E2E9F8D57006AAF07 /* Alertivity */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Alertivity; sourceTree = "<group>"; };
 		AA0000000000000000000102 /* AlertivityTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AlertivityTests; sourceTree = "<group>"; };
 		AA0000000000000000000300 /* AlertivityUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AlertivityUITests; sourceTree = "<group>"; };
-		AB0000000000000000000001 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
 		AA0000000000000000000792 /* StoreKit */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = StoreKit; sourceTree = "<group>"; };
+		AB0000000000000000000001 /* Configuration */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Configuration; sourceTree = "<group>"; };
+		C96C6D5E2E9F8D57006AAF07 /* Alertivity */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Alertivity; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,7 +217,7 @@
 				Base,
 			);
 			mainGroup = AA0000000000000000000004;
-			productRefGroup = AA0000000000000000000019;
+			productRefGroup = AA0000000000000000000019 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
