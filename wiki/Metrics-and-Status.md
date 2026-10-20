@@ -27,6 +27,6 @@ Memory usage is calculated from physical memory minus free and inactive pages. I
 
 If a system reading is unavailable, Alertivity may keep its last value. It also retains the previous disk reading when a sample reports zero. If a reading seems stuck, compare it with Activity Monitor.
 
-Auto switch chooses a **Critical** metric, using the priority above, after two consecutive matching samples. When none is Critical, it returns to the chosen default after the same sampling check. Selection uses severity and trigger priority, not the raw values.
+Auto switch chooses a **Critical** metric, using the order saved in **Settings → Menu Bar → Metric priority** (CPU, memory, disk, then network by default), after two consecutive matching samples. When none is Critical, it returns to the chosen default after the same sampling check. Selection uses severity and your metric priority, not the raw values. The custom order affects only Auto switch.
 
 See [Settings](https://github.com/nobbbbby/Alertivity/wiki/Settings) and [Notifications and permissions](https://github.com/nobbbbby/Alertivity/wiki/Notifications-and-Permissions).

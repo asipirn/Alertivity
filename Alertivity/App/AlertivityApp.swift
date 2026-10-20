@@ -53,6 +53,7 @@ struct AlertivityApp: App {
                 menuIconType: settingsBinding(\.menuIconType),
                 showMetricIcon: settingsBinding(\.showMetricIcon),
                 autoSwitchEnabled: settingsBinding(\.isMenuIconAutoSwitchEnabled),
+                autoSwitchPriority: settingsBinding(\.menuIconAutoSwitchPriority),
                 initialize: performInitialSetup
             )
             .background(OnboardingLauncher(settings: settings))
@@ -373,6 +374,7 @@ private struct MenuBarLabelLifecycleView: View {
     @Binding var menuIconType: MenuIconType
     @Binding var showMetricIcon: Bool
     @Binding var autoSwitchEnabled: Bool
+    @Binding var autoSwitchPriority: [MetricMenuSelection]
     let initialize: () -> Void
     @State private var autoSwitchSelection: MetricMenuSelection?
     @State private var pendingAutoSwitchSelection: MetricMenuSelection?
@@ -394,6 +396,12 @@ private struct MenuBarLabelLifecycleView: View {
             updateAutoSwitchSelection(for: metrics)
         }
         .onChange(of: autoSwitchEnabled) {
+            updateAutoSwitchSelection(for: monitor.metrics)
+        }
+        .onChange(of: autoSwitchPriority) {
+            // A new order must earn two fresh matching samples.
+            pendingAutoSwitchSelection = nil
+            pendingAutoSwitchSamples = 0
             updateAutoSwitchSelection(for: monitor.metrics)
         }
     }
@@ -424,7 +432,7 @@ private struct MenuBarLabelLifecycleView: View {
             return
         }
 
-        let candidate = metrics.highestSeverityMetric(allowedSeverities: [.critical])?.0
+        let candidate = metrics.highestSeverityMetric(allowedSeverities: [.critical], priority: autoSwitchPriority)?.0
 
         if candidate == autoSwitchSelection {
             pendingAutoSwitchSelection = nil

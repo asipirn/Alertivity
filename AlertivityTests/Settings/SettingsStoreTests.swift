@@ -11,6 +11,22 @@ private func makeIsolatedDefaults(_ name: String = UUID().uuidString) -> UserDef
 
 @Suite struct SettingsStoreTests {
     @Test
+    func autoSwitchPriorityPersistsAndRepairsInvalidValues() {
+        let defaults = makeIsolatedDefaults()
+        expectEqual(SettingsStore(userDefaults: defaults).menuIconAutoSwitchPriority, [.cpu, .memory, .disk, .network])
+        defaults.set(["network", "invalid", "network", "memory"], forKey: "notice.menu.autoSwitchPriority")
+        let store = SettingsStore(userDefaults: defaults)
+        expectEqual(store.menuIconAutoSwitchPriority, [.network, .memory, .cpu, .disk])
+        store.menuIconAutoSwitchPriority = [.disk, .network, .memory, .cpu]
+        expectEqual(SettingsStore(userDefaults: defaults).menuIconAutoSwitchPriority, [.disk, .network, .memory, .cpu])
+        store.menuIconAutoSwitchPriority = [.memory, .memory]
+        expectEqual(store.menuIconAutoSwitchPriority, [.memory, .cpu, .disk, .network])
+        expectEqual(SettingsStore(userDefaults: defaults).menuIconAutoSwitchPriority, store.menuIconAutoSwitchPriority)
+        store.menuIconAutoSwitchPriority = MetricMenuSelection.autoSwitchPriority
+        expectEqual(SettingsStore(userDefaults: defaults).menuIconAutoSwitchPriority, MetricMenuSelection.autoSwitchPriority)
+    }
+
+    @Test
     func initializesWithDefaults() {
         let store = SettingsStore(userDefaults: makeIsolatedDefaults("defaults"))
         expectFalse(store.hideDockIcon)

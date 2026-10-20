@@ -56,7 +56,7 @@ enum MenuIconType: String, CaseIterable, Identifiable, Sendable {
     }
 }
 
-enum MetricMenuSelection: CaseIterable, Hashable, Sendable {
+enum MetricMenuSelection: String, CaseIterable, Hashable, Sendable {
     case cpu
     case memory
     case disk
@@ -64,8 +64,13 @@ enum MetricMenuSelection: CaseIterable, Hashable, Sendable {
 
     static let autoSwitchPriority: [MetricMenuSelection] = [.cpu, .memory, .disk, .network]
 
-    static func autoSwitchPriorityIndex(_ selection: MetricMenuSelection) -> Int {
-        autoSwitchPriority.firstIndex(of: selection) ?? autoSwitchPriority.count
+    /// Preserve the supplied order while restoring missing metrics and removing duplicates.
+    static func normalizedAutoSwitchPriority(_ priority: [MetricMenuSelection]) -> [MetricMenuSelection] {
+        var result: [MetricMenuSelection] = []
+        for metric in priority + autoSwitchPriority where !result.contains(metric) {
+            result.append(metric)
+        }
+        return result
     }
 
     var menuIconType: MenuIconType {

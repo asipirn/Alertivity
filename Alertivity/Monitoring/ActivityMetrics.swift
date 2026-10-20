@@ -249,7 +249,8 @@ extension ActivityMetrics {
     }
 
     func highestSeverityMetric(
-        allowedSeverities: Set<MetricSeverity> = [.elevated, .critical]
+        allowedSeverities: Set<MetricSeverity> = [.elevated, .critical],
+        priority: [MetricMenuSelection] = MetricMenuSelection.autoSwitchPriority
     ) -> (MetricMenuSelection, MetricSeverity)? {
         let ranked: [(MetricMenuSelection, MetricSeverity)] = [
             (.cpu, cpuSeverity),
@@ -261,9 +262,10 @@ extension ActivityMetrics {
         let filtered = ranked.filter { allowedSeverities.contains($0.1) }
         guard !filtered.isEmpty else { return nil }
 
+        let order = MetricMenuSelection.normalizedAutoSwitchPriority(priority)
         return filtered.max { lhs, rhs in
             if lhs.1 == rhs.1 {
-                return MetricMenuSelection.autoSwitchPriorityIndex(lhs.0) > MetricMenuSelection.autoSwitchPriorityIndex(rhs.0)
+                return order.firstIndex(of: lhs.0)! > order.firstIndex(of: rhs.0)!
             }
             return lhs.1.rawValue < rhs.1.rawValue
         }

@@ -18,6 +18,7 @@ If macOS requires login-item approval, open **Apple menu → System Settings →
 | Indicator visibility | Settings → Menu Bar → Show indicator | Turning this off hides the indicator even during Critical activity. |
 | Default reading | Settings → Menu Bar → Default icon type | Choose Status, CPU, memory, disk, or network. |
 | Automatic metric selection | Settings → Menu Bar → Auto switch to busiest metric | Follows a Critical metric, then returns to the default. |
+| Auto-switch priority | Settings → Menu Bar → Metric priority | Use the up/down arrows to order CPU, memory, disk, and network. The highest listed Critical metric wins. Reset Priority restores CPU → Memory → Disk → Network. |
 | Show only during Critical activity | Settings → Menu Bar → Only show on high activity | Hides the indicator at Normal and Elevated status. |
 | Metric symbols | Settings → Menu Bar → Show metric icon | Shows a symbol beside the value. Auto switch keeps this on and disables editing. |
 

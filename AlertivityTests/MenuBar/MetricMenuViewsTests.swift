@@ -30,6 +30,22 @@ import Testing
     }
 
     @Test
+    func customPriorityBreaksSeverityTiesWithoutPromotingNormalMetrics() {
+        var metrics = makeMetrics(cpu: 0.95, memory: 0.95)
+        metrics.disk = DiskMetrics(readBytesPerSecond: 200_000_000, writeBytesPerSecond: 0)
+        metrics.network = NetworkMetrics(receivedBytesPerSecond: 100_000_000, sentBytesPerSecond: 0)
+        for metric in MetricMenuSelection.allCases {
+            expectEqual(metrics.highestSeverityMetric(allowedSeverities: [.critical], priority: [metric])?.0, metric)
+        }
+        let memoryOnly = makeMetrics(cpu: 0.2, memory: 0.95)
+        expectEqual(memoryOnly.highestSeverityMetric(allowedSeverities: [.critical], priority: [.cpu])?.0, .memory)
+        let normal = makeMetrics(cpu: 0.2, memory: 0.2)
+        expectEqual(normal.highestSeverityMetric(allowedSeverities: [.critical], priority: [.network])?.0, nil)
+        // Custom menu order does not affect the default severity ranking used elsewhere.
+        expectEqual(metrics.highestSeverityMetric()?.0, .cpu)
+    }
+
+    @Test
     func formattedValuesAreMetricSpecific() {
         let metrics = ActivityMetrics(
             cpuUsage: 0.42,

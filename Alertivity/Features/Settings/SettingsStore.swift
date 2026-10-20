@@ -17,6 +17,7 @@ final class SettingsStore: ObservableObject {
         static let notificationsEnabled = "notice.notifications.enabled"
         static let menuIconType = "notice.menu.iconType"
         static let showMetricIcon = "notice.menu.showMetricIcon"
+        static let autoSwitchPriority = "notice.menu.autoSwitchPriority"
         static let autoSwitch = "notice.menu.autoSwitch"
         static let highActivityDuration = "monitor.topProcesses.duration"
         static let highActivityCPUThreshold = "monitor.topProcesses.cpuThresholdPercent"
@@ -106,6 +107,20 @@ final class SettingsStore: ObservableObject {
         didSet { defaults.set(isMenuIconAutoSwitchEnabled, forKey: Keys.autoSwitch) }
     }
 
+    @Published var menuIconAutoSwitchPriority: [MetricMenuSelection] {
+        didSet {
+            let normalized = MetricMenuSelection.normalizedAutoSwitchPriority(menuIconAutoSwitchPriority)
+            if normalized != menuIconAutoSwitchPriority {
+                menuIconAutoSwitchPriority = normalized
+            }
+            defaults.set(menuIconAutoSwitchPriority.map(\.rawValue), forKey: Keys.autoSwitchPriority)
+            if menuIconAutoSwitchPriority != oldValue {
+                let order = menuIconAutoSwitchPriority.map(\.rawValue).joined(separator: ",")
+                AppLogger.lifecycle.info("Auto switch priority updated; order: \(order, privacy: .public)")
+            }
+        }
+    }
+
     @Published var highActivityDurationSeconds: Int {
         didSet { defaults.set(highActivityDurationSeconds, forKey: Keys.highActivityDuration) }
     }
@@ -160,6 +175,9 @@ final class SettingsStore: ObservableObject {
 
         showMetricIcon = defaults.object(forKey: Keys.showMetricIcon) as? Bool ?? true
         isMenuIconAutoSwitchEnabled = defaults.object(forKey: Keys.autoSwitch) as? Bool ?? true
+        menuIconAutoSwitchPriority = MetricMenuSelection.normalizedAutoSwitchPriority(
+            (defaults.stringArray(forKey: Keys.autoSwitchPriority) ?? []).compactMap(MetricMenuSelection.init(rawValue:))
+        )
         highActivityDurationSeconds = defaults.object(forKey: Keys.highActivityDuration) as? Int ?? 60
         highActivityCPUThresholdPercent = defaults.object(forKey: Keys.highActivityCPUThreshold) as? Int ?? 80
         highActivityMemoryThresholdPercent = defaults.object(forKey: Keys.highActivityMemoryThreshold) as? Int ?? 25

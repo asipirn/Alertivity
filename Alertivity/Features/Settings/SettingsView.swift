@@ -30,7 +30,8 @@ struct SettingsView: View {
                     menuIconOnlyWhenHigh: $settings.menuIconOnlyWhenHigh,
                     menuIconType: $settings.menuIconType,
                     showMetricIcon: $settings.showMetricIcon,
-                    autoSwitchEnabled: $settings.isMenuIconAutoSwitchEnabled
+                    autoSwitchEnabled: $settings.isMenuIconAutoSwitchEnabled,
+                autoSwitchPriority: $settings.menuIconAutoSwitchPriority
                 )
 
                 FooterDivider()
@@ -104,7 +105,8 @@ struct NoticePreferencesView: View {
                 menuIconOnlyWhenHigh: $settings.menuIconOnlyWhenHigh,
                 menuIconType: $settings.menuIconType,
                 showMetricIcon: $settings.showMetricIcon,
-                autoSwitchEnabled: $settings.isMenuIconAutoSwitchEnabled
+                autoSwitchEnabled: $settings.isMenuIconAutoSwitchEnabled,
+                autoSwitchPriority: $settings.menuIconAutoSwitchPriority
             )
         }
 
@@ -192,6 +194,7 @@ private struct MenuBarSettingsFields: View {
     @Binding var menuIconType: MenuIconType
     @Binding var showMetricIcon: Bool
     @Binding var autoSwitchEnabled: Bool
+    @Binding var autoSwitchPriority: [MetricMenuSelection]
 
     var body: some View {
         Toggle("settings.menuBar.showIndicator", isOn: $isMenuIconEnabled)
@@ -213,6 +216,8 @@ private struct MenuBarSettingsFields: View {
                 .padding(.bottom, 2)
         }
 
+        priorityEditor
+
         Toggle("settings.menuBar.onlyShowHigh", isOn: $menuIconOnlyWhenHigh)
             .disabled(!isMenuIconEnabled)
 
@@ -220,6 +225,52 @@ private struct MenuBarSettingsFields: View {
             Toggle("settings.menuBar.showMetricIcon", isOn: $showMetricIcon)
                 .disabled(!isMenuIconEnabled || autoSwitchEnabled)
         }
+    }
+
+    private var priorityEditor: some View {
+        DisclosureGroup("settings.menuBar.autoSwitch.priority") {
+            VStack(alignment: .leading, spacing: 6) {
+                SettingsFootnote(key: "settings.menuBar.autoSwitch.priority.help")
+                ForEach(autoSwitchPriority, id: \.self) { metric in
+                    HStack {
+                        Label(metric.menuIconType.title, systemImage: metric.menuIconType.symbolName)
+                        Spacer()
+                        Button {
+                            move(metric, by: -1)
+                        } label: {
+                            Image(systemName: "chevron.up")
+                        }
+                        .accessibilityLabel(Text(L10n.format("settings.menuBar.autoSwitch.priority.raise", metric.menuIconType.title)))
+                        .disabled(autoSwitchPriority.first == metric)
+                        Button {
+                            move(metric, by: 1)
+                        } label: {
+                            Image(systemName: "chevron.down")
+                        }
+                        .accessibilityLabel(Text(L10n.format("settings.menuBar.autoSwitch.priority.lower", metric.menuIconType.title)))
+                        .disabled(autoSwitchPriority.last == metric)
+                    }
+                }
+                HStack {
+                    Spacer()
+                    Button("settings.menuBar.autoSwitch.priority.reset") {
+                        autoSwitchPriority = MetricMenuSelection.autoSwitchPriority
+                    }
+                    .disabled(autoSwitchPriority == MetricMenuSelection.autoSwitchPriority)
+                }
+            }
+            .padding(.top, 4)
+            .padding(.leading, 16)
+        }
+        .disabled(!isMenuIconEnabled || !autoSwitchEnabled)
+    }
+
+    private func move(_ metric: MetricMenuSelection, by offset: Int) {
+        guard let index = autoSwitchPriority.firstIndex(of: metric),
+              autoSwitchPriority.indices.contains(index + offset) else { return }
+        var order = autoSwitchPriority
+        order.swapAt(index, index + offset)
+        autoSwitchPriority = order
     }
 
     private var autoSwitchBinding: Binding<Bool> {
