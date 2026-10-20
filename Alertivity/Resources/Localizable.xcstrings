@@ -3590,6 +3590,41 @@
         }
       }
     },
+    "pro.tabHelp" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize activity thresholds and notification timing with Alertivity Pro."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Alertivity Pro Aktivitätsschwellenwerte und Benachrichtigungszeiten anpassen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personnalisez les seuils d’activité et le délai des notifications avec Alertivity Pro."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alertivity Proでアクティビティのしきい値と通知のタイミングをカスタマイズします。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 Alertivity Pro 自定义活动阈值和通知时间。"
+          }
+        }
+      },
+      "extractionState" : "manual"
+    },
     "process.row.cpu.format" : {
       "extractionState" : "manual",
       "localizations" : {

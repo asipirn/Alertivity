@@ -45,32 +45,34 @@ struct ProSettingsPane: View {
             Label(store.hasProAccess ? "pro.unlocked" : "pro.title", systemImage: "star")
                 .font(.headline)
             ProFeatureList()
-            HStack {
-                if !store.hasProAccess {
-                    if let product = store.product {
-                        Button(L10n.format("pro.buy", product.displayPrice)) {
-                            Task { await store.purchase() }
+            VStack(alignment: .trailing, spacing: 4) {
+                HStack {
+                    Spacer()
+                    if !store.hasProAccess {
+                        if let product = store.product {
+                            Button(L10n.format("pro.buy", product.displayPrice)) {
+                                Task { await store.purchase() }
+                            }
+                            .accessibilityIdentifier("pro.purchase")
+                        } else {
+                            Button("pro.retry") { Task { await store.loadProduct() } }
                         }
-                        .accessibilityIdentifier("pro.purchase")
-                    } else {
-                        Button("pro.retry") { Task { await store.loadProduct() } }
                     }
+                    Button("pro.restore") { Task { await store.restore() } }
+                        .accessibilityIdentifier("pro.restore")
+                    if store.isBusy { ProgressView().controlSize(.small) }
                 }
-                Button("pro.restore") { Task { await store.restore() } }
-                    .accessibilityIdentifier("pro.restore")
-                if store.isBusy { ProgressView().controlSize(.small) }
-            }
-            .disabled(store.isBusy)
-            if let key = store.messageKey {
-                Text(LocalizedStringKey(key))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+                .disabled(store.isBusy)
 
-            FooterDivider()
-            SettingsFootnote(key: "pro.oneTime", weight: .semibold)
-                .accessibilityIdentifier("pro.footer")
+                if let key = store.messageKey {
+                    SettingsFootnote(key: LocalizedStringKey(key))
+                        .accessibilityIdentifier("pro.purchaseMessage")
+                } else if !store.hasProAccess {
+                    SettingsFootnote(key: "pro.oneTime")
+                        .accessibilityIdentifier("pro.purchaseNote")
+                }
+            }
+            .multilineTextAlignment(.trailing)
         }
     }
 }

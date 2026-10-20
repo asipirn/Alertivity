@@ -145,7 +145,7 @@ struct SettingsView: View {
             L10n.string("settings.tab.notifications"): L10n.string("settings.tab.notifications.help"),
             L10n.string("settings.tab.thresholds"): thresholds,
             L10n.string("settings.tab.detection"): L10n.string("settings.tab.detection.help"),
-            L10n.string("pro.tabTitle"): L10n.string("pro.oneTime")
+            L10n.string("pro.tabTitle"): L10n.string("pro.tabHelp")
         ]
     }
 
