@@ -4805,31 +4805,31 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benachrichtigungen werden ausgelöst, wenn eine Metrik %d Sekunden lang kritisch ist. Prozesse mit hoher Aktivität können Benachrichtigungen auslösen."
+            "value" : "Warnungen nach %d Sekunden kritischer Aktivität, mit mindestens %@ Abstand. Einschließlich Prozessen mit hoher Aktivität."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notifications fire when any metric stays critical for %d seconds. High-activity processes can also trigger alerts."
+            "value" : "Alerts after %d seconds of Critical activity, at least %@ apart. Includes high-activity processes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les notifications s'affichent lorsqu'une mesure reste critique pendant %d secondes. Les processus à forte activité peuvent aussi déclencher des alertes."
+            "value" : "Alertes après %d secondes d’activité critique, espacées d’au moins %@. Inclut les processus à forte activité."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "いずれかの指標が %d 秒間重大な状態の場合に通知します。高負荷プロセスでも通知されます。"
+            "value" : "重大な状態が %d 秒続くと通知。通知間隔は最短 %@。高負荷プロセスも対象。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当任一指标连续 %d 秒处于严重状态时发送通知。高活动进程也可能触发提醒。"
+            "value" : "严重活动持续 %d 秒后提醒，通知间隔至少 %@。包括高活动进程。"
           }
         }
       }
@@ -4840,31 +4840,31 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Benachrichtigungen werden ausgelöst, wenn eine Metrik %d Sekunden lang kritisch ist."
+            "value" : "Warnungen nach %d Sekunden kritischer Aktivität, mit mindestens %@ Abstand."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notifications fire when any metric stays critical for %d seconds."
+            "value" : "Alerts after %d seconds of Critical activity, at least %@ apart."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les notifications s’affichent lorsqu’une mesure reste critique pendant %d secondes."
+            "value" : "Alertes après %d secondes d’activité critique, espacées d’au moins %@."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "いずれかの指標が %d 秒間重大な状態の場合に通知します。"
+            "value" : "重大な状態が %d 秒続くと通知。通知間隔は最短 %@。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当任一指标连续 %d 秒处于严重状态时发送通知。"
+            "value" : "严重活动持续 %d 秒后提醒，通知间隔至少 %@。"
           }
         }
       }

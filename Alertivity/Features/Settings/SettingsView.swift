@@ -424,7 +424,11 @@ private struct NotificationSettingsFields: View {
 
         FooterDivider()
 
-        Text(L10n.format(notificationNoteKey, settings.monitoringConfiguration.durationSeconds))
+        Text(L10n.format(
+            notificationNoteKey,
+            settings.monitoringConfiguration.durationSeconds,
+            L10n.format("settings.notifications.cooldownValue", settings.monitoringConfiguration.cooldownMinutes)
+        ))
             .font(.footnote.weight(emphasizesFooter ? .semibold : .regular))
             .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
