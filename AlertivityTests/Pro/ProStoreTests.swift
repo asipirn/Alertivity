@@ -2,6 +2,7 @@ import Testing
 import Foundation
 import StoreKitTest
 import StoreKit
+import OSLog
 @testable import Alertivity
 
 @MainActor
@@ -246,39 +247,108 @@ private final class FakeProClient: ProPurchasing {
 private final class StoreKitTestBundle: NSObject {}
 
 /// Uses Apple's local StoreKit environment, without App Store Connect products or real charges.
-@Suite(.serialized, .timeLimit(.minutes(1))) @MainActor struct NativeProPurchaseTests {
+// AL-82: Cloud purchases can hang in Store UI/AuthKit despite suppressed dialogs.
+// Xcode Cloud forwards this system variable to test runners; local native coverage stays enabled.
+@Suite(
+    .disabled(
+        if: ProcessInfo.processInfo.environment["CI_XCODE_CLOUD"] == "TRUE",
+        "AL-82: Native StoreKit purchases hang in Xcode Cloud; retain local coverage."
+    ),
+    .serialized,
+    .timeLimit(.minutes(1))
+)
+@MainActor struct NativeProPurchaseTests {
     @Test
     func purchaseRestoreAndRefundUseVerifiedStoreKitTransactions() async throws {
+        Self.diagnostics.notice("StoreKit lifecycle test: creating local session")
         let session = try makeSession()
         defer { session.clearTransactions() }
 
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("initial store start") { await store.start() }
         #expect(!store.hasProAccess)
         try #require(store.product != nil)
-        await store.purchase()
+        let dialogsDisabled = session.disableDialogs
+        let host = Bundle.main.bundleIdentifier ?? "unknown"
+        Self.diagnostics.notice("StoreKit lifecycle purchase environment; host: \(host, privacy: .public); dialogsDisabled: \(dialogsDisabled, privacy: .public)")
+        try #require(dialogsDisabled, "Automated purchases must suppress StoreKit dialogs.")
+        await traceStoreKitStep("purchase") { await store.purchase() }
         try #require(store.hasProAccess)
         let transactions = session.allTransactions()
         #expect(transactions.count == 1)
         let reloaded = ProStore(distribution: .appStore)
-        await reloaded.start()
-        for _ in 0..<100 {
-            await reloaded.refreshAccess()
+        await traceStoreKitStep("reloaded store start") { await reloaded.start() }
+        for attempt in 0..<100 {
+            await traceStoreKitStep("reload access refresh \(attempt)") { await reloaded.refreshAccess() }
             if reloaded.hasProAccess { break }
             try await Task.sleep(for: .milliseconds(50))
         }
         try #require(reloaded.hasProAccess)
-        await reloaded.restore()
+        await traceStoreKitStep("restore") { await reloaded.restore() }
         #expect(reloaded.hasProAccess)
         let transaction = try #require(transactions.first)
+        Self.diagnostics.notice("StoreKit lifecycle test: refund requested")
         try session.refundTransaction(identifier: transaction.identifier)
+        Self.diagnostics.notice("StoreKit lifecycle test: refund request returned")
         // Refund updates are asynchronous; bound the wait and explicitly refresh from StoreKit.
-        for _ in 0..<100 {
-            await reloaded.refreshAccess()
+        for attempt in 0..<100 {
+            await traceStoreKitStep("refund access refresh \(attempt)") { await reloaded.refreshAccess() }
             if !reloaded.hasProAccess { break }
             try await Task.sleep(for: .milliseconds(50))
         }
         #expect(!reloaded.hasProAccess)
+    }
+
+    private static let diagnostics = Logger(subsystem: "com.Nobby.Alertivity.tests", category: "storekit-lifecycle")
+
+    /// Records the suspended step before the suite limit terminates an unresponsive StoreKit call.
+    private func traceStoreKitStep(
+        _ step: String,
+        deadline: Duration = .seconds(20),
+        sourceLocation: SourceLocation = #_sourceLocation,
+        operation: () async -> Void
+    ) async {
+        let clock = ContinuousClock()
+        let started = clock.now
+        Self.diagnostics.notice("StoreKit lifecycle step started: \(step, privacy: .public)")
+        // Keep the operation in this test's lifetime: cancellation may not unblock StoreKit,
+        // and returning early would let session cleanup race a still-pending purchase.
+        let watchdog = Task {
+            do {
+                try await Task.sleep(for: deadline)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled else { return }
+            Self.diagnostics.error("StoreKit step '\(step, privacy: .public)' exceeded \(String(describing: deadline), privacy: .public)")
+            Issue.record(
+                "StoreKit step '\(step)' exceeded \(deadline). The operation is still pending; the suite time limit remains active.",
+                severity: .error,
+                sourceLocation: sourceLocation
+            )
+        }
+        defer { watchdog.cancel() }
+        await operation()
+        let elapsed = String(describing: started.duration(to: clock.now))
+        Self.diagnostics.notice("StoreKit lifecycle step completed: \(step, privacy: .public); elapsed: \(elapsed, privacy: .public)")
+    }
+
+    @Test
+    func stepDeadlineReportsThePendingStep() async {
+        await withKnownIssue {
+            await traceStoreKitStep("simulated purchase", deadline: .milliseconds(10)) {
+                try? await Task.sleep(for: .milliseconds(100))
+            }
+        } matching: { issue in
+            issue.comments.contains { $0.rawValue.contains("StoreKit step 'simulated purchase' exceeded") }
+        }
+    }
+
+    @Test
+    func completedStepCancelsItsDeadline() async throws {
+        await traceStoreKitStep("completed purchase", deadline: .milliseconds(10)) {}
+        // Leave the original deadline behind us so a stray watchdog fails this test.
+        try await Task.sleep(for: .milliseconds(100))
     }
 
     private func makeSession() throws -> SKTestSession {
@@ -310,9 +380,9 @@ private final class StoreKitTestBundle: NSObject {}
         defer { session.clearTransactions(); session.resetToDefaultState() }
         session.askToBuyEnabled = true
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         try #require(store.product != nil)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(!store.hasProAccess)
         #expect(store.messageKey == "pro.pending")
         #expect(!store.isBusy)
@@ -322,7 +392,7 @@ private final class StoreKitTestBundle: NSObject {}
             try await waitForAccess(true, in: store)
         } else {
             try session.declineAskToBuyTransaction(identifier: transaction.identifier)
-            await store.refreshAccess()
+            await traceStoreKitStep("access refresh") { await store.refreshAccess() }
             #expect(!store.hasProAccess)
         }
     }
@@ -332,17 +402,17 @@ private final class StoreKitTestBundle: NSObject {}
         let session = try makeSession()
         defer { session.clearTransactions(); session.resetToDefaultState() }
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         try #require(store.product != nil)
         try await session.setSimulatedError(.generic(.userCancelled), forAPI: .purchase)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(!store.hasProAccess)
         #expect(!store.isBusy)
         // On macOS 27 the local service maps this injection to ASDServerErrorDomain 907,
         // which StoreKit reports as unknown. Never suppress a real unknown failure as cancellation.
         #expect(store.messageKey == nil || store.messageKey == "pro.purchaseError")
         try await session.setSimulatedError(nil, forAPI: .purchase)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(store.hasProAccess)
     }
 
@@ -351,15 +421,15 @@ private final class StoreKitTestBundle: NSObject {}
         let session = try makeSession()
         defer { session.clearTransactions(); session.resetToDefaultState() }
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         try #require(store.product != nil)
         try await session.setSimulatedError(.purchase(.purchaseNotAllowed), forAPI: .purchase)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(!store.hasProAccess)
         #expect(store.messageKey == "pro.purchaseError")
         #expect(!store.isBusy)
         try await session.setSimulatedError(nil, forAPI: .purchase)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(store.hasProAccess)
     }
 
@@ -369,25 +439,25 @@ private final class StoreKitTestBundle: NSObject {}
         defer { session.clearTransactions(); session.resetToDefaultState() }
         try await session.setSimulatedError(.generic(.networkError(URLError(.notConnectedToInternet))), forAPI: .loadProducts)
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         #expect(store.product == nil)
         #expect(store.messageKey == "pro.loadError")
         #expect(!store.isBusy)
         try await session.setSimulatedError(nil, forAPI: .loadProducts)
-        await store.loadProduct()
+        await traceStoreKitStep("product lookup") { await store.loadProduct() }
         try #require(store.product != nil)
-        await store.restore()
+        await traceStoreKitStep("restore") { await store.restore() }
         #expect(!store.hasProAccess)
         #expect(store.messageKey == "pro.noPurchase")
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         try #require(store.hasProAccess)
         try await session.setSimulatedError(.generic(.networkError(URLError(.notConnectedToInternet))), forAPI: .appStoreSync)
-        await store.restore()
+        await traceStoreKitStep("restore") { await store.restore() }
         #expect(store.hasProAccess)
         #expect(store.messageKey == "pro.restoreError")
         #expect(!store.isBusy)
         try await session.setSimulatedError(nil, forAPI: .appStoreSync)
-        await store.restore()
+        await traceStoreKitStep("restore") { await store.restore() }
         #expect(store.messageKey == "pro.restored")
     }
 
@@ -396,16 +466,16 @@ private final class StoreKitTestBundle: NSObject {}
         let session = try makeSession()
         defer { session.clearTransactions(); session.resetToDefaultState() }
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         try #require(store.product != nil)
         try await session.setSimulatedError(.verification(.invalidSignature), forAPI: .verification)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(!store.hasProAccess)
         #expect(store.messageKey == "pro.purchaseError")
-        await store.refreshAccess()
+        await traceStoreKitStep("access refresh") { await store.refreshAccess() }
         #expect(!store.hasProAccess)
         try await session.setSimulatedError(nil, forAPI: .verification)
-        await store.restore()
+        await traceStoreKitStep("restore") { await store.restore() }
         #expect(store.hasProAccess)
     }
 
@@ -415,9 +485,9 @@ private final class StoreKitTestBundle: NSObject {}
         defer { session.clearTransactions(); session.resetToDefaultState() }
         session.interruptedPurchasesEnabled = true
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         try #require(store.product != nil)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         #expect(!store.hasProAccess)
         #expect(!store.isBusy)
         let transaction = try #require(session.allTransactions().first)
@@ -437,9 +507,9 @@ private final class StoreKitTestBundle: NSObject {}
         settings.notificationCooldownMinutes = 30
         settings.highActivityDurationSeconds = 240
         let store = ProStore(distribution: .appStore)
-        await store.start()
+        await traceStoreKitStep("store start") { await store.start() }
         try #require(store.product != nil)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         try #require(store.hasProAccess)
         settings.setProAccess(store.hasProAccess)
         #expect(settings.monitoringConfiguration.cooldownMinutes == 30)
@@ -454,7 +524,7 @@ private final class StoreKitTestBundle: NSObject {}
         #expect(settings.monitoringConfiguration.durationSeconds == 60)
         #expect(settings.notificationCooldownMinutes == 30)
         #expect(settings.highActivityDurationSeconds == 240)
-        await store.purchase()
+        await traceStoreKitStep("purchase") { await store.purchase() }
         try #require(store.hasProAccess)
         settings.setProAccess(store.hasProAccess)
         #expect(settings.monitoringConfiguration.cooldownMinutes == 30)
