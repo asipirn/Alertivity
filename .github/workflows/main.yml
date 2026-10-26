@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-arm64:
-    runs-on: macos-14 # 明确指定 Apple Silicon 运行器
+    runs-on: macos-14
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -13,7 +13,7 @@ jobs:
       - name: Select Xcode 16.2
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.2' # 锁定稳定的 Xcode 版本，规避 Xcode 26 的 .help 编译报错
+          xcode-version: '16.2'
 
       - name: Confirm Apple Silicon architecture
         run: |
@@ -35,7 +35,6 @@ jobs:
       - name: Locate built .app
         id: locate
         run: |
-          # 直接全盘搜索 DerivedData 下的所有 .app 文件，只要名字包含 Alertivity 就抓取
           APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "*.app" -type d | grep -i "Alertivity" | head -1)
           if [ -z "$APP_PATH" ]; then
             echo "未找到 Alertivity 产物，请检查构建日志"
@@ -44,9 +43,31 @@ jobs:
           echo "找到应用路径: $APP_PATH"
           echo "APP_PATH=$APP_PATH" >> "$GITHUB_OUTPUT"
 
-      - name: Upload .app Artifact
+      - name: Create DMG
+        run: |
+          APP_PATH="${{ steps.locate.outputs.APP_PATH }}"
+          APP_NAME=$(basename "$APP_PATH")
+          APP_NAME_NO_EXT="${APP_NAME%.app}"
+          
+          echo "正在为 $APP_NAME 创建 DMG..."
+          
+          # 1. 创建一个临时文件夹用于存放打包内容
+          mkdir -p dmg_staging
+          
+          # 2. 将编译好的 .app 复制到临时文件夹
+          cp -R "$APP_PATH" dmg_staging/
+          
+          # 3. 创建一个指向 /Applications 的软链接（方便用户拖拽安装）
+          ln -s /Applications dmg_staging/Applications
+          
+          # 4. 使用 hdiutil 压缩生成 DMG 文件 (-format UDZO 表示最高压缩率)
+          hdiutil create -volname "$APP_NAME_NO_EXT" -srcfolder dmg_staging -ov -format UDZO "$APP_NAME_NO_EXT.dmg"
+          
+          echo "DMG 创建成功: $APP_NAME_NO_EXT.dmg"
+
+      - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Alertivity-arm64
-          path: ${{ steps.locate.outputs.APP_PATH }}
+          name: Alertivity-DMG-arm64
+          path: "*.dmg"
           retention-days: 7
