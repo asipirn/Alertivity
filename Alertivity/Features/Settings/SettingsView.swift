@@ -20,7 +20,6 @@ struct SettingsView: View {
                         Tab(L10n.string(tab.titleKey), systemImage: tab.symbolName, value: tab) {
                             pane(for: tab)
                         }
-                        .help(tabHelp(for: tab))
                     }
                 }
             } else {
